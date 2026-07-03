@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net">
   <diagram name="Página-1" id="gGChLp1fjpD0pQYQHYEd">
-    <mxGraphModel dx="5148" dy="2621" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="6789" dy="3509" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -519,7 +519,7 @@
         <mxCell id="rNADPslbVwOf_M4aQvYv-82" parent="rNADPslbVwOf_M4aQvYv-66" style="text;strokeColor=#BF6CFD;fillColor=#F7F0FB;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;" value="- numeroInformacionAgregada : int" vertex="1">
           <mxGeometry height="30" width="300" y="210" as="geometry" />
         </mxCell>
-        <mxCell id="rNADPslbVwOf_M4aQvYv-92" parent="rNADPslbVwOf_M4aQvYv-66" style="text;strokeColor=#BF6CFD;fillColor=#F7F0FB;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;" value="- informacionEliminada: int" vertex="1">
+        <mxCell id="rNADPslbVwOf_M4aQvYv-92" parent="rNADPslbVwOf_M4aQvYv-66" style="text;strokeColor=#BF6CFD;fillColor=#F7F0FB;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;" value="- numeroInformacionEliminada: int" vertex="1">
           <mxGeometry height="30" width="300" y="240" as="geometry" />
         </mxCell>
         <mxCell id="rNADPslbVwOf_M4aQvYv-90" parent="rNADPslbVwOf_M4aQvYv-66" style="text;strokeColor=#BF6CFD;fillColor=#F7F0FB;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;" value="- operadoresCibercafeDespedidos : int" vertex="1">
