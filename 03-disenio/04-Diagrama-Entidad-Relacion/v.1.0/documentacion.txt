@@ -1,7 +1,7 @@
 ------------------------------------
 Autor: Orozco Botero Adrián Enrique
 Fecha creación: 01 de julio de 2026
-Fecha actualización: 
+Fecha actualización: 02 de julio de 2026
 ------------------------------------
 
 *: El propósito de este archivo txt es documentar detalles muy importantes a la hora de solución y creación del Diagrama Entidad - Relación. Con fines de que todo quede claro y las preguntas que puedan surgir, sean respondidas.
@@ -11,3 +11,16 @@ Se sabe que no existe <<extends>> o inherit en lenguaje SQL. Por ende, de los 3 
 
 2. Eliminación de atributo 'Activo':
 A nivel de diseño, no tiene sentido llenar una tabla por llenar, revisando CU-20 no hace falta tener un atirbuto de estado. Ya que si se modifica, se llenará el campo de actualizado, y si se borra, la clave debe borrarse.
+
+3. ¿Por qué se separó estadística e historial de estadística?
+Lo puedo resumir en: 'Reprocesamiento de datos' y 'Trazabilidad de errores'. Ya que la estadística es la métrica actual, mientras que el historial es la métrica final que ve un usuario final.
+
+-------------
+-Ejemplo 1: -
+-------------
+el administrador puede generar una estadística, y la verá en pantalla en el momento. Pero supongamos que el operador Julio Orozco realiza una modificación en una factura ya que olvidó registrar una prenda. Entonces al hacer la actualización, si el administrador vuelve a generar una factura. Se actualizará (Metrica actual), pero tendrá sus 2 historiales.
+
+-------------
+-Ejemplo 2: -
+-------------
+El administrador obitene un error en medio de la generación de estadísticas, por ende va a su historial y mira a qué hora ocurrió, logrando obtener detalles a profundidad de su error.
