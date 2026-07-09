@@ -17,7 +17,7 @@ Lo puedo resumir en: 'Reprocesamiento de datos' y 'Trazabilidad de errores'. Ya 
 
 -------------
 -Ejemplo 1: -
--------------
+-------------aja
 el administrador puede generar una estadística, y la verá en pantalla en el momento. Pero supongamos que el operador Julio Orozco realiza una modificación en una factura ya que olvidó registrar una prenda. Entonces al hacer la actualización, si el administrador vuelve a generar una factura. Se actualizará (Metrica actual), pero tendrá sus 2 historiales.
 
 -------------
