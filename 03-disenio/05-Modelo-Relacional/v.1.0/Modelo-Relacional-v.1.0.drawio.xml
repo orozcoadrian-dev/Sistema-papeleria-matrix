@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net">
   <diagram name="Página-1" id="RnmQKLp_MEqQMlldjv-a">
-    <mxGraphModel dx="7361" dy="2640" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3782" dy="704" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -209,7 +209,7 @@
         <mxCell id="u-KXo6gTFuR8pbuwwxjN-54" parent="u-KXo6gTFuR8pbuwwxjN-47" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;" vertex="1">
           <mxGeometry height="30" width="330" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="u-KXo6gTFuR8pbuwwxjN-55" parent="u-KXo6gTFuR8pbuwwxjN-54" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="VAERCHAR, NN" vertex="1">
+        <mxCell id="u-KXo6gTFuR8pbuwwxjN-55" parent="u-KXo6gTFuR8pbuwwxjN-54" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="VARCHAR(15), NN" vertex="1">
           <mxGeometry height="30" width="160" as="geometry">
             <mxRectangle height="30" width="160" as="alternateBounds" />
           </mxGeometry>
@@ -319,7 +319,7 @@
         <mxCell id="u-KXo6gTFuR8pbuwwxjN-134" parent="u-KXo6gTFuR8pbuwwxjN-127" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;" vertex="1">
           <mxGeometry height="30" width="378" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="u-KXo6gTFuR8pbuwwxjN-135" parent="u-KXo6gTFuR8pbuwwxjN-134" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="VARCHAR(30), UNIQUE" vertex="1">
+        <mxCell id="u-KXo6gTFuR8pbuwwxjN-135" parent="u-KXo6gTFuR8pbuwwxjN-134" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https://fonts.googleapis.com/css?family=Poppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="VARCHAR(30), NN, UNIQUE" vertex="1">
           <mxGeometry height="30" width="160" as="geometry">
             <mxRectangle height="30" width="160" as="alternateBounds" />
           </mxGeometry>
@@ -791,7 +791,7 @@
         <mxCell id="M6lpVBNuR0sh5BDxD0Wi-8" parent="M6lpVBNuR0sh5BDxD0Wi-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" vertex="1">
           <mxGeometry height="30" width="400" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="M6lpVBNuR0sh5BDxD0Wi-9" parent="M6lpVBNuR0sh5BDxD0Wi-8" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="VARCHAR(10), NN" vertex="1">
+        <mxCell id="M6lpVBNuR0sh5BDxD0Wi-9" parent="M6lpVBNuR0sh5BDxD0Wi-8" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="VARCHAR(15), NN" vertex="1">
           <mxGeometry height="30" width="180" as="geometry">
             <mxRectangle height="30" width="180" as="alternateBounds" />
           </mxGeometry>
@@ -976,7 +976,7 @@
         <mxCell id="M6lpVBNuR0sh5BDxD0Wi-63" parent="M6lpVBNuR0sh5BDxD0Wi-41" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" vertex="1">
           <mxGeometry height="30" width="330" y="300" as="geometry" />
         </mxCell>
-        <mxCell id="M6lpVBNuR0sh5BDxD0Wi-64" parent="M6lpVBNuR0sh5BDxD0Wi-63" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="DATE, NN" vertex="1">
+        <mxCell id="M6lpVBNuR0sh5BDxD0Wi-64" parent="M6lpVBNuR0sh5BDxD0Wi-63" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="DATETIME, NN" vertex="1">
           <mxGeometry height="30" width="180" as="geometry">
             <mxRectangle height="30" width="180" as="alternateBounds" />
           </mxGeometry>
@@ -989,7 +989,7 @@
         <mxCell id="M6lpVBNuR0sh5BDxD0Wi-72" parent="M6lpVBNuR0sh5BDxD0Wi-41" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" vertex="1">
           <mxGeometry height="30" width="330" y="330" as="geometry" />
         </mxCell>
-        <mxCell id="M6lpVBNuR0sh5BDxD0Wi-73" parent="M6lpVBNuR0sh5BDxD0Wi-72" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="DATE, NN" vertex="1">
+        <mxCell id="M6lpVBNuR0sh5BDxD0Wi-73" parent="M6lpVBNuR0sh5BDxD0Wi-72" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="DATETIME, NULL&amp;nbsp;" vertex="1">
           <mxGeometry height="30" width="180" as="geometry">
             <mxRectangle height="30" width="180" as="alternateBounds" />
           </mxGeometry>
@@ -1048,7 +1048,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="M6lpVBNuR0sh5BDxD0Wi-84" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#3B0177;fontColor=#F4BE4F;strokeColor=#BF6CFD;" value="INFORMACIÓN NEGOCIO" vertex="1">
-          <mxGeometry height="210" width="369" x="801" y="560" as="geometry" />
+          <mxGeometry height="240" width="369" x="801" y="560" as="geometry" />
         </mxCell>
         <mxCell id="M6lpVBNuR0sh5BDxD0Wi-85" parent="M6lpVBNuR0sh5BDxD0Wi-84" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
           <mxGeometry height="30" width="369" y="30" as="geometry" />
@@ -1124,6 +1124,19 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="M6lpVBNuR0sh5BDxD0Wi-105" parent="M6lpVBNuR0sh5BDxD0Wi-103" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="Fecha_actualizacion" vertex="1">
+          <mxGeometry height="30" width="189" x="180" as="geometry">
+            <mxRectangle height="30" width="189" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NVJdjDTWpaVP8hFi2v1q-1" parent="M6lpVBNuR0sh5BDxD0Wi-84" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" vertex="1">
+          <mxGeometry height="30" width="369" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="NVJdjDTWpaVP8hFi2v1q-2" parent="NVJdjDTWpaVP8hFi2v1q-1" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="VARCHAR(255), NN" vertex="1">
+          <mxGeometry height="30" width="180" as="geometry">
+            <mxRectangle height="30" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NVJdjDTWpaVP8hFi2v1q-3" parent="NVJdjDTWpaVP8hFi2v1q-1" style="shape=partialRectangle;connectable=0;fillColor=#F7F0FB;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#4F0E6C;strokeColor=#BF6CFD;" value="Informacion" vertex="1">
           <mxGeometry height="30" width="189" x="180" as="geometry">
             <mxRectangle height="30" width="189" as="alternateBounds" />
           </mxGeometry>
@@ -1721,6 +1734,12 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1660" y="2040" as="sourcePoint" />
             <mxPoint x="1660" y="161" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2uU_k_fsytXvItuxbS7-1" edge="1" parent="1" style="endArrow=ERoneToMany;html=1;rounded=0;startArrow=ERone;startFill=0;endFill=0;strokeColor=#3B0177;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-322" y="320" as="sourcePoint" />
+            <mxPoint x="-322" y="651" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
