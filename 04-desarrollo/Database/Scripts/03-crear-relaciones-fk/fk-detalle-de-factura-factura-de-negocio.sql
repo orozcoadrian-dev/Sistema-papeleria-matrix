@@ -1,0 +1,3 @@
+ALTER TABLE detalle_de_factura
+ADD CONSTRAINT fk_detalle_de_factura_factura_de_negocio
+FOREIGN KEY (Factura_de_negocio_id) REFERENCES Factura_de_negocio(Id_factura);

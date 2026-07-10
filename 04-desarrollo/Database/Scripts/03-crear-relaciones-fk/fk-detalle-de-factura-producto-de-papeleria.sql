@@ -1,0 +1,3 @@
+ALTER TABLE detalle_de_factura
+ADD CONSTRAINT fk_detalle_de_factura_producto_de_papeleria
+FOREIGN KEY (Producto_de_papeleria_id) REFERENCES Producto_de_papeleria(Id_producto);

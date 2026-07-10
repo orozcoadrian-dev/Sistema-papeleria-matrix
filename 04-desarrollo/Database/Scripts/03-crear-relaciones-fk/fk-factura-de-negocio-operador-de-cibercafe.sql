@@ -1,0 +1,3 @@
+ALTER TABLE Factura_de_negocio
+ADD CONSTRAINT fk_factura_de_negocio_operador_de_cibercafe
+FOREIGN KEY (Usuario_id) REFERENCES Operador_de_cibercafe(Id_usuario);

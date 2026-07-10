@@ -1,0 +1,3 @@
+ALTER TABLE Historial_ingreso_del_negocio
+ADD CONSTRAINT fk_historial_ingreso_del_negocio_ingreso_del_negocio
+FOREIGN KEY (Ingreso_id) REFERENCES Ingreso_del_negocio(Id_ingreso);

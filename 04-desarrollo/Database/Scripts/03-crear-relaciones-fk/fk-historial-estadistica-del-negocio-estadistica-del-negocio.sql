@@ -1,0 +1,3 @@
+ALTER TABLE Historial_estadistica_del_negocio
+ADD CONSTRAINT fk_historial_estadistica_del_negocio_estadistica_del_negocio
+FOREIGN KEY (Estadistica_del_negocio_id) REFERENCES Estadistica_del_negocio(Id_estadistica);

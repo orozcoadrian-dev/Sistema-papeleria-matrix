@@ -1,0 +1,3 @@
+ALTER TABLE Clave_de_permiso
+ADD CONSTRAINT fk_clave_de_permiso_operador_de_cibercafe
+FOREIGN KEY (Usuario_id) REFERENCES Operador_de_cibercafe(Id_usuario);

@@ -1,0 +1,3 @@
+ALTER TABLE Informacion_del_negocio
+ADD CONSTRAINT fk_informacion_del_negocio_administrador
+FOREIGN KEY (Usuario_id) REFERENCES Administrador(Id_usuario);
