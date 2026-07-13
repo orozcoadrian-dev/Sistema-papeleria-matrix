@@ -1,6 +1,7 @@
 import java.util.Date;
 
-public class Clave_de_permiso {
+public class Clave_de_permiso extends Object 
+{
 	
 	private int Id_clave = 0;
 	private int Usuario_id = 0;
@@ -34,6 +35,13 @@ public class Clave_de_permiso {
 
 	public void setUsuarioId(int usuarioId)
 	{
+		if(usuarioId == 0)
+		{
+			throw new IllegalArgumentException("El ID del usuario no puede ser 0.");
+		} else if(usuarioId <= -1)
+		{
+			throw new IllegalArgumentException("El ID del usuario no puede ser negativo.");
+		}
 		this.Usuario_id = usuarioId;
 	}
 

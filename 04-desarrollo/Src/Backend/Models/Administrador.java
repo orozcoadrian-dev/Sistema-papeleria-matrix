@@ -1,7 +1,8 @@
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class Administrador extends Usuario {
+public class Administrador extends Usuario 
+{
 	
 		private Date Fecha_posicionamiento;
 		private String Area_acceso = "";

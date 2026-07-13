@@ -1,7 +1,8 @@
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class Operador_de_cibercafe extends Usuario{
+public class Operador_de_cibercafe extends Usuario
+{
 	
 	private double Salario = 0;
 	private String Horario = "";
@@ -33,7 +34,7 @@ public class Operador_de_cibercafe extends Usuario{
 		if(salario == 0)
 		{
 			throw new IllegalArgumentException("El salario no puede ser igual a 0.");
-		} else if (salario < 0)
+		} else if (salario <= -1)
 		{
 			throw new IllegalArgumentException("El salario no puede ser negativo.");
 		}

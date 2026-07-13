@@ -1,22 +1,26 @@
 import java.time.LocalDateTime;
 
 //Enum para el rol del usuario
-enum RolUsuario {
+enum RolUsuario 
+{
 	ADMINISTRADOR("Administrador"),
 	OPERADOR_DE_CIBERCAFE("Operador de cibercafé");
 
 	private final String rol;
 
-	RolUsuario(String rol) {
+	RolUsuario(String rol) 
+	{
 		this.rol = rol;
 	}
 
-	public String getRol() {
+	public String getRol() 
+	{
 		return rol;
 	}
 }
 
-public class Usuario {
+public class Usuario extends Object 
+{
 
 	private int Id_usuario = 0;
 	private String Primer_nombre = "";
@@ -33,7 +37,8 @@ public class Usuario {
 	private LocalDateTime ultima_sesion;
 
 	// Constructor con id incremental
-	public Usuario(int idUsuario, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion) {
+	public Usuario(int idUsuario, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion) 
+	{
 		this.Id_usuario = idUsuario;
 		setPrimerNombre(primerNombre);
 		setSegundoNombre(segundoNombre);
@@ -51,7 +56,8 @@ public class Usuario {
 
 
 	// Constructor sin id incremental
-	public Usuario(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion) {
+	public Usuario(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion) 
+	{
 		setPrimerNombre(primerNombre);
 		setSegundoNombre(segundoNombre);
 		setPrimerApellido(primerApellido);
