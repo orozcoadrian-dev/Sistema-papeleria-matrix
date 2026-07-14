@@ -4,7 +4,7 @@ CREATE TABLE Ropa
     Codigo_ropa VARCHAR(20) NOT NULL UNIQUE,
     Tipo_ropa VARCHAR(20) NOT NULL,
     Material VARCHAR(30) NOT NULL,
-    Talla VARCHAR(30) NOT NULL,
+    Talla VARCHAR(5) NOT NULL,
     Descripcion VARCHAR(150) NULL,
     Nombre VARCHAR(30),
     Precio DOUBLE NOT NULL,
