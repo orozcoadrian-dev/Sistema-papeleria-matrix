@@ -63,6 +63,16 @@ public class Servicio extends Object
 
 	public void setNombre(String nombre)
 	{
+		if(nombre.isBlank() || nombre.isEmpty())
+		{
+			throw new IllegalArgumentException("El nombre del servicio no puede ir vacío.");
+		} else if(nombre.length() < 4)
+		{
+			throw new IllegalArgumentException("La longitud del nombre no puede ser menor de 4 caracteres.");
+		} else if(nombre.length() > 30)
+		{
+			throw new IllegalArgumentException("La longitud del nombre no puede ser mayor de 30 caracteres.");
+		}
 		this.Nombre = nombre;
 	}
 
