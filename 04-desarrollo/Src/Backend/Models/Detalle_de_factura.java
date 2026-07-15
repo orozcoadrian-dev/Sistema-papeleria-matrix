@@ -13,6 +13,7 @@ public class Detalle_de_factura extends Object
 	private int Ropa_id = 0;
 	private LocalDateTime Fecha_generacion;
 	private LocalDateTime Fecha_actualizacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con id autoincremental
 	public Detalle_de_factura(int idDetalle, int facturaDeNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int Ropa_id, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
@@ -76,8 +77,10 @@ public class Detalle_de_factura extends Object
 		} else if(descripcion.length() > 120)
 		{
 			throw new IllegalArgumentException("La longitud de la descripción es demasiado larga.");
+		} else if(utilidades.tieneSoloTexto(descripcion) == true)
+		{
+			this.Descripcion = descripcion;
 		}
-		this.Descripcion = descripcion;
 	}
 
 	public String getDescripcion() {

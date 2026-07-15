@@ -9,6 +9,7 @@ public class Factura_del_negocio extends Object
 	private double Monto = 0;
 	private Date Fecha_generacion;
 	private Date Fecha_actualizacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con ID autoincremental
 	public Factura_del_negocio(int idFactura, String codigoFactura, String tipoFactura, int usuarioId, double monto, Date fechaGeneracion, Date fechaActualizacion)
@@ -49,8 +50,10 @@ public class Factura_del_negocio extends Object
 		} else if(codigoFactura.length() > 15)
 		{
 			throw new IllegalArgumentException("El código de la factura no puede tener una longitud superior a 15 caracteres.");
+		} else if(utilidades.tieneSoloNumeros(codigoFactura) == true)
+		{
+			this.Codigo_factura = codigoFactura;
 		}
-		this.Codigo_factura = codigoFactura;
 	}
 
 	public String getCodigoFactura()
@@ -69,8 +72,10 @@ public class Factura_del_negocio extends Object
 		} else if(tipoFactura.length() > 15)
 		{
 			throw new IllegalArgumentException("El tipo de la factura no puede tener una longitud superior a 15 caracteres.");
+		} else if(utilidades.tieneSoloTexto(tipoFactura) == true)
+		{
+			this.Tipo_factura = tipoFactura;
 		}
-		this.Tipo_factura = tipoFactura;
 	}
 
 	public String getTipoFactura()

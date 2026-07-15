@@ -9,6 +9,7 @@ public class Informacion_del_negocio extends Object
 	private String Informacion = "";
 	private Date Fecha_creacion;
 	private Date Fecha_actualizacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con id incremental
 	public Informacion_del_negocio(int idInformacion, int usuarioId, int valorInformacion, String tipoInformacion, String informacion, Date fechaCreacion, Date fechaActualizacion)
@@ -83,8 +84,10 @@ public class Informacion_del_negocio extends Object
 		} else if(tipoInformacion.length() > 15)
 		{
 			throw new IllegalArgumentException("El tipo de información no puede superar una longitud de 15 caracteres.");
+		} else if(utilidades.tieneSoloTexto(tipoInformacion) == true)
+		{
+			this.Tipo_informacion = tipoInformacion;
 		}
-		this.Tipo_informacion = tipoInformacion;
 	}
 
 	public String getTipoInformacion()
@@ -103,8 +106,10 @@ public class Informacion_del_negocio extends Object
 		} else if(informacion.length() > 255)
 		{
 			throw new IllegalArgumentException("La información no puede superar una longitud de 255 caracteres.");
+		} else if(utilidades.tieneSoloTexto(informacion) == true)
+		{
+			this.Informacion = informacion;
 		}
-		this.Informacion = informacion;
 	}
 
 	public String getInformacion()

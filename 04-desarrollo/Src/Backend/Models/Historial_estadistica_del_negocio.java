@@ -6,6 +6,7 @@ public class Historial_estadistica_del_negocio extends Object
 	private int Estadistica_del_negocio_id = 0;
 	private String Motivo_estadistica = "";
 	private LocalDateTime Fecha_generacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con ID incremental
 	public Historial_estadistica_del_negocio(int idHistorialEstadista, int estadisticaDelNegocioId, String motivo_estadistica, LocalDateTime fechaGeneracion)
@@ -55,8 +56,10 @@ public class Historial_estadistica_del_negocio extends Object
 		} else if(motivoEstadistica.length() > 100)
 		{
 			throw new IllegalArgumentException("El la longitud del motivo de la estadística es muy largo.");
+		} else if(utilidades.tieneSoloTexto(motivoEstadistica) == true)
+		{
+			this.Motivo_estadistica = motivoEstadistica;
 		}
-		this.Motivo_estadistica = motivoEstadistica;
 	}
 
 	public String getMotivoEstadistica()

@@ -9,6 +9,7 @@ public class Ingreso_del_negocio extends Object
 	private double Total_vendido_productos = 0;
 	private double Total_recaudo_esperado_papeleria = 0;
 	private String Tipo_ingreso = "";
+	private Utils utilidades = new Utils();
 
 	// Constructor con id autoincremental
 	public Ingreso_del_negocio(int idIngreso, String codigoIngreso, double totalSalarioOperadores, double totalVendidoRopa, double inversionTotalPapeleria, double totalVendidoServicios, double totalVendidoProductos, double totalRecaudoEsperadoPapeleria, String tipoIngreso)
@@ -53,8 +54,10 @@ public class Ingreso_del_negocio extends Object
 		} else if (codigoIngreso.length() > 15)
 		{
 			throw new IllegalArgumentException("El código de ingreso no puede superar una longitud de 15 caracteres.");
+		} else if(utilidades.tieneSoloNumeros(codigoIngreso) == true)
+		{
+			this.Codigo_ingreso = codigoIngreso;
 		}
-		this.Codigo_ingreso = codigoIngreso;
 	}
 
 	public String getCodigoIngreso()
@@ -175,8 +178,10 @@ public class Ingreso_del_negocio extends Object
 		} else if (tipoIngreso.length() > 15)
 		{
 			throw new IllegalArgumentException("El tipo de ingreso no puede superar una longitud de 15 caracteres.");
+		} else if(utilidades.tieneSoloTexto(tipoIngreso) == true)
+		{
+			this.Tipo_ingreso = tipoIngreso;
 		}
-		this.Tipo_ingreso = tipoIngreso;
 	}
 
 	public String getTipoIngreso()

@@ -8,6 +8,7 @@ public class Clave_de_permiso extends Object
 	private String Clave = "";
 	private Date Fecha_creacion;
 	private Date Fecha_actualizacion;
+	private Utils utilidades = new Utils();
 
 	//Constructor con id autoincremental
 	public Clave_de_permiso(int idClave, int usuarioId, String clave, Date fechaCreacion, Date fechaActualizacion)
@@ -61,8 +62,8 @@ public class Clave_de_permiso extends Object
 		} else if(clave.length() > 30)
 		{
 			throw new IllegalArgumentException("La longitud de la clave es demasiado larga.");
-		}
-		this.Clave = clave;
+		} 
+			this.Clave = clave;
 	}
 
 	public String getClave()

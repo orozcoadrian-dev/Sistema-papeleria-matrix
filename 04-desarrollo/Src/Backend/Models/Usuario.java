@@ -32,9 +32,10 @@ public class Usuario extends Object
 	private String Nombre_usuario = "";
 	private String Contrasenia = "";
 	private RolUsuario Rol;
-	private String email = "";
-	private String telefono = "";
-	private LocalDateTime ultima_sesion;
+	private String Email = "";
+	private String Telefono = "";
+	private LocalDateTime Ultima_sesion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con id incremental
 	public Usuario(int idUsuario, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion) 
@@ -88,9 +89,10 @@ public class Usuario extends Object
 		} else if(primerNombre.length() > 30)
 		{
 			throw new IllegalArgumentException("La longitud del primer nombre es demasiado larga.");
+		} else if(utilidades.tieneSoloTexto(primerNombre) == true)
+		{
+			this.Primer_nombre = primerNombre;
 		}
-		
-		this.Primer_nombre = primerNombre;
 	}
 
 	public String getPrimerNombre()
@@ -106,8 +108,11 @@ public class Usuario extends Object
 		} else if(segundoNombre.length() > 30)
 		{
 			throw new IllegalArgumentException("La longitud del segundo nombre es demasiado larga.");
+		} else if(utilidades.tieneSoloTexto(segundoNombre) == true)
+		{
+			this.Segundo_nombre = segundoNombre;
 		}
-		this.Segundo_nombre = segundoNombre;
+		
 	}
 
 	public String getSegundoNombre()
@@ -126,8 +131,10 @@ public class Usuario extends Object
 		} else if(primerApellido.length() > 30)
 		{
 			throw new IllegalArgumentException("La longitud del primer apellido es demasiado larga.");
+		} else if(utilidades.tieneSoloTexto(primerApellido) == true)
+		{
+			this.Primer_apellido = primerApellido;
 		}
-		this.Primer_apellido = primerApellido;
 	}
 
 	public String getPrimerApellido()
@@ -143,8 +150,10 @@ public class Usuario extends Object
 		} else if(segundoApellido.length() > 30)
 		{
 			throw new IllegalArgumentException("La longitud del segundo apellido es demasiado larga.");
+		} else if(utilidades.tieneSoloTexto(segundoApellido) == true)
+		{
+			this.Segundo_apellido = segundoApellido;
 		}
-		this.Segundo_apellido = segundoApellido;
 	}
 
 	public String getSegundoApellido()
@@ -163,8 +172,10 @@ public class Usuario extends Object
 		} else if(numeroDocumento.length() > 20)
 		{
 			throw new IllegalArgumentException("El número de documento tiene una longitud muy larga.");
+		} else if(utilidades.tieneSoloNumeros(numeroDocumento) == true)
+		{
+			this.Numero_documento = numeroDocumento;
 		}
-		this.Numero_documento = numeroDocumento;
 	}
 
 	public String getNumeroDocumento()
@@ -180,8 +191,10 @@ public class Usuario extends Object
 		} else if(tipoDocumento.length() > 5)
 		{
 			System.out.println("El tipo de documento superó el máximo de carácteres.");
+		} else if(utilidades.tieneSoloTexto(tipoDocumento) == true)
+		{
+			this.Tipo_documento = tipoDocumento;
 		}
-		this.Tipo_documento = tipoDocumento;
 	}
 
 	public String getTipoDocumento()
@@ -245,12 +258,14 @@ public class Usuario extends Object
 		} else if(email.length() > 60)
 		{
 			throw new IllegalArgumentException("La longitud del email es demasiado larga.");
+		} else if(utilidades.esEmailValido(email) == true)
+		{
+			this.Email = email;
 		}
-		this.email = email;
 	}
 
 	public String getEmail() {
-		return email;
+		return Email;
 	}
 
 	public void setTelefono(String telefono) {
@@ -263,19 +278,21 @@ public class Usuario extends Object
 		} else if(telefono.length() > 15)
 		{
 			throw new IllegalArgumentException("La longitud del teléfono  es demasiado larga.");
+		} else if(utilidades.tieneSoloNumeros(telefono) == true)
+		{
+			this.Telefono = telefono;
 		}
-		this.telefono = telefono;
 	}
 
 	public String getTelefono() {
-		return telefono;
+		return Telefono;
 	}
 
 	public void setUltima_sesion(LocalDateTime ultimaSesion) {
-		this.ultima_sesion = ultimaSesion;
+		this.Ultima_sesion = ultimaSesion;
 	}
 
 	public LocalDateTime getUltima_sesion() {
-		return ultima_sesion;
+		return Ultima_sesion;
 	}	
 }

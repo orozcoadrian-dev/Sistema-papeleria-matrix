@@ -17,6 +17,7 @@ public class Estadistica_del_negocio extends Object
 	private int Numero_ropa_vendida = 0;
 	private int Numero_servicios = 0;
 	private int Numero_facturas_generadas = 0;
+	private Utils utilidades = new Utils();
 
 	// Constructor con ID incremental
 	public Estadistica_del_negocio(int idEstadistica, String codigoEstadistica)
@@ -47,8 +48,10 @@ public class Estadistica_del_negocio extends Object
 		} else if(codigoEstadistica.length() > 15)
 		{
 			throw new IllegalArgumentException("El código de la estadística no puede tener una longitud superior a 15 caracteres.");
+		} else if(utilidades.tieneSoloNumeros(codigoEstadistica) == true)
+		{
+			this.Codigo_estadistica = codigoEstadistica;
 		}
-		this.Codigo_estadistica = codigoEstadistica;
 	}
 
 	public String getCodigoEstadistica()

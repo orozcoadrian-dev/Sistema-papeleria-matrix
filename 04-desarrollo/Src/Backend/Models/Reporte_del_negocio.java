@@ -9,6 +9,7 @@ public class Reporte_del_negocio extends Object
 	private int Usuario_id = 0;
 	private String Ruta_archivo = "";
 	private Date Fecha_generacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con id autoincremental
 	public Reporte_del_negocio(int idReporte, String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, Date fechaGeneracion)
@@ -49,8 +50,10 @@ public class Reporte_del_negocio extends Object
 		} else if (codigoReporte.length() > 20)
 		{
 			throw new IllegalArgumentException("El código de reporte no puede superar una longitud de 20 caracteres.");
+		} else if(utilidades.tieneSoloNumeros(codigoReporte) == true)
+		{
+			this.Codigo_reporte = codigoReporte;
 		}
-		this.Codigo_reporte = codigoReporte;
 	}
 
 	public String getCodigoReporte()
@@ -114,9 +117,6 @@ public class Reporte_del_negocio extends Object
 		if (rutaArchivo.isEmpty() || rutaArchivo.isBlank())
 		{
 			throw new IllegalArgumentException("La ruta del archivo no puede estar vacía.");
-		} else if (rutaArchivo.length() < 20)
-		{
-			throw new IllegalArgumentException("La longitud de la ruta del archivo es demasiado corta.");
 		} else if (rutaArchivo.length() > 255)
 		{
 			throw new IllegalArgumentException("La ruta del archivo no puede superar una longitud de 255 caracteres.");

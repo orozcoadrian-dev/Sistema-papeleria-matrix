@@ -10,6 +10,7 @@ public class Servicio extends Object
 	private String Descripcion = "";
 	private Date Fecha_vinculacion;
 	private Date Fecha_actualizacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con id autoincremental
 	public Servicio(int idServicio, String codigoServicio, String nombre, String categoria, double precio, String descripcion, Date fechaVinculacion, Date fechaActualizacion)
@@ -52,8 +53,10 @@ public class Servicio extends Object
 		} else if (codigoServicio.length() > 20)
 		{
 			throw new IllegalArgumentException("El código de servicio no puede superar una longitud de 20 caracteres.");
+		} else if (utilidades.tieneSoloNumeros(codigoServicio) == true)
+		{
+			this.Codigo_servicio = codigoServicio;
 		}
-		this.Codigo_servicio = codigoServicio;
 	}
 
 	public String getCodigoServicio()
@@ -72,8 +75,10 @@ public class Servicio extends Object
 		} else if(nombre.length() > 30)
 		{
 			throw new IllegalArgumentException("La longitud del nombre no puede ser mayor de 30 caracteres.");
+		} else if (utilidades.tieneSoloTexto(nombre) == true)
+		{
+			this.Nombre = nombre;
 		}
-		this.Nombre = nombre;
 	}
 
 	public String getNombre()
@@ -92,8 +97,10 @@ public class Servicio extends Object
 		} else if (categoria.length() > 30)
 		{
 			throw new IllegalArgumentException("La categoría no puede superar una longitud de 30 caracteres.");
+		} else if (utilidades.tieneSoloTexto(categoria) == true)
+		{
+			this.Categoria = categoria;
 		}
-		this.Categoria = categoria;
 	}
 
 	public String getCategoria()
@@ -129,8 +136,10 @@ public class Servicio extends Object
 		} else if (descripcion.length() > 150)
 		{
 			throw new IllegalArgumentException("La descripción no puede superar una longitud de 150 caracteres.");
+		} else if (utilidades.tieneSoloTexto(descripcion) == true)
+		{
+			this.Descripcion = descripcion;
 		}
-		this.Descripcion = descripcion;
 	}
 
 	public String getDescripcion()

@@ -12,6 +12,7 @@ public class Producto_de_papeleria extends Object
 	private String Lugar_compra = "";
 	private Date Fecha_publicacion;
 	private Date Fecha_actualizacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con id autoincremental
 	public Producto_de_papeleria(int idProducto, String codigoProducto, String nombre, int cantidad, double precioVenta, double precioCompra, String descripcion, String lugarCompra, Date fechaPublicacion, Date fechaActualizacion)
@@ -58,8 +59,10 @@ public class Producto_de_papeleria extends Object
 		} else if (codigoProducto.length() > 20)
 		{
 			throw new IllegalArgumentException("El código de producto no puede superar una longitud de 20 caracteres.");
+		} else if(utilidades.tieneSoloNumeros(codigoProducto) == true)
+		{
+			this.Codigo_producto = codigoProducto;
 		}
-		this.Codigo_producto = codigoProducto;
 	}
 
 	public String getCodigoProducto()
@@ -78,8 +81,10 @@ public class Producto_de_papeleria extends Object
 		} else if (nombre.length() > 30)
 		{
 			throw new IllegalArgumentException("El nombre no puede superar una longitud de 30 caracteres.");
+		} else if(utilidades.tieneSoloTexto(nombre) == true)
+		{
+			this.Nombre = nombre;
 		}
-		this.Nombre = nombre;
 	}
 
 	public String getNombre()
@@ -149,8 +154,10 @@ public class Producto_de_papeleria extends Object
 		} else if (descripcion.length() > 150)
 		{
 			throw new IllegalArgumentException("La descripción no puede superar una longitud de 150 caracteres.");
-		}
+		} else if(utilidades.tieneSoloTexto(descripcion) == true)
+		{
 		this.Descripcion = descripcion;
+		}
 	}
 
 	public String getDescripcion()
@@ -169,8 +176,10 @@ public class Producto_de_papeleria extends Object
 		} else if (lugarCompra.length() > 40)
 		{
 			throw new IllegalArgumentException("El lugar de compra no puede superar una longitud de 40 caracteres.");
-		}
+		} else if(utilidades.tieneSoloTexto(lugarCompra) == true)
+		{
 		this.Lugar_compra = lugarCompra;
+		}
 	}
 
 	public String getLugarCompra()

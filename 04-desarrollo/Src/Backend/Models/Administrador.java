@@ -6,6 +6,7 @@ public class Administrador extends Usuario
 	
 		private Date Fecha_posicionamiento;
 		private String Area_acceso = "";
+		private Utils utilidades = new Utils();
 	
 	// Constructor con id incremental
 	public Administrador(int idUsuario, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion, Date fechaPosicionamiento, String areaAcceso)
@@ -48,8 +49,10 @@ public class Administrador extends Usuario
 		} else if(areaAcceso.length() > 15)
 		{
 			throw new IllegalArgumentException("La longitud del área de acceso es demasiado larga.");
+		} else if(utilidades.tieneSoloTexto(areaAcceso) == true)
+		{
+			this.Area_acceso = areaAcceso;
 		}
-		this.Area_acceso = areaAcceso;
 	}
 
 	public String getAreaAcceso()

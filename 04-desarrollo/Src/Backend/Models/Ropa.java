@@ -13,6 +13,7 @@ public class Ropa extends Object
 	private String Color = "";
 	private Date Fecha_registro;
 	private Date Fecha_actualizacion;
+	private Utils utilidades = new Utils();
 
 	// Constructor con id autoincremental
 	public Ropa(int idRopa, String codigoRopa, String tipoRopa, String material, String talla, String descripcion, String nombre, double precio, String color, Date fechaRegistro, Date fechaActualizacion)
@@ -61,8 +62,10 @@ public class Ropa extends Object
 		} else if (codigoRopa.length() > 20)
 		{
 			throw new IllegalArgumentException("El código de ropa no puede superar una longitud de 20 caracteres.");
+		} else if (utilidades.tieneSoloNumeros(codigoRopa) == true)
+		{
+			this.Codigo_ropa = codigoRopa;
 		}
-		this.Codigo_ropa = codigoRopa;
 	}
 
 	public String getCodigoRopa()
@@ -81,8 +84,10 @@ public class Ropa extends Object
 		} else if (tipoRopa.length() > 20)
 		{
 			throw new IllegalArgumentException("El tipo de ropa no puede superar una longitud de 20 caracteres.");
+		} else if (utilidades.tieneSoloTexto(tipoRopa) == true)
+		{
+			this.Tipo_ropa = tipoRopa;
 		}
-		this.Tipo_ropa = tipoRopa;
 	}
 
 	public String getTipoRopa()
@@ -101,8 +106,10 @@ public class Ropa extends Object
 		} else if (material.length() > 30)
 		{
 			throw new IllegalArgumentException("El material no puede superar una longitud de 30 caracteres.");
+		} else if (utilidades.tieneSoloTexto(material) == true)
+		{
+			this.Material = material;
 		}
-		this.Material = material;
 	}
 
 	public String getMaterial()
@@ -121,8 +128,8 @@ public class Ropa extends Object
 		} else if (talla.length() > 5)
 		{
 			throw new IllegalArgumentException("La talla no puede superar una longitud de 5 caracteres.");
-		}
-		this.Talla = talla;
+		} 
+			this.Talla = talla;
 	}
 
 	public String getTalla()
@@ -141,8 +148,10 @@ public class Ropa extends Object
 		} else if (descripcion.length() > 150)
 		{
 			throw new IllegalArgumentException("La descripción no puede superar una longitud de 150 caracteres.");
+		} else if (utilidades.tieneSoloTexto(descripcion) == true)
+		{
+			this.Descripcion = descripcion;
 		}
-		this.Descripcion = descripcion;
 	}
 
 	public String getDescripcion()
@@ -161,8 +170,10 @@ public class Ropa extends Object
 		} else if (nombre.length() > 30)
 		{
 			throw new IllegalArgumentException("El nombre no puede superar una longitud de 30 caracteres.");
+		} else if (utilidades.tieneSoloTexto(nombre) == true)
+		{
+			this.Nombre = nombre;
 		}
-		this.Nombre = nombre;
 	}
 
 	public String getNombre()
@@ -198,8 +209,10 @@ public class Ropa extends Object
 		} else if (color.length() > 20)
 		{
 			throw new IllegalArgumentException("El color no puede superar una longitud de 20 caracteres.");
+		} else if (utilidades.tieneSoloTexto(color) == true)
+		{
+			this.Color = color;
 		}
-		this.Color = color;
 	}
 
 	public String getColor()
