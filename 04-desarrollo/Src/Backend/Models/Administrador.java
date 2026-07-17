@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -24,11 +26,11 @@ public class Administrador extends Usuario
 		setAreaAcceso(areaAcceso);
 	}
 
-	public void setFechaPosicionamiento(Date fechaPosicionamiento)
+	public void setFechaPosicionamiento(Date fechaPosicionamiento) throws IllegalArgumentException
 	{
 		if(fechaPosicionamiento == null)
 		{
-			throw new IllegalArgumentException("La fecha no puede quedar vacía.");
+			throw new IllegalArgumentException("La fecha de posicionamiento no puede quedar vacía.");
 		}
 		this.Fecha_posicionamiento = fechaPosicionamiento;
 	}
@@ -38,7 +40,7 @@ public class Administrador extends Usuario
 		return Fecha_posicionamiento;
 	}
 
-	public void setAreaAcceso(String areaAcceso)
+	public void setAreaAcceso(String areaAcceso) throws IllegalArgumentException
 	{
 		if(areaAcceso.isBlank() || areaAcceso.isEmpty())
 		{

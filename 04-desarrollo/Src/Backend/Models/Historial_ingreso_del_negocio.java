@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.time.LocalDateTime;
 
 public class Historial_ingreso_del_negocio extends Object 
@@ -28,7 +30,7 @@ public class Historial_ingreso_del_negocio extends Object
 		return Id_historial_ingreso;
 	}
 
-	public void setIngresoId(int ingresoId)
+	public void setIngresoId(int ingresoId) throws IllegalArgumentException
 	{
 		if(ingresoId == 0)
 		{
@@ -45,7 +47,7 @@ public class Historial_ingreso_del_negocio extends Object
 		return Ingreso_id;
 	}
 
-	public void setMotivoEstadistica(String motivoEstadistica)
+	public void setMotivoEstadistica(String motivoEstadistica) throws IllegalArgumentException
 	{
 		if(motivoEstadistica.isBlank() || motivoEstadistica.isEmpty())
 		{
@@ -67,8 +69,12 @@ public class Historial_ingreso_del_negocio extends Object
 		return Motivo_estadistica;
 	}
 
-	public void setFechaGeneracion(LocalDateTime fechaGeneracion)
+	public void setFechaGeneracion(LocalDateTime fechaGeneracion) throws IllegalArgumentException
 	{
+		if(fechaGeneracion == null)
+		{
+			throw new IllegalArgumentException("La fecha de generación no puede ir vacía.");
+		}
 		this.Fecha_generacion = fechaGeneracion;
 	}
 

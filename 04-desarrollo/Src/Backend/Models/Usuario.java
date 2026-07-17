@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.time.LocalDateTime;
 
 //Enum para el rol del usuario
@@ -78,7 +80,7 @@ public class Usuario extends Object
 		return Id_usuario;
 	}
 
-	public void setPrimerNombre(String primerNombre)
+	public void setPrimerNombre(String primerNombre) throws IllegalArgumentException
 	{
 		if(primerNombre.isBlank() || primerNombre.isEmpty())
 		{
@@ -100,7 +102,7 @@ public class Usuario extends Object
 		return Primer_nombre;
 	}
 
-	public void setSegundoNombre(String segundoNombre)
+	public void setSegundoNombre(String segundoNombre) throws IllegalArgumentException
 	{
 		if(segundoNombre.length() < 3)
 		{
@@ -120,7 +122,7 @@ public class Usuario extends Object
 		return Segundo_nombre;
 	}
 
-	public void setPrimerApellido(String primerApellido)
+	public void setPrimerApellido(String primerApellido) throws IllegalArgumentException
 	{
 		if(primerApellido.isBlank() || primerApellido.isEmpty())
 		{
@@ -142,7 +144,7 @@ public class Usuario extends Object
 		return Primer_apellido;
 	}
 
-	public void setSegundoApellido(String segundoApellido)
+	public void setSegundoApellido(String segundoApellido) throws IllegalArgumentException
 	{
 		if(segundoApellido.length() < 3)
 		{
@@ -161,7 +163,7 @@ public class Usuario extends Object
 		return Segundo_apellido;
 	}
 
-	public void setNumeroDocumento(String numeroDocumento)
+	public void setNumeroDocumento(String numeroDocumento) throws IllegalArgumentException
 	{
 		if(numeroDocumento.isBlank() || numeroDocumento.isEmpty())
 		{
@@ -183,7 +185,7 @@ public class Usuario extends Object
 		return Numero_documento;
 	}
 
-	public void setTipoDocumento(String tipoDocumento)
+	public void setTipoDocumento(String tipoDocumento) throws IllegalArgumentException
 	{
 		if(tipoDocumento.isBlank() || tipoDocumento.isEmpty())
 		{
@@ -202,7 +204,7 @@ public class Usuario extends Object
 		return Tipo_documento;
 	}
 
-	public void setNombreUsuario(String nombreUsuario)
+	public void setNombreUsuario(String nombreUsuario) throws IllegalArgumentException
 	{
 		if(nombreUsuario.isBlank() || nombreUsuario.isEmpty())
 		{
@@ -222,7 +224,8 @@ public class Usuario extends Object
 		return Nombre_usuario;
 	}
 
-	public void setContrasenia(String contrasenia) {
+	public void setContrasenia(String contrasenia) throws IllegalArgumentException
+	{
 		if(contrasenia.isBlank() || contrasenia.isEmpty())
 		{
 			System.out.println("La contraseña no puede estar vacía.");
@@ -248,7 +251,8 @@ public class Usuario extends Object
 		return Rol;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(String email) throws IllegalArgumentException
+	{
 		if(email.isBlank() || email.isEmpty())
 		{
 			System.out.println("El email no puede estar vacío.");
@@ -268,7 +272,8 @@ public class Usuario extends Object
 		return Email;
 	}
 
-	public void setTelefono(String telefono) {
+	public void setTelefono(String telefono) throws IllegalArgumentException
+	{
 		if(telefono.isBlank() || telefono.isEmpty())
 		{
 			System.out.println("El email no puede estar vacío.");

@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.util.Date;
 
 public class Factura_del_negocio extends Object 
@@ -39,7 +41,7 @@ public class Factura_del_negocio extends Object
 		return Id_factura;
 	}
 
-	public void setCodigoFactura(String codigoFactura)
+	public void setCodigoFactura(String codigoFactura) throws IllegalArgumentException
 	{
 		if(codigoFactura.isBlank() || codigoFactura.isEmpty())
 		{
@@ -61,7 +63,7 @@ public class Factura_del_negocio extends Object
 		return Codigo_factura;
 	}
 
-	public void setTipoFactura(String tipoFactura)
+	public void setTipoFactura(String tipoFactura) throws IllegalArgumentException
 	{
 		if(tipoFactura.isBlank() || tipoFactura.isEmpty())
 		{
@@ -83,7 +85,7 @@ public class Factura_del_negocio extends Object
 		return Tipo_factura;
 	}
 
-	public void setUsuarioId(int usuarioId)
+	public void setUsuarioId(int usuarioId) throws IllegalArgumentException
 	{
 		if(usuarioId == 0)
 		{
@@ -100,7 +102,7 @@ public class Factura_del_negocio extends Object
 		return Usuario_id;
 	}
 
-	public void setMonto(double monto)
+	public void setMonto(double monto) throws IllegalArgumentException
 	{
 		if(monto == 0)
 		{
@@ -117,8 +119,12 @@ public class Factura_del_negocio extends Object
 		return Monto;
 	}
 
-	public void setFechaGeneracion(Date fechaGeneracion)
+	public void setFechaGeneracion(Date fechaGeneracion) throws IllegalArgumentException
 	{
+		if(fechaGeneracion == null)
+		{
+			throw new IllegalArgumentException("La fecha de generación no puede ir vacía.");
+		}
 		this.Fecha_generacion = fechaGeneracion;
 	}
 
@@ -127,8 +133,11 @@ public class Factura_del_negocio extends Object
 		return Fecha_generacion;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion)
+	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
 	{
+		if (fechaActualizacion == null) {
+			throw new IllegalArgumentException("La fecha de actualización no puede ir vacía.");
+		}
 		this.Fecha_actualizacion = fechaActualizacion;
 	}
 

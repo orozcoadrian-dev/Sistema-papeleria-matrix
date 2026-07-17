@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.util.Date;
 
 public class Informacion_del_negocio extends Object 
@@ -39,7 +41,7 @@ public class Informacion_del_negocio extends Object
 		return Id_informacion;
 	}
 
-	public void setUsuarioId(int usuarioId)
+	public void setUsuarioId(int usuarioId) throws IllegalArgumentException
 	{
 		if(usuarioId == 0)
 		{
@@ -56,7 +58,7 @@ public class Informacion_del_negocio extends Object
 		return Usuario_id;
 	}
 
-	public void setValorInformacion(int valorInformacion)
+	public void setValorInformacion(int valorInformacion) throws IllegalArgumentException
 	{
 		if(valorInformacion == 0)
 		{
@@ -68,12 +70,12 @@ public class Informacion_del_negocio extends Object
 		this.ValorInformacion = valorInformacion;
 	}
 
-	public int getValorInformacion()
+	public int getValorInformacion() throws IllegalArgumentException
 	{
 		return ValorInformacion;
 	}
 
-	public void setTipoInformacion(String tipoInformacion)
+	public void setTipoInformacion(String tipoInformacion) throws IllegalArgumentException
 	{
 		if(tipoInformacion.isEmpty() || tipoInformacion.isBlank())
 		{
@@ -95,7 +97,7 @@ public class Informacion_del_negocio extends Object
 		return Tipo_informacion;
 	}
 
-	public void setInformacion(String informacion)
+	public void setInformacion(String informacion) throws IllegalArgumentException
 	{
 		if(informacion.isEmpty() || informacion.isBlank())
 		{
@@ -117,8 +119,12 @@ public class Informacion_del_negocio extends Object
 		return Informacion;
 	}
 
-	public void setFechaCreacion(Date fechaCreacion)
+	public void setFechaCreacion(Date fechaCreacion) throws IllegalArgumentException
 	{
+		if(fechaCreacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de creacipon no puede estar vacía.");
+		}
 		this.Fecha_creacion = fechaCreacion;
 	}
 
@@ -127,8 +133,12 @@ public class Informacion_del_negocio extends Object
 		return Fecha_creacion;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion)
+	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
 	{
+		if(fechaActualizacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de actualización no puede estar vacía.");
+		}
 		this.Fecha_actualizacion = fechaActualizacion;
 	}
 

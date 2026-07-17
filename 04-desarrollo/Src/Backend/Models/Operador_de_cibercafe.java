@@ -1,3 +1,4 @@
+package Backend.Models;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class Operador_de_cibercafe extends Usuario
 		setFechaContrato(fechaContrato);
 	}
 
-	public void setSalario(double salario)
+	public void setSalario(double salario) throws IllegalArgumentException
 	{
 		if(salario == 0)
 		{
@@ -46,7 +47,7 @@ public class Operador_de_cibercafe extends Usuario
 		return Salario;
 	}
 
-	public void setHorario(String horario)
+	public void setHorario(String horario) throws IllegalArgumentException
 	{
 		if(horario.isBlank() || horario.isEmpty())
 		{
@@ -66,7 +67,7 @@ public class Operador_de_cibercafe extends Usuario
 		return Horario;
 	}
 
-	public void setDireccion(String direccion)
+	public void setDireccion(String direccion) throws IllegalArgumentException
 	{
 		if(direccion.isBlank() || direccion.isEmpty())
 		{
@@ -86,8 +87,12 @@ public class Operador_de_cibercafe extends Usuario
 		return Direccion;
 	}
 
-	public void setFechaContrato(Date fechaContrato)
+	public void setFechaContrato(Date fechaContrato) throws IllegalArgumentException
 	{
+		if(fechaContrato == null)
+		{
+			throw new IllegalArgumentException("La fecha de contrato no puede estar vacía.");
+		}
 		this.Fecha_contrato = fechaContrato; 
 	}
 

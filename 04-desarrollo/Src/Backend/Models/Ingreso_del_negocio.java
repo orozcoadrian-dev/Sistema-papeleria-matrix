@@ -1,3 +1,6 @@
+package Backend.Models;
+import Backend.Common.Utils;
+
 public class Ingreso_del_negocio extends Object 
 {
 	private int Id_ingreso = 0;
@@ -43,7 +46,7 @@ public class Ingreso_del_negocio extends Object
 		return Id_ingreso;
 	}
 
-	public void setCodigoIngreso(String codigoIngreso)
+	public void setCodigoIngreso(String codigoIngreso) throws IllegalArgumentException
 	{
 		if (codigoIngreso.isEmpty() || codigoIngreso.isBlank())
 		{
@@ -65,7 +68,7 @@ public class Ingreso_del_negocio extends Object
 		return Codigo_ingreso;
 	}
 
-	public void setTotalSalarioOperadores(double totalSalarioOperadores)
+	public void setTotalSalarioOperadores(double totalSalarioOperadores) throws IllegalArgumentException
 	{
 		if (totalSalarioOperadores == 0)
 		{
@@ -82,7 +85,7 @@ public class Ingreso_del_negocio extends Object
 		return Total_salario_operadores;
 	}
 
-	public void setTotalVendidoRopa(double totalVendidoRopa)
+	public void setTotalVendidoRopa(double totalVendidoRopa) throws IllegalArgumentException
 	{
 		if (totalVendidoRopa == 0)
 		{
@@ -99,7 +102,7 @@ public class Ingreso_del_negocio extends Object
 		return Total_vendido_ropa;
 	}
 
-	public void setInversionTotalPapeleria(double inversionTotalPapeleria)
+	public void setInversionTotalPapeleria(double inversionTotalPapeleria) throws IllegalArgumentException
 	{
 		if (inversionTotalPapeleria == 0)
 		{
@@ -116,7 +119,7 @@ public class Ingreso_del_negocio extends Object
 		return Inversion_total_papeleria;
 	}
 
-	public void setTotalVendidoServicios(double totalVendidoServicios)
+	public void setTotalVendidoServicios(double totalVendidoServicios) throws IllegalArgumentException
 	{
 		if (totalVendidoServicios == 0)
 		{
@@ -133,7 +136,7 @@ public class Ingreso_del_negocio extends Object
 		return Total_vendido_servicios;
 	}
 
-	public void setTotalVendidoProductos(double totalVendidoProductos)
+	public void setTotalVendidoProductos(double totalVendidoProductos) throws IllegalArgumentException
 	{
 		if (totalVendidoProductos == 0)
 		{
@@ -150,7 +153,7 @@ public class Ingreso_del_negocio extends Object
 		return Total_vendido_productos;
 	}
 
-	public void setTotalRecaudoEsperadoPapeleria(double totalRecaudoEsperadoPapeleria)
+	public void setTotalRecaudoEsperadoPapeleria(double totalRecaudoEsperadoPapeleria) throws IllegalArgumentException
 	{
 		if (totalRecaudoEsperadoPapeleria == 0)
 		{
@@ -167,7 +170,7 @@ public class Ingreso_del_negocio extends Object
 		return Total_recaudo_esperado_papeleria;
 	}
 
-	public void setTipoIngreso(String tipoIngreso)
+	public void setTipoIngreso(String tipoIngreso) throws IllegalArgumentException
 	{
 		if (tipoIngreso.isEmpty() || tipoIngreso.isBlank())
 		{

@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.util.Date;
 
 public class Ropa extends Object
@@ -51,7 +53,7 @@ public class Ropa extends Object
 		return Id_ropa;
 	}
 
-	public void setCodigoRopa(String codigoRopa)
+	public void setCodigoRopa(String codigoRopa) throws IllegalArgumentException
 	{
 		if (codigoRopa.isEmpty() || codigoRopa.isBlank())
 		{
@@ -73,7 +75,7 @@ public class Ropa extends Object
 		return Codigo_ropa;
 	}
 
-	public void setTipoRopa(String tipoRopa)
+	public void setTipoRopa(String tipoRopa) throws IllegalArgumentException
 	{
 		if (tipoRopa.isEmpty() || tipoRopa.isBlank())
 		{
@@ -95,7 +97,7 @@ public class Ropa extends Object
 		return Tipo_ropa;
 	}
 
-	public void setMaterial(String material)
+	public void setMaterial(String material) throws IllegalArgumentException
 	{
 		if (material.isEmpty() || material.isBlank())
 		{
@@ -117,7 +119,7 @@ public class Ropa extends Object
 		return Material;
 	}
 
-	public void setTalla(String talla)
+	public void setTalla(String talla) throws IllegalArgumentException
 	{
 		if (talla.isEmpty() || talla.isBlank())
 		{
@@ -137,7 +139,7 @@ public class Ropa extends Object
 		return Talla;
 	}
 
-	public void setDescripcion(String descripcion)
+	public void setDescripcion(String descripcion) throws IllegalArgumentException
 	{
 		if (descripcion.isEmpty() || descripcion.isBlank())
 		{
@@ -159,7 +161,7 @@ public class Ropa extends Object
 		return Descripcion;
 	}
 
-	public void setNombre(String nombre)
+	public void setNombre(String nombre) throws IllegalArgumentException
 	{
 		if (nombre.isEmpty() || nombre.isBlank())
 		{
@@ -181,7 +183,7 @@ public class Ropa extends Object
 		return Nombre;
 	}
 
-	public void setPrecio(double precio)
+	public void setPrecio(double precio) throws IllegalArgumentException
 	{
 		if (precio == 0)
 		{
@@ -198,7 +200,7 @@ public class Ropa extends Object
 		return Precio;
 	}
 
-	public void setColor(String color)
+	public void setColor(String color) throws IllegalArgumentException
 	{
 		if (color.isEmpty() || color.isBlank())
 		{
@@ -220,8 +222,12 @@ public class Ropa extends Object
 		return Color;
 	}
 
-	public void setFechaRegistro(Date fechaRegistro)
+	public void setFechaRegistro(Date fechaRegistro) throws IllegalArgumentException
 	{
+		if(fechaRegistro == null)
+		{
+			throw new IllegalArgumentException("La fecha de registro no puede ir vacía.");
+		}
 		this.Fecha_registro = fechaRegistro;
 	}
 
@@ -230,8 +236,12 @@ public class Ropa extends Object
 		return Fecha_registro;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion)
+	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
 	{
+		if(fechaActualizacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de actualización no puede ir vacía.");
+		}
 		this.Fecha_actualizacion = fechaActualizacion;
 	}
 

@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.util.Date; 
 
 public class Servicio extends Object
@@ -42,7 +44,7 @@ public class Servicio extends Object
 		return Id_servicio;
 	}
 
-	public void setCodigoServicio(String codigoServicio)
+	public void setCodigoServicio(String codigoServicio) throws IllegalArgumentException
 	{
 		if (codigoServicio.isEmpty() || codigoServicio.isBlank())
 		{
@@ -64,7 +66,7 @@ public class Servicio extends Object
 		return Codigo_servicio;
 	}
 
-	public void setNombre(String nombre)
+	public void setNombre(String nombre) throws IllegalArgumentException
 	{
 		if(nombre.isBlank() || nombre.isEmpty())
 		{
@@ -86,7 +88,7 @@ public class Servicio extends Object
 		return Nombre;
 	}
 
-	public void setCategoria(String categoria)
+	public void setCategoria(String categoria) throws IllegalArgumentException
 	{
 		if (categoria.isEmpty() || categoria.isBlank())
 		{
@@ -108,7 +110,7 @@ public class Servicio extends Object
 		return Categoria;
 	}
 
-	public void setPrecio(double precio)
+	public void setPrecio(double precio) throws IllegalArgumentException
 	{
 		if (precio == 0)
 		{
@@ -125,7 +127,7 @@ public class Servicio extends Object
 		return Precio;
 	}
 
-	public void setDescripcion(String descripcion)
+	public void setDescripcion(String descripcion) throws IllegalArgumentException
 	{
 		if (descripcion.isEmpty() || descripcion.isBlank())
 		{
@@ -147,8 +149,12 @@ public class Servicio extends Object
 		return Descripcion;
 	}
 
-	public void setFechaVinculacion(Date fechaVinculacion)
+	public void setFechaVinculacion(Date fechaVinculacion) throws IllegalArgumentException
 	{
+		if(fechaVinculacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de vinculación no puede ir vacía.");
+		}
 		this.Fecha_vinculacion = fechaVinculacion;
 	}
 
@@ -157,8 +163,12 @@ public class Servicio extends Object
 		return Fecha_vinculacion;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion)
+	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
 	{
+		if(fechaActualizacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de actualización no puede ir vacía.");
+		}
 		this.Fecha_actualizacion = fechaActualizacion;
 	}
 

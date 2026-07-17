@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.util.Date;
 
 public class Producto_de_papeleria extends Object
@@ -48,7 +50,7 @@ public class Producto_de_papeleria extends Object
 		return Id_producto;
 	}
 
-	public void setCodigoProducto(String codigoProducto)
+	public void setCodigoProducto(String codigoProducto) throws IllegalArgumentException
 	{
 		if (codigoProducto.isEmpty() || codigoProducto.isBlank())
 		{
@@ -70,7 +72,7 @@ public class Producto_de_papeleria extends Object
 		return Codigo_producto;
 	}
 
-	public void setNombre(String nombre)
+	public void setNombre(String nombre) throws IllegalArgumentException
 	{
 		if (nombre.isEmpty() || nombre.isBlank())
 		{
@@ -92,7 +94,7 @@ public class Producto_de_papeleria extends Object
 		return Nombre;
 	}
 
-	public void setCantidad(int cantidad)
+	public void setCantidad(int cantidad) throws IllegalArgumentException
 	{
 		if (cantidad == 0)
 		{
@@ -109,7 +111,7 @@ public class Producto_de_papeleria extends Object
 		return Cantidad;
 	}
 
-	public void setPrecioVenta(double precioVenta)
+	public void setPrecioVenta(double precioVenta) throws IllegalArgumentException
 	{
 		if (precioVenta == 0)
 		{
@@ -126,7 +128,7 @@ public class Producto_de_papeleria extends Object
 		return Precio_venta;
 	}
 
-	public void setPrecioCompra(double precioCompra)
+	public void setPrecioCompra(double precioCompra) throws IllegalArgumentException
 	{
 		if (precioCompra == 0)
 		{
@@ -143,7 +145,7 @@ public class Producto_de_papeleria extends Object
 		return Precio_compra;
 	}
 
-	public void setDescripcion(String descripcion)
+	public void setDescripcion(String descripcion) throws IllegalArgumentException
 	{
 		if (descripcion.isEmpty() || descripcion.isBlank())
 		{
@@ -165,7 +167,7 @@ public class Producto_de_papeleria extends Object
 		return Descripcion;
 	}
 
-	public void setLugarCompra(String lugarCompra)
+	public void setLugarCompra(String lugarCompra) throws IllegalArgumentException
 	{
 		if (lugarCompra.isEmpty() || lugarCompra.isBlank())
 		{
@@ -187,8 +189,12 @@ public class Producto_de_papeleria extends Object
 		return Lugar_compra;
 	}
 
-	public void setFechaPublicacion(Date fechaPublicacion)
+	public void setFechaPublicacion(Date fechaPublicacion) throws IllegalArgumentException
 	{
+		if(fechaPublicacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de publicación no puede estar vacía.");
+		}
 		this.Fecha_publicacion = fechaPublicacion;
 	}
 
@@ -197,8 +203,12 @@ public class Producto_de_papeleria extends Object
 		return Fecha_publicacion;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion)
+	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
 	{
+		if(fechaActualizacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de actualización no puede ir vacía.");
+		}
 		this.Fecha_actualizacion = fechaActualizacion;
 	}
 

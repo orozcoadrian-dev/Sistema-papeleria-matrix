@@ -1,3 +1,6 @@
+package Backend.Models;
+import Backend.Common.Utils;
+
 public class Estadistica_del_negocio extends Object 
 {
 	
@@ -37,7 +40,7 @@ public class Estadistica_del_negocio extends Object
 		return Id_estadistica;
 	}
 
-	public void setCodigoEstadistica(String codigoEstadistica)
+	public void setCodigoEstadistica(String codigoEstadistica) throws IllegalArgumentException
 	{
 		if(codigoEstadistica.isBlank() || codigoEstadistica.isEmpty())
 		{

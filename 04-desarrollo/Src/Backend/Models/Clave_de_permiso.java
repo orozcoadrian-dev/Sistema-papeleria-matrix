@@ -1,3 +1,4 @@
+package Backend.Models;
 import java.util.Date;
 
 public class Clave_de_permiso extends Object 
@@ -8,7 +9,6 @@ public class Clave_de_permiso extends Object
 	private String Clave = "";
 	private Date Fecha_creacion;
 	private Date Fecha_actualizacion;
-	private Utils utilidades = new Utils();
 
 	//Constructor con id autoincremental
 	public Clave_de_permiso(int idClave, int usuarioId, String clave, Date fechaCreacion, Date fechaActualizacion)
@@ -34,7 +34,7 @@ public class Clave_de_permiso extends Object
 		return Id_clave;
 	}
 
-	public void setUsuarioId(int usuarioId)
+	public void setUsuarioId(int usuarioId) throws IllegalArgumentException
 	{
 		if(usuarioId == 0)
 		{
@@ -51,7 +51,7 @@ public class Clave_de_permiso extends Object
 		return Usuario_id;
 	}
 
-	public void setClave(String clave)
+	public void setClave(String clave) throws IllegalArgumentException
 	{
 		if(clave.isBlank() || clave.isEmpty())
 		{
@@ -71,8 +71,12 @@ public class Clave_de_permiso extends Object
 		return Clave;
 	}
 
-	public void setFechaCreacion(Date fechaCreacion)
+	public void setFechaCreacion(Date fechaCreacion) throws IllegalArgumentException
 	{
+		if(fechaCreacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de creación no puede ir vacía.");
+		}
 		this.Fecha_creacion = fechaCreacion;
 	}
 
@@ -81,8 +85,12 @@ public class Clave_de_permiso extends Object
 		return Fecha_creacion;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion)
+	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
 	{
+		if(fechaActualizacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de actualización no puede estar vacía");
+		}
 		this.Fecha_actualizacion = fechaActualizacion;
 	}
 

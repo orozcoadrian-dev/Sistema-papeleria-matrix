@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.time.LocalDateTime;
 
 public class Detalle_de_factura extends Object 
@@ -50,7 +52,8 @@ public class Detalle_de_factura extends Object
 		return Id_detalle;
 	}
 
-	public void setFacturaDeNegocioId(int facturaDeNegocioId) {
+	public void setFacturaDeNegocioId(int facturaDeNegocioId) throws IllegalArgumentException
+	{
 
 		if(facturaDeNegocioId == 0)
 		{
@@ -62,11 +65,13 @@ public class Detalle_de_factura extends Object
 		Factura_de_negocio_id = facturaDeNegocioId;
 	}
 
-	public int getFacturaDeNegocioId() {
+	public int getFacturaDeNegocioId() 
+	{
 		return Factura_de_negocio_id;
 	}
 
-	public void setDescripcion(String descripcion) {
+	public void setDescripcion(String descripcion) throws IllegalArgumentException
+	{
 
 		if(descripcion.isBlank() || descripcion.isEmpty())
 		{
@@ -83,11 +88,13 @@ public class Detalle_de_factura extends Object
 		}
 	}
 
-	public String getDescripcion() {
+	public String getDescripcion() 
+	{
 		return Descripcion;
 	}
 
-	public void setServicioId(int servicioId) {
+	public void setServicioId(int servicioId) throws IllegalArgumentException
+	{
 		if(servicioId == 0)
 		{
 			throw new IllegalArgumentException("El ID del servicio no puede ser 0.");
@@ -98,11 +105,13 @@ public class Detalle_de_factura extends Object
 		this.Servicio_id = servicioId;
 	}
 
-	public int getServicioId() {
+	public int getServicioId() 
+	{
 		return Servicio_id;
 	}
 
-	public void setCantidadServicio(int cantidadServicio) {
+	public void setCantidadServicio(int cantidadServicio) throws IllegalArgumentException
+	{
 
 		if(cantidadServicio == 0)
 		{
@@ -117,11 +126,13 @@ public class Detalle_de_factura extends Object
 		Cantidad_servicio = cantidadServicio;
 	}
 
-	public int getCantidadServicio() {
+	public int getCantidadServicio() 
+	{
 		return Cantidad_servicio;
 	}
 
-	public void setProductoPapeleriaId(int productoPapeleriaId) {
+	public void setProductoPapeleriaId(int productoPapeleriaId) throws IllegalArgumentException
+	{
 		if(productoPapeleriaId == 0)
 		{
 			throw new IllegalArgumentException("El ID del producto de la papelería no puede ser 0.");
@@ -132,19 +143,30 @@ public class Detalle_de_factura extends Object
 		Producto_papeleria_id = productoPapeleriaId;
 	}
 
-	public int getProductoPapeleriaId() {
+	public int getProductoPapeleriaId() 
+	{
 		return Producto_papeleria_id;
 	}
 
-	public void setCantidadProducto(int cantidadProducto) {
+	public void setCantidadProducto(int cantidadProducto) throws IllegalArgumentException
+	{
+		if(cantidadProducto == 0)
+		{
+			throw new IllegalArgumentException("La cantidad de productos no puede ser 0.");
+		}else if(cantidadProducto < -1)
+		{
+			throw new IllegalArgumentException("La cantidad de productos no puede ser negativa.");
+		}
 		Cantidad_producto = cantidadProducto;
 	}
 
-	public int getCantidadProducto() {
+	public int getCantidadProducto() 
+	{
 		return Cantidad_producto;
 	}
 
-	public void setRopaId(int ropaId) {
+	public void setRopaId(int ropaId) throws IllegalArgumentException
+	{
 		if(ropaId == 0)
 		{
 			throw new IllegalArgumentException("El ID de la ropa no puede ser 0.");
@@ -155,23 +177,36 @@ public class Detalle_de_factura extends Object
 		Ropa_id = ropaId;
 	}
 
-	public int getRopaId() {
+	public int getRopaId() 
+	{
 		return Ropa_id;
 	}
 
-	public void setFechaGeneracion(LocalDateTime fechaGeneracion) {
+	public void setFechaGeneracion(LocalDateTime fechaGeneracion) throws IllegalArgumentException
+	{
+		if(fechaGeneracion == null)
+		{
+			throw new IllegalArgumentException("La fecha de generación no puede estar vacía.");
+		}
 		Fecha_generacion = fechaGeneracion;
 	}
 
-	public LocalDateTime getFechaGeneracion() {
+	public LocalDateTime getFechaGeneracion() 
+	{
 		return Fecha_generacion;
 	}
 
-	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+	public void setFechaActualizacion(LocalDateTime fechaActualizacion) throws IllegalArgumentException
+	{
+		if(fechaActualizacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de actualización no puede estar vacía.");
+		}
 		Fecha_actualizacion = fechaActualizacion;
 	}
 	
-	public LocalDateTime getFechaActualizacion() {
+	public LocalDateTime getFechaActualizacion() 
+	{
 		return Fecha_actualizacion;
 	}
 }

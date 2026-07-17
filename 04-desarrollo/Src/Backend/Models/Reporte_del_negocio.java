@@ -1,3 +1,5 @@
+package Backend.Models;
+import Backend.Common.Utils;
 import java.util.Date;
 
 public class Reporte_del_negocio extends Object
@@ -39,7 +41,7 @@ public class Reporte_del_negocio extends Object
 		return Id_reporte;
 	}
 
-	public void setCodigoReporte(String codigoReporte)
+	public void setCodigoReporte(String codigoReporte) throws IllegalArgumentException
 	{
 		if (codigoReporte.isEmpty() || codigoReporte.isBlank())
 		{
@@ -61,7 +63,7 @@ public class Reporte_del_negocio extends Object
 		return Codigo_reporte;
 	}
 
-	public void setHistorialEstadisticaDelNegocioId(int historialEstadisticaDelNegocioId)
+	public void setHistorialEstadisticaDelNegocioId(int historialEstadisticaDelNegocioId) throws IllegalArgumentException
 	{
 		if (historialEstadisticaDelNegocioId == 0)
 		{
@@ -78,7 +80,7 @@ public class Reporte_del_negocio extends Object
 		return Historial_estadistica_del_negocio_id;
 	}
 
-	public void setHistorialIngresoDelNegocioId(int historialIngresoDelNegocioId)
+	public void setHistorialIngresoDelNegocioId(int historialIngresoDelNegocioId) throws IllegalArgumentException
 	{
 		if (historialIngresoDelNegocioId == 0)
 		{
@@ -95,7 +97,7 @@ public class Reporte_del_negocio extends Object
 		return Historial_ingreso_del_negocio_id;
 	}
 
-	public void setUsuarioId(int usuarioId)
+	public void setUsuarioId(int usuarioId) throws IllegalArgumentException
 	{
 		if (usuarioId == 0)
 		{
@@ -112,7 +114,7 @@ public class Reporte_del_negocio extends Object
 		return Usuario_id;
 	}
 
-	public void setRutaArchivo(String rutaArchivo)
+	public void setRutaArchivo(String rutaArchivo) throws IllegalArgumentException
 	{
 		if (rutaArchivo.isEmpty() || rutaArchivo.isBlank())
 		{
@@ -129,8 +131,12 @@ public class Reporte_del_negocio extends Object
 		return Ruta_archivo;
 	}
 
-	public void setFechaGeneracion(Date fechaGeneracion)
+	public void setFechaGeneracion(Date fechaGeneracion) throws IllegalArgumentException
 	{
+		if(fechaGeneracion == null)
+		{
+			throw new IllegalArgumentException("La fecha de generación no puede ir vacía.");
+		}
 		this.Fecha_generacion = fechaGeneracion;
 	}
 
