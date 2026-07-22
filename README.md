@@ -121,15 +121,17 @@ Desarrollador del **Sistema de Gestión Integral para Papelería Matrix**, proye
 
 # COLABORADOR
 
-**Jaber Vargas Echeverría**
+**Vargas Echeverria Jaber**
 
 Tecnología en Desarrollo de Sistemas de Información y de Software
 
 Fundación Universitaria Colombo Internacional – Unicolombo
 
-Participó como colaborador en el desarrollo del proyecto, contribuyendo en las diferentes etapas de construcción e implementación del Sistema de Gestión Integral para Papelería Matrix.
+Colaborador en el desarrollo del proyecto, contribuyendo en las diferentes etapas de construcción e implementación del Sistema de Gestión Integral para Papelería Matrix.
 
 **Teléfono:** +57 302 407 2334
+
+---
 
 <div align="center">
 
