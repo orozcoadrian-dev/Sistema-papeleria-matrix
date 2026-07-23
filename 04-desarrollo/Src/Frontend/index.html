@@ -7,7 +7,7 @@
     <title>Papelería Matrix</title>
     <meta name="description" content="Matrix Papelería: impresiones, copias, venta de papelería y catálogo aliado de Pulguero Glam. Cartagena de Indias.">
     <link rel="icon" type="image/x-icon" href="Assets/Icons/logo-papeleria-matrix.ico" type="image/ico">
-    <link rel="stylesheet" href="css/Fuentes.css">
+    <link rel="title" content="Sistema Papelería Matrix">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -15,12 +15,11 @@
 
     <header class="header" id="header">
         <div class="header__container">
-
             <a href="#inicio" class="header__brand" aria-label="Ir al inicio de Matrix Papelería">
                 <img src="Assets/Icons/logo-papeleria-matrix.ico"
                     alt="Logo de Matrix Papelería, estrella plateada con las iniciales MP" class="header__logo"
                     width="48" height="48">
-                <span class="header__brand-name">Matrix <span class="header__brand-accent">Papelería</span></span>
+                <span class="header__brand-name">Papelería <span class="header__brand-accent">Matrix</span></span>
             </a>
 
             <nav class="nav" aria-label="Navegación principal">
@@ -28,10 +27,11 @@
                     <li class="nav__item"><a class="nav__link" href="#inicio">Inicio</a></li>
                     <li class="nav__item"><a class="nav__link" href="#nosotros">Nosotros</a></li>
                     <li class="nav__item"><a class="nav__link" href="#papeleria">Papelería</a></li>
-                    <li class="nav__item"><a class="nav__link" href="#ropa-glam">Ropa Glam</a></li>
-                    <li class="nav__item"><a class="nav__link" href="#contacto">Contacto</a></li>
+                    <li class="nav__item"><a class="nav__link" href="#ropa-glam">Pulguero Glam D&A</a></li>
+                    <li class="nav__item"><a class="nav__link" href="#contacto">Insumos y Papelería</a></li>
+                    
+                    <!-- 
                     <li class="nav__item">
-
                         <button type="button" class="nav__search-btn" data-action="open-search" aria-haspopup="dialog"
                             aria-controls="dialog-buscar">
                             <svg class="nav__search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -41,6 +41,7 @@
                             <span class="u-visually-hidden">Buscar información del negocio</span>
                         </button>
                     </li>
+                    -->            
                 </ul>
 
                 <div class="nav__auth">
@@ -59,18 +60,17 @@
     </header>
 
     <main class="main">
+
         <section class="hero" id="inicio">
             <div class="hero__grid" aria-hidden="true"></div>
 
             <div class="hero__container">
                 <div class="hero__content">
-                    <p class="hero__eyebrow">Internet · Papelería · Cartagena de Indias</p>
-                    <h1 class="hero__title">Tu espacio tecnológico <span class="hero__title-accent">de confianza</span>
+                    <p class="hero__eyebrow">Soluciones Digitales · Suministros · Cartagena de Indias</p>
+                    <h1 class="hero__title">Tu socio estatrégico<span class="hero__title-accent"> en tecnología</span>
                     </h1>
                     <p class="hero__subtitle">
-                        Impresiones, copias y todo lo que necesitas en papelería, en un solo lugar.
-                        Además, encuentra el catálogo de nuestra aliada <strong>Pulguero Glam</strong> sin salir de la
-                        página.
+                        Soluciones integrales de impresión, fotocopiado y suministros de oficina. Explore nuestras líneas de productos corporativos y descubra el catálogo exclusivo de nuestra marca aliada, Pulguero Glam, integrado directamente en nuestra plataforma.
                     </p>
                     <div class="hero__actions">
                         <a href="#papeleria" class="btn btn--primary btn--lg">Ver papelería</a>
@@ -79,9 +79,10 @@
                 </div>
 
                 <div class="hero__media">
-                    <img src="Assets/Img/papeleria-matrix-banner.png"
+                    <img src="Assets/Img/General/hero-background.jpg"
                         alt="Banner de Matrix Papelería: Internet y Papelería, tu espacio tecnológico de confianza"
-                        class="hero__banner" width="1280" height="450">
+                        class="hero__banner" width="1280" height="350">
+                    <div class="hero__overlay"></div>
                 </div>
             </div>
         </section>
@@ -91,29 +92,28 @@
 
                 <div class="about__text">
                     <p class="section-eyebrow">Nosotros</p>
-                    <h2 class="section-title">Qué hacemos por ti</h2>
+                    <h2 class="section-title">Servicios Integrales</h2>
                     <p class="about__description">
-                        Matrix Papelería es tu punto de confianza para servicios de internet y papelería,
-                        pensado para que encuentres todo rápido, claro y sin complicaciones.
+                        Somos su aliado estratégico en gestión documental y suministros corporativos, diseñado para brindar eficiencia, rapidez y respaldo a sus proyectos.
                     </p>
                 </div>
 
                 <ul class="about__services">
                     <li class="service-card">
                         <div class="service-card__icon" aria-hidden="true">🖨️</div>
-                        <h3 class="service-card__title">Impresiones y copias</h3>
-                        <p class="service-card__text">Documentos, trabajos y copias listos el mismo día.</p>
+                        <h3 class="service-card__title">Gestión Documental e Impresión</h3>
+                        <p class="service-card__text">Servicios de fotocopiado e impresión de alta calidad con entrega inmediata.</p>
                     </li>
                     <li class="service-card">
                         <div class="service-card__icon" aria-hidden="true">📚</div>
-                        <h3 class="service-card__title">Venta de papelería</h3>
-                        <p class="service-card__text">Cuadernos, útiles escolares y de oficina para lo que necesites.
+                        <h3 class="service-card__title">Suministros e Insumos</h3>
+                        <p class="service-card__text">Catálogo integral de papelería, insumos escolares y suministros para su oficina.
                         </p>
                     </li>
                     <li class="service-card">
                         <div class="service-card__icon" aria-hidden="true">👗</div>
-                        <h3 class="service-card__title">Alianza Pulguero Glam</h3>
-                        <p class="service-card__text">Descubre el catálogo de ropa de nuestra aliada, aquí mismo.</p>
+                        <h3 class="service-card__title">Aliado Comercial: Pulguero Glam</h3>
+                        <p class="service-card__text">Explore el catálogo exclusivo de moda e indumentaria de nuestra marca aliada.</p>
                     </li>
                 </ul>
             </div>
@@ -125,15 +125,15 @@
                 <ul class="quick-info__list">
                     <li class="quick-info__item">
                         <span class="quick-info__day">Lunes a viernes</span>
-                        <span class="quick-info__hours">8:00 a.m. – 9:00 p.m.</span>
+                        <span class="quick-info__hours">8:30 a.m. – 9:00 p.m.</span>
                     </li>
                     <li class="quick-info__item">
-                        <span class="quick-info__day">Sábados y festivos</span>
+                        <span class="quick-info__day">Sábados y Feriados</span>
                         <span class="quick-info__hours">9:00 a.m. – 5:00 p.m.</span>
                     </li>
                     <li class="quick-info__item quick-info__item--closed">
                         <span class="quick-info__day">Domingos</span>
-                        <span class="quick-info__hours">Cerrado</span>
+                        <span class="quick-info__hours">Fuera de servicio</span>
                     </li>
                 </ul>
             </div>
@@ -143,8 +143,8 @@
             <div class="catalog__container">
                 <div class="catalog__header">
                     <div>
-                        <p class="section-eyebrow">Catálogo</p>
-                        <h2 class="section-title">Papelería</h2>
+                        <p class="section-eyebrow">Catálogo Corporativo:</p>
+                        <h2 class="section-title">Insumos y Papelería</h2>
                     </div>
 
                     <form class="search" role="search" aria-label="Buscar producto de papelería"
@@ -158,32 +158,32 @@
 
                 <ul class="catalog__grid" id="papeleria-grid">
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">📓</div>
+                        <div class="card__image-wrap card--plumones-de-colores">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Cuaderno 100 hojas</h3>
-                        <p class="card__price">$6.500</p>
+                        <h3 class="card__title">Plumones de Colores</h3>
+                        <p class="card__price">$2.000</p>
                     </li>
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">✏️</div>
+                        <div class="card__image-wrap card--carpeta-blanca">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Kit de esferos x5</h3>
-                        <p class="card__price">$8.000</p>
+                        <h3 class="card__title">Carpeta Blanca</h3>
+                        <p class="card__price">$800</p>
                     </li>
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">📄</div>
+                        <div class="card__image-wrap card-capeta-de-carton">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Resma de papel carta</h3>
-                        <p class="card__price">$14.500</p>
+                        <h3 class="card__title">Carpeta de Cartón</h3>
+                        <p class="card__price">Oficio: $1000 | Carta: $800</p>
                     </li>
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">🖇️</div>
+                        <div class="card__image-wrap card--sobre-de-manila">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Organizador de oficina</h3>
-                        <p class="card__price">$22.000</p>
+                        <h3 class="card__title">Sobre de manila</h3>
+                        <p class="card__price">Oficio: $600 | Carta: $500</p>
                     </li>
                 </ul>
 
@@ -195,10 +195,9 @@
             <div class="catalog__container">
                 <div class="catalog__header">
                     <div>
-                        <p class="section-eyebrow">Alianza</p>
-                        <h2 class="section-title">Ropa Glam</h2>
-                        <p class="catalog__note">Catálogo de nuestra aliada Pulguero Glam, disponible aquí para tu
-                            comodidad.</p>
+                        <p class="section-eyebrow">Partner Comercial</p>
+                        <h2 class="section-title">Pulguero Glam D&A</h2>
+                        <p class="catalog__note">Explore la colección exclusiva de nuestra marca aliada Pulguero Glam, integrada directamente en nuestro portal para su facilidad.</p>
                     </div>
 
                     <form class="search" role="search" aria-label="Buscar prenda de ropa" data-form="buscar-ropa">
@@ -211,32 +210,32 @@
 
                 <ul class="catalog__grid" id="ropa-grid">
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">👕</div>
+                        <div class="card__image-wrap card--blusa-de-flores">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Blusa casual</h3>
-                        <p class="card__price">$45.000</p>
+                        <h3 class="card__title">Blusa de flores casual</h3>
+                        <p class="card__price">$15.000 | Talla: M</p>
                     </li>
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">👖</div>
+                        <div class="card__image-wrap card--blusa-sencilla-rosada">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Pantalón denim</h3>
-                        <p class="card__price">$68.000</p>
+                        <h3 class="card__title">Blusa rosada sencilla</h3>
+                        <p class="card__price">$12000 | Talla: M</p>
                     </li>
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">👗</div>
+                        <div class="card__image-wrap card--chaqueta-de-jean-ninia">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Vestido de fiesta</h3>
-                        <p class="card__price">$95.000</p>
+                        <h3 class="card__title">Chaqueta de jean para niña</h3>
+                        <p class="card__price">$20000 | Talla: 12</p>
                     </li>
                     <li class="card">
-                        <div class="card__image-wrap">
-                            <div class="card__placeholder" aria-hidden="true">🧥</div>
+                        <div class="card__image-wrap card--falda-de-jean-ninia">
+                            <div class="card__placeholder" aria-hidden="true"></div>
                         </div>
-                        <h3 class="card__title">Chaqueta liviana</h3>
-                        <p class="card__price">$72.000</p>
+                        <h3 class="card__title">Falda de jean para niña</h3>
+                        <p class="card__price">$15000 | Talla: 6</p>
                     </li>
                 </ul>
 
@@ -294,7 +293,7 @@
         <div class="footer__container">
 
             <div class="footer__brand">
-                <img src="img/logos/logo-matrix-192.png" alt="" class="footer__logo" width="40" height="40">
+                <img src="Assets/Icons/logo-papeleria-matrix.ico" alt="Logo de Papelería Matrix" class="footer__logo" width="40" height="40">
                 <p class="footer__brand-name">Matrix Papelería</p>
                 <p class="footer__tagline">Tu espacio tecnológico de confianza.</p>
             </div>
@@ -304,17 +303,17 @@
                 <ul class="footer__list">
                     <li><a class="footer__link" href="#inicio">Inicio</a></li>
                     <li><a class="footer__link" href="#nosotros">Nosotros</a></li>
-                    <li><a class="footer__link" href="#papeleria">Papelería</a></li>
-                    <li><a class="footer__link" href="#ropa-glam">Ropa Glam</a></li>
+                    <li><a class="footer__link" href="#papeleria">Insumos y Papelería</a></li>
+                    <li><a class="footer__link" href="#ropa-glam">Pulguero Glam D&A</a></li>
                 </ul>
             </nav>
 
             <div class="footer__contact">
                 <h3 class="footer__heading">Contacto</h3>
                 <ul class="footer__list">
-                    <li class="footer__list-item">Cartagena de Indias, Colombia</li>
-                    <li class="footer__list-item">Lun–Vie: 8:00 a.m. – 9:00 p.m.</li>
-                    <li class="footer__list-item">Sáb/Festivos: 9:00 a.m. – 5:00 p.m.</li>
+                    <li class="footer__list-item">Correo: internetcybermatrix@gmail.com</li>
+                    <li class="footer__list-item"> Teléfono: +57 305 2943560</li>
+                    <li class="footer__list-item">Dirección: Urb. Chapacua Mz H Lt 27</li>
                 </ul>
             </div>
 
