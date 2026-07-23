@@ -1,0 +1,62 @@
+:root {
+
+    /* --- Morados (marca) --- */
+    --color-morado-principal: #3B0177;
+
+    /* Morado intenso - principal */
+    --color-morado-fondo: #2A014F;
+
+    /* Morado oscuro profundo - fondos */
+    --color-morado-superficie: #4F0E6C;
+
+    /* Morado vibrante - superficies */
+    --color-morado-neon: #7A1BFF;
+    /* Morado neón brillante - acabados */
+    --color-morado-electrico: #9C2CFF;
+
+    /* Morado eléctrico - bordes/sombras */
+    --color-lila: #BF6CFD;
+
+    /* --- Blancos --- */
+    --color-blanco-principal: #FBFFFC;
+
+    /* Blanco puro brillante */
+    --color-blanco-perlado: #F7F0FB;
+    /* Blanco perlado - textos */
+
+    /* --- Dorados --- */
+    --color-dorado-principal: #F4BE4F;
+
+    /* Dorado intenso */
+    --color-dorado-sombra: #885B45;
+    /* Dorado oscuro - sombra */
+    --color-dorado-premium: #FECE4B;
+
+    /* Dorado premium - texto resaltado */
+    --color-amarillo-luminoso: #FCCC2C;
+
+    /* --- Secundarios (para futuros mensajes del sistema) --- */
+    --color-exito: #27A36B;
+    --color-error: #C93A5A;
+    --color-alerta: #FCCC2C;
+    --color-gris-lavanda: #A29B9D;
+    --color-negro: #110011;
+
+    /* --- Tipografía para textos --- */
+    --font-display: 'PapeleriaMatrix-Titulo', sans-serif;
+
+    /* --- Tipografía para títulos --- */
+    --font-body: 'PapeleriaMatrix-Texto', sans-serif;
+
+
+    /* --- Medidas reutilizables --- */
+    --container-width: 1180px;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --transition-base: 0.25s ease;
+
+    /* --- Sombra/resplandor de marca (para botones, tarjetas, logo) --- */
+    --glow-morado: 0 0 24px rgba(122, 27, 255, 0.45);
+    --glow-dorado: 0 0 18px rgba(254, 206, 75, 0.35);
+}
