@@ -8,6 +8,7 @@ public abstract class Dao extends Object
 	/**
 	 * 
 	 * @author Orozco Adrián Dev.
+	 * @param none
 	 */
 	protected Connection obtenerConexion()
 	{
@@ -20,24 +21,5 @@ public abstract class Dao extends Object
 			System.out.println("Error al establecer la conexión: " + e);
 		}
 		return conexion;
-	}
-
-	/**
-	 * 
-	 * @author Orozco Adrián Dev.
-	 * @param conexion
-	 * @return {@code Connection}
-	 */
-	protected void cerrarConexion(Connection conexion)
-	{
-		if(conexion != null)
-		{
-			try {
-				conexion.close();
-			} catch (Exception e) 
-			{
-				System.out.println("Error al cerrar la base de datos: " + e);
-			}
-		}
 	}
 }
