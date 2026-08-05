@@ -6,8 +6,9 @@ public abstract class Dao extends Object
 {
 
 	/**
-	 * 
+	 * Establece y retorna una conexión activa con la base de datos utilizando las credenciales configuradas.
 	 * @author Orozco Adrián Dev.
+	 * @return {@code Connection}
 	 * @param none
 	 */
 	protected Connection obtenerConexion()
