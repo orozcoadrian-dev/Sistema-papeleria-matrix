@@ -161,6 +161,7 @@ public class UsuarioDAO extends Dao
 
 	/**
 	 * Actualizar la contraseña de un usuario mediante su identificador principal
+	 * @author Orozco Adrián Dev.
 	 * @param idUsuario
 	 * @param nuevaContrasenia
 	 */

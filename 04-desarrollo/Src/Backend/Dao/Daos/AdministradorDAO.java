@@ -41,6 +41,27 @@ public class AdministradorDAO extends Dao
 	}
 
 	/**
+	 * Recupera la información detallada de un operador de cibercafé registrado en la base de datos a partir de su identificador único.
+	 * @author Orozco Adrián Dev
+	 * @param idUsuario
+	 * @return {@code operadorDeCibercafe}
+	 */
+	public Administrador buscarAdministradorPorId(int idUsuario)
+	{
+		Administrador administrador = null;
+
+		try (Connection conexion = obtenerConexion();) {
+		
+		// Mensaje de que fue correcto
+		System.out.println("La conexión fue exitosa, lista para eliminar un por su primary key.");
+
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return administrador;
+	}
+
+	/**
 	 * Recupera la información detallada de todos los adninistradores de la base de datos.
 	 * @author Orozco Adrián dev.
 	 * @return {@code administradores}
@@ -60,12 +81,12 @@ public class AdministradorDAO extends Dao
 
 	/**
 	 * Actualizar la contraseña de un usuario mediante su identificador principal
+	 * @author Orozco Adrián Dev.
 	 * @param idUsuario
 	 * @param areaAcceso
 	 */
 	public void actualizarAreaAcceso(int idUsuario, String areaAcceso)
 	{
-
 		String sql = "UPDATE Administrador SET area_acceso = " + areaAcceso + " WHERE idUsuario =" + idUsuario;
 
 	try (Connection conexion = obtenerConexion()) {
@@ -74,5 +95,4 @@ public class AdministradorDAO extends Dao
 			System.out.println("Error: " + e.getMessage());
 		}
 	}
-
 }
