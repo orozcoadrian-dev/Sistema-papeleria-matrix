@@ -1,0 +1,14 @@
+# Lo que Docker no necesita para compilar la API. Así la construcción es más rápida.
+.git
+.github
+**/target
+**/.vscode
+**/.idea
+01-requisitos
+02-analisis
+03-disenio
+05-pruebas
+06-documentacion
+07-entrega-final
+08-contexto
+database/backups

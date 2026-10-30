@@ -1,0 +1,13 @@
+# Modo local: el sistema real, con la base de datos de XAMPP.
+# Requiere que XAMPP esté encendido y que los scripts de database/scripts ya se hayan ejecutado.
+# Los valores se pueden cambiar con las variables de entorno DB_URL, DB_USER y DB_PASSWORD.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/papeleria_matrix?useUnicode=true&characterEncoding=utf8}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      # Al arrancar, compara las entidades con las tablas y avisa de cualquier diferencia de nombre.
+      ddl-auto: validate
+    open-in-view: false
