@@ -49,6 +49,28 @@ h1,h2,h3 {
     white-space: nowrap;
 }
 
+/* Enlace que solo aparece al usar el teclado: lleva directo al contenido */
+.skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 300;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-dorado-premium);
+    color: var(--color-negro);
+    font-weight: 600;
+    transition: top var(--transition-base);
+}
+
+.skip-link:focus {
+    top: 1rem;
+}
+
+.main:focus {
+    outline: none;
+}
+
 /* Todas las secciones grandes usan un contenedor centrado con el mismo ancho máximo — así todo queda alineado verticalmente. */
 .header__container,.hero__container,.about__container,.quick-info__container,.catalog__container,.footer__container {
     width: min(92%, var(--container-width));
@@ -508,42 +530,24 @@ h1,h2,h3 {
 }
 
 .card__image-wrap {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 3 / 4;
     display: grid;
     place-items: center;
-    background: var(--color-morado-superficie)
+    overflow: hidden;
+    background: var(--color-morado-superficie);
 }
 
-.card--plumones-de-colores {
-    background: url(../../assets/img/insumos-papeleria/plumones-de-colores.png) 1.5px / cover #000;
+/* Las fotos son verticales: se ven completas, sin recortar el producto ni la prenda. */
+.card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: var(--color-morado-fondo);
 }
 
-.card--carpeta-blanca {
-    background: url(../../assets/img/insumos-papeleria/carpeta-blanca.png) 2px / cover #000;
-}
-
-.card-capeta-de-carton {
-    background: url(../../assets/img/insumos-papeleria/carpeta-de-carton.png) 2px / cover #000;
-}
-
-.card--sobre-de-manila {
-    background: url(../../assets/img/insumos-papeleria/sobre-de-manila.png) 2px / cover #000;
-}
-
-.card--blusa-de-flores {
-    background: url(../../assets/img/pulguero-glam/Blusa-de-flores.jpeg) 0.7rem / contain no-repeat #2A014F;
-}
-
-.card--blusa-sencilla-rosada {
-    background: url(../../assets/img/pulguero-glam/Blusa-de-sencilla-rosada.jpeg) 2.1rem / contain no-repeat #2A014F;
-}
-
-.card--chaqueta-de-jean-ninia {
-    background: url(../../assets/img/pulguero-glam/Chaqueta-de-jean-ninia.jpeg) 2.1rem / contain no-repeat #2A014F;
-}
-
-.card--falda-de-jean-ninia {
-    background: url(../../assets/img/pulguero-glam/Falda-de-jean-nina.jpeg) 2.1rem / contain no-repeat #2A014F;
+/* Los servicios no tienen foto: su ícono ocupa una franja baja en vez de un cuadrado vacío. */
+.card--servicio .card__image-wrap {
+    aspect-ratio: 16 / 7;
 }
 
 .card__placeholder {
@@ -560,6 +564,51 @@ h1,h2,h3 {
     color: var(--color-dorado-premium);
     font-weight: 700;
     padding: 0 1rem 1.25rem;
+}
+
+.card__category {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-lila);
+    padding: 1rem 1rem 0;
+}
+
+.card__category + .card__title {
+    padding-top: 0.25rem;
+}
+
+.card__text {
+    font-size: 0.88rem;
+    color: var(--color-gris-lavanda);
+    padding: 0 1rem 0.75rem;
+}
+
+.card__badge {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    background: var(--color-error);
+    color: var(--color-blanco-principal);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+/* Mensaje de carga o de error del catálogo, con su botón de reintento */
+.catalog__status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    min-height: 1.6rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-gris-lavanda);
+    font-size: 0.92rem;
 }
 
 .catalog__empty-state {
@@ -629,6 +678,120 @@ h1,h2,h3 {
     background: rgba(255, 255, 255, 0.06);
     color: var(--color-blanco-principal);
     width: 100%;
+}
+
+.dialog__message {
+    min-height: 1.4rem;
+    font-size: 0.9rem;
+    color: var(--color-dorado-premium);
+}
+
+.dialog--wide {
+    width: min(92%, 560px);
+}
+
+.dialog__scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 50vh;
+    overflow-y: auto;
+    font-size: 0.92rem;
+    color: var(--color-blanco-perlado);
+}
+
+.dialog__subtitle {
+    font-size: 0.95rem;
+    color: var(--color-dorado-premium);
+}
+
+/* Resultados del buscador general */
+.resultados {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.resultados__aviso {
+    font-size: 0.9rem;
+    color: var(--color-gris-lavanda);
+}
+
+.resultados__enlace {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    transition: background var(--transition-base);
+}
+
+.resultados__enlace:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.resultados__tipo {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-lila);
+}
+
+.resultados__detalle {
+    font-size: 0.88rem;
+    color: var(--color-gris-lavanda);
+}
+
+/* Aviso de privacidad, fijo en la parte baja de la pantalla */
+.aviso {
+    position: fixed;
+    inset: auto 1rem 1rem 1rem;
+    z-index: 200;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 760px;
+    margin-inline: auto;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--color-morado-superficie);
+    border: 1px solid var(--color-morado-electrico);
+    box-shadow: var(--glow-morado), 0 20px 40px rgba(0, 0, 0, 0.5);
+    font-size: 0.9rem;
+}
+
+.aviso[hidden] {
+    display: none;
+}
+
+.aviso__texto {
+    flex: 1 1 320px;
+}
+
+.aviso__enlace,
+.footer__legal {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--color-dorado-premium);
+}
+
+.footer__legal {
+    margin-left: 0.75rem;
+    color: var(--color-gris-lavanda);
+    font-size: inherit;
+}
+
+.footer__legal:hover {
+    color: var(--color-dorado-premium);
 }
 
 /* Footer */
@@ -732,6 +895,12 @@ h1,h2,h3 {
     .hero__banner {
         animation: none;
     }
+
+    .nav,
+    .btn,
+    .card {
+        transition: none;
+    }
 }
 
 /* Media queries (Mobile-first en reversa: de escritorio hacia abajo, reduciendo breakpoints). */
@@ -753,79 +922,90 @@ h1,h2,h3 {
     }
 }
 
-/* --- Móviles grandes / tablets pequeñas: aquí activamos el menú hamburguesa y apilamos el hero --- */
-@media (max-width: 860px) {
+/* --- Pantallas medianas y menores: el menú pasa a hamburguesa, porque ya no caben todos los enlaces --- */
+@media (max-width: 1100px) {
     .header__toggle {
         display: flex;
     }
 
+    /* El panel cuelga del header (que es sticky) y ocupa el resto de la pantalla. No usa position: fixed
+       porque el header tiene backdrop-filter, y eso haría que el panel midiera solo lo que mide el header. */
     .nav {
-        position: fixed;
-        inset: 78px 0 0 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: calc(100vh - 78px);
         flex-direction: column;
         align-items: stretch;
         background: var(--color-morado-fondo);
         padding: 2rem 1.5rem;
         gap: 1.5rem;
-        transform: translateX(100%);
-        transition: transform var(--transition-base);
+        opacity: 0;
+        transform: translateY(-1rem);
+        visibility: hidden;
+        transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
         overflow-y: auto;
     }
 
-/* Clase que tu JS debe alternar (toggle) en el <nav> al hacer clic en el botón hamburguesa. Ver js/main.js, sección 1. */
-.nav--open {
-        transform: translateX(0);
-}
+    /* Clase que el JS alterna en el <nav> al pulsar la hamburguesa. Ver js/main.js, sección 2. */
+    .nav--open {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
 
-.nav__list {
+    .nav__list {
         flex-direction: column;
         align-items: flex-start;
         gap: 1.25rem;
-}
+    }
 
-.nav__auth {
+    .nav__auth {
         flex-direction: column;
         width: 100%;
     }
 
-.nav__auth .btn {
+    .nav__auth .btn {
         width: 100%;
     }
+}
 
-.hero__container {
+/* --- Móviles grandes / tablets pequeñas: se apila el hero y los catálogos --- */
+@media (max-width: 860px) {
+    .hero__container {
         grid-template-columns: 1fr;
         text-align: center;
     }
 
-.hero__actions {
+    .hero__actions {
         justify-content: center;
     }
 
-.hero__subtitle {
+    .hero__subtitle {
         margin-inline: auto;
     }
 
-.catalog__header {
+    .catalog__header {
         flex-direction: column;
         align-items: stretch;
     }
 
-.search {
+    .search {
         width: 100%;
     }
 }
 
 /* --- Móviles pequeños --- */
 @media (max-width: 560px) {
-
     .about__services,
     .quick-info__list,
     .catalog__grid,
     .footer__container {
         grid-template-columns: 1fr;
-	}
+    }
 
-.hero {
+    .hero {
         padding-block: 3.5rem 2.5rem;
-	}
+    }
 }
