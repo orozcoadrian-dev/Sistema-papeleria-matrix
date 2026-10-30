@@ -1,4 +1,4 @@
-CREATE TABLE Ingreso_del_negocio
+CREATE TABLE ingreso_del_negocio
 (
 	Id_ingreso INT PRIMARY KEY AUTO_INCREMENT,
     Codigo_ingreso VARCHAR(15) NOT NULL UNIQUE,

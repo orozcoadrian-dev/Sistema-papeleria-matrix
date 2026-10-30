@@ -1,4 +1,4 @@
-CREATE TABLE Reporte_del_negocio
+CREATE TABLE reporte_del_negocio
 (
 	Id_reporte INT PRIMARY KEY AUTO_INCREMENT,
     Codigo_reporte VARCHAR(20) NOT NULL UNIQUE,

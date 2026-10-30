@@ -1,4 +1,4 @@
-CREATE TABLE Historial_ingreso_del_negocio
+CREATE TABLE historial_ingreso_del_negocio
 (
 	Id_historial_ingreso INT PRIMARY KEY AUTO_INCREMENT,
     Ingreso_id INT NOT NULL,

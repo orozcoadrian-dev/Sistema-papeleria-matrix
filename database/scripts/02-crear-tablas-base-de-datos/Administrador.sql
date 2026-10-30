@@ -1,4 +1,4 @@
-CREATE TABLE Administrador
+CREATE TABLE administrador
 (
 	Id_usuario INT PRIMARY KEY,
     Fecha_posicionamiento DATE NOT NULL,

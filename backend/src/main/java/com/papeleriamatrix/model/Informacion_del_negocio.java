@@ -6,7 +6,7 @@ public class Informacion_del_negocio extends Object
 {
 	private int Id_informacion = 0;
 	private int Usuario_id = 0;
-	private int ValorInformacion = 0;
+	private int Valor_informacion = 0;
 	private String Tipo_informacion = "";
 	private String Informacion = "";
 	private Date Fecha_creacion;
@@ -67,12 +67,12 @@ public class Informacion_del_negocio extends Object
 		{
 			throw new IllegalArgumentException("El valor de la información no puede ser negativo.");
 		}
-		this.ValorInformacion = valorInformacion;
+		this.Valor_informacion = valorInformacion;
 	}
 
 	public int getValorInformacion() throws IllegalArgumentException
 	{
-		return ValorInformacion;
+		return Valor_informacion;
 	}
 
 	public void setTipoInformacion(String tipoInformacion) throws IllegalArgumentException

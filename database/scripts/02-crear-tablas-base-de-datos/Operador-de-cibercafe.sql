@@ -1,4 +1,4 @@
-CREATE TABLE Operador_de_cibercafe
+CREATE TABLE operador_de_cibercafe
 (
 	Id_usuario INT PRIMARY KEY,
     Salario DOUBLE NOT NULL,

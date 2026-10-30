@@ -6,23 +6,23 @@ public class Historial_ingreso_del_negocio extends Object
 {
 	private int Id_historial_ingreso = 0;
 	private int Ingreso_id = 0;
-	private String Motivo_estadistica = "";
+	private String Motivo_ingreso = "";
 	private LocalDateTime Fecha_generacion;
 	private Utils utilidades = new Utils();
 
 	// Constructor con ID incremental
-	public Historial_ingreso_del_negocio(int idHistorialIngreso, int ingresoId, String motivo_estadistica, LocalDateTime fechaGeneracion)
+	public Historial_ingreso_del_negocio(int idHistorialIngreso, int ingresoId, String motivoIngreso, LocalDateTime fechaGeneracion)
 	{
 		this.Id_historial_ingreso = idHistorialIngreso;
 		setIngresoId(ingresoId);
-		setMotivoEstadistica(motivo_estadistica);
+		setMotivoIngreso(motivoIngreso);
 	}
 
 	// Constructor sin ID incremental
-	public Historial_ingreso_del_negocio(int ingresoId, String motivo_estadistica, LocalDateTime fechaGeneracion)
+	public Historial_ingreso_del_negocio(int ingresoId, String motivoIngreso, LocalDateTime fechaGeneracion)
 	{
 		setIngresoId(ingresoId);
-		setMotivoEstadistica(motivo_estadistica);
+		setMotivoIngreso(motivoIngreso);
 	}
 
 	public int getIdHistorialEstadistica()
@@ -47,26 +47,26 @@ public class Historial_ingreso_del_negocio extends Object
 		return Ingreso_id;
 	}
 
-	public void setMotivoEstadistica(String motivoEstadistica) throws IllegalArgumentException
+	public void setMotivoIngreso(String motivoIngreso) throws IllegalArgumentException
 	{
-		if(motivoEstadistica.isBlank() || motivoEstadistica.isEmpty())
+		if(motivoIngreso.isBlank() || motivoIngreso.isEmpty())
 		{
-			throw new IllegalArgumentException("El motivo de la estadística no puede ir vacío.");
-		} else if(motivoEstadistica.length() < 20)
+			throw new IllegalArgumentException("El motivo del ingreso no puede ir vacío.");
+		} else if(motivoIngreso.length() < 20)
 		{
-			throw new IllegalArgumentException("El la longitud del motivo de la estadística es muy corto.");
-		} else if(motivoEstadistica.length() > 100)
+			throw new IllegalArgumentException("El la longitud del motivo del ingreso es muy corto.");
+		} else if(motivoIngreso.length() > 100)
 		{
-			throw new IllegalArgumentException("El la longitud del motivo de la estadística es muy largo.");
-		} else if(utilidades.tieneSoloTexto(motivoEstadistica) == true)
+			throw new IllegalArgumentException("El la longitud del motivo del ingreso es muy largo.");
+		} else if(utilidades.tieneSoloTexto(motivoIngreso) == true)
 		{
-			this.Motivo_estadistica = motivoEstadistica;
+			this.Motivo_ingreso = motivoIngreso;
 		}
 	}
 
-	public String getMotivoEstadistica()
+	public String getMotivoIngreso()
 	{
-		return Motivo_estadistica;
+		return Motivo_ingreso;
 	}
 
 	public void setFechaGeneracion(LocalDateTime fechaGeneracion) throws IllegalArgumentException

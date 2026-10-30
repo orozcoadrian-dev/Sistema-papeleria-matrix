@@ -1,4 +1,4 @@
-CREATE TABLE Historial_estadistica_del_negocio
+CREATE TABLE historial_estadistica_del_negocio
 (
 	Id_historial_estadistica INT PRIMARY KEY AUTO_INCREMENT,
     Estadistica_del_negocio_id INT NOT NULL,
