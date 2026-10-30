@@ -1,0 +1,7 @@
+# Evito que el archivo MAIN llegue a ser rastreado en git
+Main.java
+bin/
+.vscode/
+
+# Salida de Maven
+target/
