@@ -1,6 +1,6 @@
-@import url(../Bases/Fuentes.css);
-@import url(../Bases/Variables.css);
-@import url(../Bases/Reset.css);
+@import url(../bases/fuentes.css);
+@import url(../bases/variables.css);
+@import url(../bases/reset.css);
 
 body {
     font-family: var(--font-body);
@@ -515,35 +515,35 @@ h1,h2,h3 {
 }
 
 .card--plumones-de-colores {
-    background: url(../../Assets/Img/Insumos-papeleria/plumones-de-colores.png) 1.5px / cover #000;
+    background: url(../../assets/img/insumos-papeleria/plumones-de-colores.png) 1.5px / cover #000;
 }
 
 .card--carpeta-blanca {
-    background: url(../../Assets/Img/Insumos-papeleria/carpeta-blanca.png) 2px / cover #000;
+    background: url(../../assets/img/insumos-papeleria/carpeta-blanca.png) 2px / cover #000;
 }
 
 .card-capeta-de-carton {
-    background: url(../../Assets/Img/Insumos-papeleria/carpeta-de-carton.png) 2px / cover #000;
+    background: url(../../assets/img/insumos-papeleria/carpeta-de-carton.png) 2px / cover #000;
 }
 
 .card--sobre-de-manila {
-    background: url(../../Assets/Img/Insumos-papeleria/sobre-de-manila.png) 2px / cover #000;
+    background: url(../../assets/img/insumos-papeleria/sobre-de-manila.png) 2px / cover #000;
 }
 
 .card--blusa-de-flores {
-    background: url(../../Assets/Img/Pulguero-Glam/Blusa-de-flores.jpeg) 0.7rem / contain no-repeat #2A014F;
+    background: url(../../assets/img/pulguero-glam/Blusa-de-flores.jpeg) 0.7rem / contain no-repeat #2A014F;
 }
 
 .card--blusa-sencilla-rosada {
-    background: url(../../Assets/Img/Pulguero-Glam/Blusa-de-sencilla-rosada.jpeg) 2.1rem / contain no-repeat #2A014F;
+    background: url(../../assets/img/pulguero-glam/Blusa-de-sencilla-rosada.jpeg) 2.1rem / contain no-repeat #2A014F;
 }
 
 .card--chaqueta-de-jean-ninia {
-    background: url(../../Assets/Img/Pulguero-Glam/Chaqueta-de-jean-ninia.jpeg) 2.1rem / contain no-repeat #2A014F;
+    background: url(../../assets/img/pulguero-glam/Chaqueta-de-jean-ninia.jpeg) 2.1rem / contain no-repeat #2A014F;
 }
 
 .card--falda-de-jean-ninia {
-    background: url(../../Assets/Img/Pulguero-Glam/Falda-de-jean-nina.jpeg) 2.1rem / contain no-repeat #2A014F;
+    background: url(../../assets/img/pulguero-glam/Falda-de-jean-nina.jpeg) 2.1rem / contain no-repeat #2A014F;
 }
 
 .card__placeholder {
