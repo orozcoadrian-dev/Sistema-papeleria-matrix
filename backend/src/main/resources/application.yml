@@ -20,3 +20,8 @@ management:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+app:
+  # Clave que se exige en la cabecera X-API-Key para crear, modificar y borrar.
+  # En Render se genera sola, con la variable API_KEY definida en render.yaml.
+  api-key: ${API_KEY:clave-de-prueba}

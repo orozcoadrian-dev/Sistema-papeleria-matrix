@@ -12,3 +12,6 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: demo
+      # Render inventa la clave al crear el servicio. Se consulta en Environment y se usa en Postman.
+      - key: API_KEY
+        generateValue: true

@@ -1,0 +1,612 @@
+{
+  "info": {
+    "name": "API de Papelería Matrix",
+    "description": "Pruebas de la API REST de Papelería Matrix. Antes de ejecutarla, elige el entorno Local o Render y revisa la variable apiKey. Hay datos de ejemplo solo en el modo demo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "apiKey",
+      "value": "clave-de-prueba"
+    },
+    {
+      "key": "servicioId",
+      "value": ""
+    },
+    {
+      "key": "codigoPrueba",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Estado",
+      "item": [
+        {
+          "name": "Estado de la API",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.test(\"La API está en línea\", function () { pm.expect(json.estado).to.eql(\"en línea\"); });",
+                  "pm.test(\"Informa el modo\", function () { pm.expect(json.modo).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/estado",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "estado"
+              ]
+            },
+            "description": "Comprueba que la API está en línea y en qué modo corre: local o demo."
+          }
+        },
+        {
+          "name": "Salud del servicio",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El estado es UP\", function () { pm.expect(pm.response.json().status).to.eql(\"UP\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": "La usa Render para saber si la aplicación está viva."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Servicios",
+      "item": [
+        {
+          "name": "Listar servicios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var lista = pm.response.json();",
+                  "pm.test(\"Devuelve una lista con servicios\", function () { pm.expect(lista).to.be.an(\"array\").that.is.not.empty; });",
+                  "pm.test(\"Cada servicio trae código y precio\", function () { pm.expect(lista[0]).to.have.property(\"codigo\"); pm.expect(lista[0]).to.have.property(\"precio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear servicio",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"codigoPrueba\", \"PRB-\" + Date.now().toString().slice(-9));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 201\", function () { pm.response.to.have.status(201); });",
+                  "var creado = pm.response.json();",
+                  "pm.collectionVariables.set(\"servicioId\", creado.id);",
+                  "pm.test(\"Devuelve el servicio creado\", function () { pm.expect(creado.codigo).to.eql(pm.collectionVariables.get(\"codigoPrueba\")); });",
+                  "pm.test(\"Trae la dirección del nuevo servicio\", function () { pm.expect(pm.response.headers.get(\"Location\")).to.include(\"/api/servicios/\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"{{codigoPrueba}}\",\n  \"nombre\": \"Servicio de prueba\",\n  \"categoria\": \"Prueba\",\n  \"precio\": 1500,\n  \"descripcion\": \"Creado desde Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Exige la clave de la API en la cabecera X-API-Key."
+          }
+        },
+        {
+          "name": "Consultar el servicio creado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Es el servicio que se creó\", function () { pm.expect(pm.response.json().codigo).to.eql(pm.collectionVariables.get(\"codigoPrueba\")); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios/{{servicioId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios",
+                "{{servicioId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar el servicio",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var servicio = pm.response.json();",
+                  "pm.test(\"Cambió el precio\", function () { pm.expect(servicio.precio).to.eql(2500); });",
+                  "pm.test(\"Registra la fecha de actualización\", function () { pm.expect(servicio.fechaActualizacion).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios/{{servicioId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios",
+                "{{servicioId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"{{codigoPrueba}}\",\n  \"nombre\": \"Servicio editado\",\n  \"categoria\": \"Prueba\",\n  \"precio\": 2500,\n  \"descripcion\": \"Creado desde Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Crear con un código repetido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Explica que el código ya existe\", function () { pm.expect(pm.response.json().title).to.eql(\"Código repetido\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"{{codigoPrueba}}\",\n  \"nombre\": \"Servicio repetido\",\n  \"categoria\": \"Prueba\",\n  \"precio\": 900,\n  \"descripcion\": \"Creado desde Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Eliminar el servicio",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios/{{servicioId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios",
+                "{{servicioId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar el servicio eliminado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"El mensaje es claro\", function () { pm.expect(pm.response.json().detail).to.include(\"No existe un servicio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios/{{servicioId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios",
+                "{{servicioId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Seguridad y errores",
+      "item": [
+        {
+          "name": "Crear sin la clave de la API",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"Pide la clave\", function () { pm.expect(pm.response.json().title).to.eql(\"No autorizado\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"{{codigoPrueba}}\",\n  \"nombre\": \"Sin clave\",\n  \"categoria\": \"Prueba\",\n  \"precio\": 100,\n  \"descripcion\": \"Creado desde Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Crear con datos inválidos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 400\", function () { pm.response.to.have.status(400); });",
+                  "var errores = pm.response.json().errores;",
+                  "pm.test(\"Indica qué campos fallaron\", function () { pm.expect(errores).to.have.property(\"nombre\"); pm.expect(errores).to.have.property(\"precio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/servicios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "servicios"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"PRB-INV\",\n  \"nombre\": \"\",\n  \"categoria\": \"Prueba\",\n  \"precio\": -5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Catálogos públicos",
+      "item": [
+        {
+          "name": "Listar productos de papelería",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var lista = pm.response.json();",
+                  "pm.test(\"Devuelve productos\", function () { pm.expect(lista).to.be.an(\"array\").that.is.not.empty; });",
+                  "pm.test(\"No muestra el precio de compra\", function () { pm.expect(lista[0]).to.not.have.property(\"precioCompra\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "productos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar un producto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Trae el precio de venta\", function () { pm.expect(pm.response.json().precio).to.be.a(\"number\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "productos",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar la ropa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Devuelve prendas\", function () { pm.expect(pm.response.json()).to.be.an(\"array\").that.is.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ropa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ropa"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar una prenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Trae la talla\", function () { pm.expect(pm.response.json().talla).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ropa/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ropa",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
