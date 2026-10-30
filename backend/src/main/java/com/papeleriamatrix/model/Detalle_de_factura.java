@@ -6,42 +6,45 @@ public class Detalle_de_factura extends Object
 {
 	
 	private int Id_detalle = 0;
-	private int Factura_de_negocio_id = 0;
+	private int Factura_del_negocio_id = 0;
 	private String Descripcion = "";
 	private int Servicio_id = 0;
 	private int Cantidad_servicio = 0;
-	private int Producto_papeleria_id = 0;
+	private int Producto_de_papeleria_id = 0;
 	private int Cantidad_producto = 0;
 	private int Ropa_id = 0;
+	private int Cantidad_ropa = 0;
 	private LocalDateTime Fecha_generacion;
 	private LocalDateTime Fecha_actualizacion;
 	private Utils utilidades = new Utils();
 
 	// Constructor con id autoincremental
-	public Detalle_de_factura(int idDetalle, int facturaDeNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int Ropa_id, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
+	public Detalle_de_factura(int idDetalle, int facturaDelNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int Ropa_id, int cantidadRopa, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
 	{
 		this.Id_detalle = idDetalle;
-		setFacturaDeNegocioId(facturaDeNegocioId);
+		setFacturaDelNegocioId(facturaDelNegocioId);
 		setDescripcion(descripcion);
 		setServicioId(servicioId);
 		setCantidadServicio(cantidadServicio);
 		setProductoPapeleriaId(productoPapeleriaId);
 		setCantidadProducto(cantidadProducto);
 		setRopaId(Ropa_id);
+		setCantidadRopa(cantidadRopa);
 		setFechaGeneracion(fechaGeneracion);
 		setFechaActualizacion(fechaActualizacion);
 	}
 
 	//Constructor sin id incremental
-	public Detalle_de_factura(int facturaDeNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int ropaId, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
+	public Detalle_de_factura(int facturaDelNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int ropaId, int cantidadRopa, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
 	{
-		setFacturaDeNegocioId(facturaDeNegocioId);
+		setFacturaDelNegocioId(facturaDelNegocioId);
 		setDescripcion(descripcion);
 		setServicioId(servicioId);
 		setCantidadServicio(cantidadServicio);
 		setProductoPapeleriaId(productoPapeleriaId);
 		setCantidadProducto(cantidadProducto);
 		setRopaId(ropaId);
+		setCantidadRopa(cantidadRopa);
 		setFechaGeneracion(fechaGeneracion);
 		setFechaActualizacion(fechaActualizacion);
 	}
@@ -52,22 +55,22 @@ public class Detalle_de_factura extends Object
 		return Id_detalle;
 	}
 
-	public void setFacturaDeNegocioId(int facturaDeNegocioId) throws IllegalArgumentException
+	public void setFacturaDelNegocioId(int facturaDelNegocioId) throws IllegalArgumentException
 	{
 
-		if(facturaDeNegocioId == 0)
+		if(facturaDelNegocioId == 0)
 		{
 			throw new IllegalArgumentException("El ID de la factura del negocio no puede ser 0.");
-		} else if (facturaDeNegocioId <= -1)
+		} else if (facturaDelNegocioId <= -1)
 		{
 			throw new IllegalArgumentException("El ID de la factura del negocio no puede ser negativo.");
 		}
-		Factura_de_negocio_id = facturaDeNegocioId;
+		Factura_del_negocio_id = facturaDelNegocioId;
 	}
 
-	public int getFacturaDeNegocioId() 
+	public int getFacturaDelNegocioId() 
 	{
-		return Factura_de_negocio_id;
+		return Factura_del_negocio_id;
 	}
 
 	public void setDescripcion(String descripcion) throws IllegalArgumentException
@@ -140,12 +143,12 @@ public class Detalle_de_factura extends Object
 		{
 			throw new IllegalArgumentException("El ID del producto de la papelería no puede ser negativo.");
 		}
-		Producto_papeleria_id = productoPapeleriaId;
+		Producto_de_papeleria_id = productoPapeleriaId;
 	}
 
 	public int getProductoPapeleriaId() 
 	{
-		return Producto_papeleria_id;
+		return Producto_de_papeleria_id;
 	}
 
 	public void setCantidadProducto(int cantidadProducto) throws IllegalArgumentException
@@ -180,6 +183,20 @@ public class Detalle_de_factura extends Object
 	public int getRopaId() 
 	{
 		return Ropa_id;
+	}
+
+	public void setCantidadRopa(int cantidadRopa) throws IllegalArgumentException
+	{
+		if(cantidadRopa < 0)
+		{
+			throw new IllegalArgumentException("La cantidad de ropa no puede ser negativa.");
+		}
+		Cantidad_ropa = cantidadRopa;
+	}
+
+	public int getCantidadRopa() 
+	{
+		return Cantidad_ropa;
 	}
 
 	public void setFechaGeneracion(LocalDateTime fechaGeneracion) throws IllegalArgumentException

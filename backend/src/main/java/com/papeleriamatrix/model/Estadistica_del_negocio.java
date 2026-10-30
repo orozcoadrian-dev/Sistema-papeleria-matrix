@@ -7,6 +7,7 @@ public class Estadistica_del_negocio extends Object
 	//Los atributos int (Aparte del ID) cumplen con la función de un contador.
 	private int Id_estadistica = 0;
 	private String Codigo_estadistica = "";
+	private String Tipo_estadistica = "";
 	private int Numero_informacion_eliminada = 0;
 	private int Servicios_eliminados = 0;
 	private int Numero_informacion_agregada = 0;
@@ -23,16 +24,18 @@ public class Estadistica_del_negocio extends Object
 	private Utils utilidades = new Utils();
 
 	// Constructor con ID incremental
-	public Estadistica_del_negocio(int idEstadistica, String codigoEstadistica)
+	public Estadistica_del_negocio(int idEstadistica, String codigoEstadistica, String tipoEstadistica)
 	{
 		this.Id_estadistica = idEstadistica;
 		setCodigoEstadistica(codigoEstadistica);
+		setTipoEstadistica(tipoEstadistica);
 	}
 
 	// Constructor sin ID incremental
-	public Estadistica_del_negocio(String codigoEstadistica)
+	public Estadistica_del_negocio(String codigoEstadistica, String tipoEstadistica)
 	{
 		setCodigoEstadistica(codigoEstadistica);
+		setTipoEstadistica(tipoEstadistica);
 	}
 
 	public int getIdEstadistica()
@@ -60,6 +63,23 @@ public class Estadistica_del_negocio extends Object
 	public String getCodigoEstadistica()
 	{
 		return Codigo_estadistica;
+	}
+
+	public void setTipoEstadistica(String tipoEstadistica) throws IllegalArgumentException
+	{
+		if(tipoEstadistica.isBlank() || tipoEstadistica.isEmpty())
+		{
+			throw new IllegalArgumentException("El tipo de la estadística no puede ir vacío.");
+		} else if(tipoEstadistica.length() > 15)
+		{
+			throw new IllegalArgumentException("El tipo de la estadística no puede superar los 15 caracteres.");
+		}
+		this.Tipo_estadistica = tipoEstadistica;
+	}
+
+	public String getTipoEstadistica()
+	{
+		return Tipo_estadistica;
 	}
 
 	public void contarInformacionEliminada()
