@@ -25,3 +25,7 @@ app:
   # Clave que se exige en la cabecera X-API-Key para crear, modificar y borrar.
   # En Render se genera sola, con la variable API_KEY definida en render.yaml.
   api-key: ${API_KEY:clave-de-prueba}
+  cors:
+    # Direcciones desde las que el frontend puede consultar la API, separadas por comas.
+    # Por defecto, el servidor local del frontend. Al publicar la página, se agrega su dirección en CORS_ORIGENES.
+    origenes: ${CORS_ORIGENES:http://localhost:5500,http://127.0.0.1:5500}
