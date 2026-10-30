@@ -8,10 +8,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * Convierte los errores en respuestas claras para quien consume la API.
@@ -55,6 +57,18 @@ public class ManejadorDeErrores
 	public ProblemDetail parametroInvalido(MethodArgumentTypeMismatchException error)
 	{
 		return respuesta(HttpStatus.BAD_REQUEST, "Parámetro inválido", "El valor de " + error.getName() + " no es válido.");
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	public ProblemDetail rutaInexistente(NoResourceFoundException error)
+	{
+		return respuesta(HttpStatus.NOT_FOUND, "Ruta no encontrada", "La ruta solicitada no existe en esta API.");
+	}
+
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public ProblemDetail metodoNoPermitido(HttpRequestMethodNotSupportedException error)
+	{
+		return respuesta(HttpStatus.METHOD_NOT_ALLOWED, "Método no permitido", "Esta ruta no admite el método " + error.getMethod() + ".");
 	}
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
