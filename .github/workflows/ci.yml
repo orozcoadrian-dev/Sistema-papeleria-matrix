@@ -1,0 +1,59 @@
+name: CI
+
+# Corre en cada pull request hacia main y en cada commit que llega a main.
+# Render espera este resultado antes de desplegar (autoDeployTrigger: checksPass en render.yaml).
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Si llega un commit nuevo a la misma rama, se cancela la corrida anterior.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (compilar y probar)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Compilar y correr las pruebas
+        run: mvn -B verify
+        working-directory: backend
+
+  docker:
+    name: Docker (construir la imagen)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Construir la imagen
+        run: docker build -t papeleria-matrix .
+
+      - name: Arrancar el contenedor y consultar la salud
+        run: |
+          docker run -d --name api -p 8080:8080 papeleria-matrix
+          for intento in $(seq 1 30); do
+            if curl -fsS http://localhost:8080/actuator/health; then
+              echo
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "La API no respondió a tiempo"
+          docker logs api
+          exit 1
