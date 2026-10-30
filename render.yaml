@@ -1,0 +1,15 @@
+# Configuración de Render (Blueprint). En Render: New, Blueprint, y se elige este repositorio.
+services:
+  - type: web
+    name: papeleria-matrix-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /actuator/health
+    # Cuando exista CI en GitHub Actions, cambiar a checksPass para desplegar solo si pasan las pruebas.
+    # Con checksPass y sin CI, Render no desplegaría nada.
+    autoDeployTrigger: commit
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: demo
