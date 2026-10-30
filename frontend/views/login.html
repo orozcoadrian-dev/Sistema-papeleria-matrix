@@ -4,26 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Login</title>
+    <title>Iniciar sesión · Papelería Matrix</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/x-icon" href="../assets/icons/logo-papeleria-matrix.ico">
+    <link rel="stylesheet" href="../css/vistas/estilo-login.css">
 </head>
 
 <body>
-    <form action="" method="post">
-        <label for="username">Usuario:</label>
-        <input type="text" id="username" name="username" title="Ingrese su nombre de usuario" required><br><br>
+    <main class="login">
+        <div class="login__brand">
+            <img src="../assets/icons/logo-papeleria-matrix.ico" alt="" class="login__logo" width="40" height="40">
+            <span>Papelería <span class="login__accent">Matrix</span></span>
+        </div>
 
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" title="Ingrese su contraseña" required><br><br>
+        <div>
+            <h1 class="login__title">Iniciar sesión</h1>
+            <p class="login__hint">Acceso para la administradora y los operadores del cibercafé.</p>
+        </div>
 
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" name="email" title="Ingrese su correo electrónico" required><br><br>
+        <form class="login__form" id="form-login" novalidate>
+            <label class="login__label" for="correo">Correo electrónico</label>
+            <input class="login__input" type="email" id="correo" name="correo" autocomplete="username" required>
 
-        <input type="submit" value="Iniciar sesión">
-        <input type="submit" value="Recuperar contraseña">
-        <a href="../index.html" class="boton-volver" target="_self">Volver al inicio</a>
+            <label class="login__label" for="clave">Contraseña</label>
+            <input class="login__input" type="password" id="clave" name="clave" autocomplete="current-password" required>
 
+            <button type="submit" class="btn btn--primary btn--full">Entrar</button>
+            <p class="login__message" id="login-mensaje" role="status" aria-live="polite"></p>
+        </form>
 
-    </form>
+        <a href="../index.html" class="login__back">Volver al inicio</a>
+    </main>
+
+    <script>
+        'use strict';
+
+        /* El inicio de sesión se conectará con el backend cuando exista (RF-38). Mientras tanto,
+           el formulario valida los datos y dice con claridad que todavía no da acceso. */
+        const formulario = document.getElementById('form-login');
+        const mensaje = document.getElementById('login-mensaje');
+
+        formulario.addEventListener('submit', (evento) => {
+            evento.preventDefault();
+            const correo = formulario.correo.value.trim();
+            const clave = formulario.clave.value;
+
+            if (!correo || !formulario.correo.validity.valid) {
+                mensaje.textContent = 'Escribe un correo electrónico válido.';
+                formulario.correo.focus();
+            } else if (!clave) {
+                mensaje.textContent = 'Escribe tu contraseña.';
+                formulario.clave.focus();
+            } else {
+                mensaje.textContent = 'El acceso al sistema interno todavía no está disponible.';
+            }
+        });
+    </script>
 </body>
 
 </html>
