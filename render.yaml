@@ -7,9 +7,8 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /actuator/health
-    # Cuando exista CI en GitHub Actions, cambiar a checksPass para desplegar solo si pasan las pruebas.
-    # Con checksPass y sin CI, Render no desplegaría nada.
-    autoDeployTrigger: commit
+    # Render despliega solo cuando pasan las revisiones de GitHub Actions (.github/workflows/ci.yml).
+    autoDeployTrigger: checksPass
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: demo
