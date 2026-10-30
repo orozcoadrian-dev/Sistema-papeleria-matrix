@@ -1,179 +1,112 @@
 package com.papeleriamatrix.model;
-import com.papeleriamatrix.common.Utils;
-import java.util.Date; 
 
-public class Servicio extends Object
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+
+/**
+ * Servicio que ofrece el negocio, como impresiones, copias o escáner.
+ * Corresponde a la tabla servicio.
+ */
+@Entity
+@Table(name = "servicio")
+public class Servicio
 {
-	private int Id_servicio = 0;
-	private String Codigo_servicio = "";
-	private String Nombre = "";
-	private String Categoria = "";
-	private double Precio = 0;
-	private String Descripcion = "";
-	private Date Fecha_vinculacion;
-	private Date Fecha_actualizacion;
-	private Utils utilidades = new Utils();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id_servicio")
+	private Integer id;
 
-	// Constructor con id autoincremental
-	public Servicio(int idServicio, String codigoServicio, String nombre, String categoria, double precio, String descripcion, Date fechaVinculacion, Date fechaActualizacion)
+	@Column(name = "Codigo_servicio", nullable = false, unique = true, length = 20)
+	private String codigoServicio;
+
+	@Column(name = "Nombre", nullable = false, length = 30)
+	private String nombre;
+
+	@Column(name = "Categoria", nullable = false, length = 30)
+	private String categoria;
+
+	@Column(name = "Precio", nullable = false)
+	private Double precio;
+
+	@Column(name = "Descripcion", length = 150)
+	private String descripcion;
+
+	@Column(name = "Fecha_vinculacion", nullable = false)
+	private LocalDate fechaVinculacion;
+
+	@Column(name = "Fecha_actualizacion")
+	private LocalDate fechaActualizacion;
+
+	// JPA necesita un constructor sin parámetros.
+	protected Servicio()
 	{
-		this.Id_servicio = idServicio;
-		setCodigoServicio(codigoServicio);
-		setNombre(nombre);
-		setCategoria(categoria);
-		setPrecio(precio);
-		setDescripcion(descripcion);
-		setFechaVinculacion(fechaVinculacion);
-		setFechaActualizacion(fechaActualizacion);
 	}
 
-	// Constructor sin id incremental
-	public Servicio(String codigoServicio, String nombre, String categoria, double precio, String descripcion, Date fechaVinculacion, Date fechaActualizacion)
+	public Servicio(String codigoServicio, String nombre, String categoria, Double precio, String descripcion)
 	{
-		setCodigoServicio(codigoServicio);
-		setNombre(nombre);
-		setCategoria(categoria);
-		setPrecio(precio);
-		setDescripcion(descripcion);
-		setFechaVinculacion(fechaVinculacion);
-		setFechaActualizacion(fechaActualizacion);
+		this.codigoServicio = codigoServicio;
+		this.nombre = nombre;
+		this.categoria = categoria;
+		this.precio = precio;
+		this.descripcion = descripcion;
+		this.fechaVinculacion = LocalDate.now();
 	}
 
-	public int getIdServicio()
+	/**
+	 * Cambia los datos del servicio y registra la fecha de actualización.
+	 */
+	public void actualizar(String codigoServicio, String nombre, String categoria, Double precio, String descripcion)
 	{
-		return Id_servicio;
+		this.codigoServicio = codigoServicio;
+		this.nombre = nombre;
+		this.categoria = categoria;
+		this.precio = precio;
+		this.descripcion = descripcion;
+		this.fechaActualizacion = LocalDate.now();
 	}
 
-	public void setCodigoServicio(String codigoServicio) throws IllegalArgumentException
+	public Integer getId()
 	{
-		if (codigoServicio.isEmpty() || codigoServicio.isBlank())
-		{
-			throw new IllegalArgumentException("El código de servicio no puede estar vacío.");
-		} else if (codigoServicio.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud del código de servicio es demasiado corta.");
-		} else if (codigoServicio.length() > 20)
-		{
-			throw new IllegalArgumentException("El código de servicio no puede superar una longitud de 20 caracteres.");
-		} else if (utilidades.tieneSoloNumeros(codigoServicio) == true)
-		{
-			this.Codigo_servicio = codigoServicio;
-		}
+		return id;
 	}
 
 	public String getCodigoServicio()
 	{
-		return Codigo_servicio;
-	}
-
-	public void setNombre(String nombre) throws IllegalArgumentException
-	{
-		if(nombre.isBlank() || nombre.isEmpty())
-		{
-			throw new IllegalArgumentException("El nombre del servicio no puede ir vacío.");
-		} else if(nombre.length() < 4)
-		{
-			throw new IllegalArgumentException("La longitud del nombre no puede ser menor de 4 caracteres.");
-		} else if(nombre.length() > 30)
-		{
-			throw new IllegalArgumentException("La longitud del nombre no puede ser mayor de 30 caracteres.");
-		} else if (utilidades.tieneSoloTexto(nombre) == true)
-		{
-			this.Nombre = nombre;
-		}
+		return codigoServicio;
 	}
 
 	public String getNombre()
 	{
-		return Nombre;
-	}
-
-	public void setCategoria(String categoria) throws IllegalArgumentException
-	{
-		if (categoria.isEmpty() || categoria.isBlank())
-		{
-			throw new IllegalArgumentException("La categoría no puede estar vacía.");
-		} else if (categoria.length() < 8)
-		{
-			throw new IllegalArgumentException("La longitud de la categoría es demasiado corta.");
-		} else if (categoria.length() > 30)
-		{
-			throw new IllegalArgumentException("La categoría no puede superar una longitud de 30 caracteres.");
-		} else if (utilidades.tieneSoloTexto(categoria) == true)
-		{
-			this.Categoria = categoria;
-		}
+		return nombre;
 	}
 
 	public String getCategoria()
 	{
-		return Categoria;
+		return categoria;
 	}
 
-	public void setPrecio(double precio) throws IllegalArgumentException
+	public Double getPrecio()
 	{
-		if (precio == 0)
-		{
-			throw new IllegalArgumentException("El precio no puede ser 0.");
-		} else if (precio <= -1)
-		{
-			throw new IllegalArgumentException("El precio no puede ser negativo.");
-		}
-		this.Precio = precio;
-	}
-
-	public double getPrecio()
-	{
-		return Precio;
-	}
-
-	public void setDescripcion(String descripcion) throws IllegalArgumentException
-	{
-		if (descripcion.isEmpty() || descripcion.isBlank())
-		{
-			throw new IllegalArgumentException("La descripción no puede estar vacía.");
-		} else if (descripcion.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud de la descripción es demasiado corta.");
-		} else if (descripcion.length() > 150)
-		{
-			throw new IllegalArgumentException("La descripción no puede superar una longitud de 150 caracteres.");
-		} else if (utilidades.tieneSoloTexto(descripcion) == true)
-		{
-			this.Descripcion = descripcion;
-		}
+		return precio;
 	}
 
 	public String getDescripcion()
 	{
-		return Descripcion;
+		return descripcion;
 	}
 
-	public void setFechaVinculacion(Date fechaVinculacion) throws IllegalArgumentException
+	public LocalDate getFechaVinculacion()
 	{
-		if(fechaVinculacion == null)
-		{
-			throw new IllegalArgumentException("La fecha de vinculación no puede ir vacía.");
-		}
-		this.Fecha_vinculacion = fechaVinculacion;
+		return fechaVinculacion;
 	}
 
-	public Date getFechaVinculacion()
+	public LocalDate getFechaActualizacion()
 	{
-		return Fecha_vinculacion;
-	}
-
-	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
-	{
-		if(fechaActualizacion == null)
-		{
-			throw new IllegalArgumentException("La fecha de actualización no puede ir vacía.");
-		}
-		this.Fecha_actualizacion = fechaActualizacion;
-	}
-
-	public Date getFechaActualizacion()
-	{
-		return Fecha_actualizacion;
+		return fechaActualizacion;
 	}
 }

@@ -1,252 +1,113 @@
 package com.papeleriamatrix.model;
-import com.papeleriamatrix.common.Utils;
-import java.util.Date;
 
-public class Ropa extends Object
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+
+/**
+ * Prenda del catálogo de ropa del aliado Pulguero Glam.
+ * Corresponde a la tabla ropa.
+ */
+@Entity
+@Table(name = "ropa")
+public class Ropa
 {
-	private int Id_ropa = 0;
-	private String Codigo_ropa = "";
-	private String Tipo_ropa = "";
-	private String Material = "";
-	private String Talla = "";
-	private String Descripcion = "";
-	private String Nombre = "";
-	private double Precio = 0;
-	private String Color = "";
-	private Date Fecha_registro;
-	private Date Fecha_actualizacion;
-	private Utils utilidades = new Utils();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id_ropa")
+	private Integer id;
 
-	// Constructor con id autoincremental
-	public Ropa(int idRopa, String codigoRopa, String tipoRopa, String material, String talla, String descripcion, String nombre, double precio, String color, Date fechaRegistro, Date fechaActualizacion)
+	@Column(name = "Codigo_ropa", nullable = false, unique = true, length = 20)
+	private String codigoRopa;
+
+	@Column(name = "Tipo_ropa", nullable = false, length = 20)
+	private String tipoRopa;
+
+	@Column(name = "Material", nullable = false, length = 30)
+	private String material;
+
+	@Column(name = "Talla", nullable = false, length = 5)
+	private String talla;
+
+	@Column(name = "Descripcion", length = 150)
+	private String descripcion;
+
+	@Column(name = "Nombre", length = 30)
+	private String nombre;
+
+	@Column(name = "Precio", nullable = false)
+	private Double precio;
+
+	@Column(name = "Color", length = 40)
+	private String color;
+
+	@Column(name = "Fecha_registro", nullable = false)
+	private LocalDate fechaRegistro;
+
+	@Column(name = "Fecha_actualizacion")
+	private LocalDate fechaActualizacion;
+
+	// JPA necesita un constructor sin parámetros.
+	protected Ropa()
 	{
-		this.Id_ropa = idRopa;
-		setCodigoRopa(codigoRopa);
-		setTipoRopa(tipoRopa);
-		setMaterial(material);
-		setTalla(talla);
-		setDescripcion(descripcion);
-		setNombre(nombre);
-		setPrecio(precio);
-		setColor(color);
-		setFechaRegistro(fechaRegistro);
-		setFechaActualizacion(fechaActualizacion);
 	}
 
-	// Constructor sin id incremental
-	public Ropa(String codigoRopa, String tipoRopa, String material, String talla, String descripcion, String nombre, double precio, String color, Date fechaRegistro, Date fechaActualizacion)
+	public Integer getId()
 	{
-		setCodigoRopa(codigoRopa);
-		setTipoRopa(tipoRopa);
-		setMaterial(material);
-		setTalla(talla);
-		setDescripcion(descripcion);
-		setNombre(nombre);
-		setPrecio(precio);
-		setColor(color);
-		setFechaRegistro(fechaRegistro);
-		setFechaActualizacion(fechaActualizacion);
-	}
-
-	public int getIdRopa()
-	{
-		return Id_ropa;
-	}
-
-	public void setCodigoRopa(String codigoRopa) throws IllegalArgumentException
-	{
-		if (codigoRopa.isEmpty() || codigoRopa.isBlank())
-		{
-			throw new IllegalArgumentException("El código de ropa no puede estar vacío.");
-		} else if (codigoRopa.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud del código de ropa es demasiado corta.");
-		} else if (codigoRopa.length() > 20)
-		{
-			throw new IllegalArgumentException("El código de ropa no puede superar una longitud de 20 caracteres.");
-		} else if (utilidades.tieneSoloNumeros(codigoRopa) == true)
-		{
-			this.Codigo_ropa = codigoRopa;
-		}
+		return id;
 	}
 
 	public String getCodigoRopa()
 	{
-		return Codigo_ropa;
-	}
-
-	public void setTipoRopa(String tipoRopa) throws IllegalArgumentException
-	{
-		if (tipoRopa.isEmpty() || tipoRopa.isBlank())
-		{
-			throw new IllegalArgumentException("El tipo de ropa no puede estar vacío.");
-		} else if (tipoRopa.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud del tipo de ropa es demasiado corta.");
-		} else if (tipoRopa.length() > 20)
-		{
-			throw new IllegalArgumentException("El tipo de ropa no puede superar una longitud de 20 caracteres.");
-		} else if (utilidades.tieneSoloTexto(tipoRopa) == true)
-		{
-			this.Tipo_ropa = tipoRopa;
-		}
+		return codigoRopa;
 	}
 
 	public String getTipoRopa()
 	{
-		return Tipo_ropa;
-	}
-
-	public void setMaterial(String material) throws IllegalArgumentException
-	{
-		if (material.isEmpty() || material.isBlank())
-		{
-			throw new IllegalArgumentException("El material no puede estar vacío.");
-		} else if (material.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud del material es demasiado corta.");
-		} else if (material.length() > 30)
-		{
-			throw new IllegalArgumentException("El material no puede superar una longitud de 30 caracteres.");
-		} else if (utilidades.tieneSoloTexto(material) == true)
-		{
-			this.Material = material;
-		}
+		return tipoRopa;
 	}
 
 	public String getMaterial()
 	{
-		return Material;
-	}
-
-	public void setTalla(String talla) throws IllegalArgumentException
-	{
-		if (talla.isEmpty() || talla.isBlank())
-		{
-			throw new IllegalArgumentException("La talla no puede estar vacía.");
-		} else if (talla.length() < 1)
-		{
-			throw new IllegalArgumentException("La longitud de la talla es demasiado corta.");
-		} else if (talla.length() > 5)
-		{
-			throw new IllegalArgumentException("La talla no puede superar una longitud de 5 caracteres.");
-		} 
-			this.Talla = talla;
+		return material;
 	}
 
 	public String getTalla()
 	{
-		return Talla;
-	}
-
-	public void setDescripcion(String descripcion) throws IllegalArgumentException
-	{
-		if (descripcion.isEmpty() || descripcion.isBlank())
-		{
-			throw new IllegalArgumentException("La descripción no puede estar vacía.");
-		} else if (descripcion.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud de la descripción es demasiado corta.");
-		} else if (descripcion.length() > 150)
-		{
-			throw new IllegalArgumentException("La descripción no puede superar una longitud de 150 caracteres.");
-		} else if (utilidades.tieneSoloTexto(descripcion) == true)
-		{
-			this.Descripcion = descripcion;
-		}
+		return talla;
 	}
 
 	public String getDescripcion()
 	{
-		return Descripcion;
-	}
-
-	public void setNombre(String nombre) throws IllegalArgumentException
-	{
-		if (nombre.isEmpty() || nombre.isBlank())
-		{
-			throw new IllegalArgumentException("El nombre no puede estar vacío.");
-		} else if (nombre.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud del nombre es demasiado corta.");
-		} else if (nombre.length() > 30)
-		{
-			throw new IllegalArgumentException("El nombre no puede superar una longitud de 30 caracteres.");
-		} else if (utilidades.tieneSoloTexto(nombre) == true)
-		{
-			this.Nombre = nombre;
-		}
+		return descripcion;
 	}
 
 	public String getNombre()
 	{
-		return Nombre;
+		return nombre;
 	}
 
-	public void setPrecio(double precio) throws IllegalArgumentException
+	public Double getPrecio()
 	{
-		if (precio == 0)
-		{
-			throw new IllegalArgumentException("El precio no puede ser 0.");
-		} else if (precio <= -1)
-		{
-			throw new IllegalArgumentException("El precio no puede ser negativo.");
-		}
-		this.Precio = precio;
-	}
-
-	public double getPrecio()
-	{
-		return Precio;
-	}
-
-	public void setColor(String color) throws IllegalArgumentException
-	{
-		if (color.isEmpty() || color.isBlank())
-		{
-			throw new IllegalArgumentException("El color no puede estar vacío.");
-		} else if (color.length() < 3)
-		{
-			throw new IllegalArgumentException("La longitud del color es demasiado corta.");
-		} else if (color.length() > 20)
-		{
-			throw new IllegalArgumentException("El color no puede superar una longitud de 20 caracteres.");
-		} else if (utilidades.tieneSoloTexto(color) == true)
-		{
-			this.Color = color;
-		}
+		return precio;
 	}
 
 	public String getColor()
 	{
-		return Color;
+		return color;
 	}
 
-	public void setFechaRegistro(Date fechaRegistro) throws IllegalArgumentException
+	public LocalDate getFechaRegistro()
 	{
-		if(fechaRegistro == null)
-		{
-			throw new IllegalArgumentException("La fecha de registro no puede ir vacía.");
-		}
-		this.Fecha_registro = fechaRegistro;
+		return fechaRegistro;
 	}
 
-	public Date getFechaRegistro()
+	public LocalDate getFechaActualizacion()
 	{
-		return Fecha_registro;
-	}
-
-	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
-	{
-		if(fechaActualizacion == null)
-		{
-			throw new IllegalArgumentException("La fecha de actualización no puede ir vacía.");
-		}
-		this.Fecha_actualizacion = fechaActualizacion;
-	}
-
-	public Date getFechaActualizacion()
-	{
-		return Fecha_actualizacion;
+		return fechaActualizacion;
 	}
 }
