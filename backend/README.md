@@ -23,8 +23,10 @@ Si la base no usa el usuario `root` sin contraseña en el puerto 3306, se cambia
 **Modo demo, sin XAMPP**
 
 ```
-mvn spring-boot:run -Dspring-boot.run.profiles=demo
+mvn spring-boot:run "-Dspring-boot.run.profiles=demo"
 ```
+
+Las comillas hacen falta en PowerShell, que si no corta el texto en el punto y Maven da error. Cuando aparece `Started PapeleriaMatrixApplication`, la API está encendida: abrir `http://localhost:8080` lleva a la documentación. Para apagarla se pulsa `Ctrl+C`.
 
 **Con Docker**, desde la raíz del repositorio:
 
@@ -37,6 +39,7 @@ docker run -p 8080:8080 papeleria-matrix
 
 | Ruta | Qué hace | Clave |
 |------|----------|-------|
+| `GET /` | Lleva a la documentación (`/swagger-ui.html`). La API no tiene página de inicio propia. | No |
 | `GET /api/estado` | Comprueba que la API está en línea y en qué modo corre. | No |
 | `GET /actuator/health` | La usa Render para saber si la aplicación está viva. | No |
 | `GET /api/servicios` y `GET /api/servicios/{id}` | Consultan los servicios del negocio. | No |
