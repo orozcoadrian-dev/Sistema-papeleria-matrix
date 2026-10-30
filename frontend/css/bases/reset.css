@@ -8,6 +8,11 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Un elemento con el atributo hidden debe desaparecer aunque su clase le dé otro display. */
+[hidden] {
+    display: none !important;
+}
+
 img {
     max-width: 100%;
     display: block;
