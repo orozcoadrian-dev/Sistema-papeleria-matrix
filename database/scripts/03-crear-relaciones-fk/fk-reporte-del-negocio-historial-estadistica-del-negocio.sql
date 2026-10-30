@@ -1,3 +1,3 @@
-ALTER TABLE Reporte_del_negocio
+ALTER TABLE reporte_del_negocio
 ADD CONSTRAINT fk_reporte_del_negocio_historial_estadistica_del_negocio
-FOREIGN KEY (Historial_estadistica_del_negocio_id) REFERENCES Historial_estadistica_del_negocio(Id_historial_estadistica);
+FOREIGN KEY (Historial_estadistica_del_negocio_id) REFERENCES historial_estadistica_del_negocio(Id_historial_estadistica);

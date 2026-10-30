@@ -1,14 +1,15 @@
-CREATE TABLE Estadistica_del_negocio
+CREATE TABLE estadistica_del_negocio
 (
 	Id_estadistica INT PRIMARY KEY AUTO_INCREMENT,
-    Codigo_estadistica VARCHAR(15) NOT NULL,
+    Codigo_estadistica VARCHAR(15) NOT NULL UNIQUE,
+    Tipo_estadistica VARCHAR(15) NOT NULL,
     Numero_informacion_eliminada INT NULL,
     Servicios_eliminados INT NULL,
     Numero_informacion_agregada INT NULL,
     Numero_servicios_ofrecidos INT NULL,
     Numero_productos_vendidos INT NULL,
     Operadores_cibercafe_despedidos INT NULL,
-    Rpa_actual_catalogo INT NULL,
+    Ropa_actual_catalogo INT NULL,
     Numero_productos_papeleria INT NULL,
     Ropa_removida_catalogo INT NULL,
     Productos_removidos INT NULL,

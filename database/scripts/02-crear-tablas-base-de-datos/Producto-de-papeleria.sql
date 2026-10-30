@@ -1,4 +1,4 @@
-CREATE TABLE Producto_de_papeleria
+CREATE TABLE producto_de_papeleria
 (
 	Id_producto INT PRIMARY KEY AUTO_INCREMENT,
     Codigo_producto VARCHAR(20) NOT NULL UNIQUE,

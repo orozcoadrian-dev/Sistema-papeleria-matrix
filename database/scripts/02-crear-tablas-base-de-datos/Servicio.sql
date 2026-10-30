@@ -1,4 +1,4 @@
-CREATE TABLE Servicio
+CREATE TABLE servicio
 (
 	Id_servicio INT PRIMARY KEY AUTO_INCREMENT,
     Codigo_servicio VARCHAR(20) NOT NULL UNIQUE,

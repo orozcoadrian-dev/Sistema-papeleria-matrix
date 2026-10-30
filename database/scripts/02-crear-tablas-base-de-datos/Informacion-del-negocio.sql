@@ -1,4 +1,4 @@
-CREATE TABLE Informacion_del_negocio
+CREATE TABLE informacion_del_negocio
 (
 	Id_informacion INT PRIMARY KEY AUTO_INCREMENT,
     Usuario_id INT NOT NULL,

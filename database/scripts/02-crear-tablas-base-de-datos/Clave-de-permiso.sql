@@ -1,4 +1,4 @@
-CREATE TABLE Clave_de_permiso
+CREATE TABLE clave_de_permiso
 (
 	Id_clave INT PRIMARY KEY AUTO_INCREMENT,
 	Usuario_id INT,

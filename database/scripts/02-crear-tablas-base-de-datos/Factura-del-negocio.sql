@@ -1,4 +1,4 @@
-CREATE TABLE Factura_del_negocio
+CREATE TABLE factura_del_negocio
 (
 	Id_factura INT PRIMARY KEY AUTO_INCREMENT,
     Codigo_factura VARCHAR(15) NOT NULL UNIQUE,
