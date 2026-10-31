@@ -1,26 +1,73 @@
 package com.papeleriamatrix.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
-public class Clave_de_permiso extends Object 
+@Entity
+@Table(name = "clave_de_permiso")
+public class Clave_de_permiso 
 {
-	
-	private int Id_clave = 0;
-	private int Usuario_id = 0;
-	private String Clave = "";
-	private Date Fecha_creacion;
-	private Date Fecha_actualizacion;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id_clave")
+	private Integer idClave;
 
-	//Constructor con id autoincremental
-	public Clave_de_permiso(int idClave, int usuarioId, String clave, Date fechaCreacion, Date fechaActualizacion)
+	@Column(name = "Usuario_id")
+	private Integer usuarioId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Usuario_id", insertable = false, updatable = false)
+	private Operador_de_cibercafe operadorDeCibercafe;
+
+	@Column(name = "Clave", nullable = false, unique = true, length = 30)
+	private String clave = "";
+
+	@Column(name = "Fecha_creacion", nullable = false)
+	private LocalDate fechaCreacion;
+
+	@Column(name = "Fecha_actualizacion")
+	private LocalDate fechaActualizacion;
+
+	public Clave_de_permiso()
 	{
-		this.Id_clave = idClave;
+	}
+
+	public Clave_de_permiso(int idClave, int usuarioId, String clave, LocalDate fechaCreacion, LocalDate fechaActualizacion)
+	{
+		this.idClave = idClave;
 		setUsuarioId(usuarioId);
 		setClave(clave);
 		setFechaCreacion(fechaCreacion);
 		setFechaActualizacion(fechaActualizacion);
 	}
 
-	//Constructor sin id autoincremental
+	public Clave_de_permiso(int usuarioId, String clave, LocalDate fechaCreacion, LocalDate fechaActualizacion)
+	{
+		setUsuarioId(usuarioId);
+		setClave(clave);
+		setFechaCreacion(fechaCreacion);
+		setFechaActualizacion(fechaActualizacion);
+	}
+
+	public Clave_de_permiso(int idClave, int usuarioId, String clave, Date fechaCreacion, Date fechaActualizacion)
+	{
+		this.idClave = idClave;
+		setUsuarioId(usuarioId);
+		setClave(clave);
+		setFechaCreacion(fechaCreacion);
+		setFechaActualizacion(fechaActualizacion);
+	}
+
 	public Clave_de_permiso(int usuarioId, String clave, Date fechaCreacion, Date fechaActualizacion)
 	{
 		setUsuarioId(usuarioId);
@@ -31,71 +78,106 @@ public class Clave_de_permiso extends Object
 
 	public int getIdClave()
 	{
-		return Id_clave;
+		return idClave != null ? idClave : 0;
+	}
+
+	public void setIdClave(int idClave)
+	{
+		this.idClave = idClave;
 	}
 
 	public void setUsuarioId(int usuarioId) throws IllegalArgumentException
 	{
-		if(usuarioId == 0)
+		if (usuarioId == 0)
 		{
 			throw new IllegalArgumentException("El ID del usuario no puede ser 0.");
-		} else if(usuarioId <= -1)
+		} else if (usuarioId <= -1)
 		{
 			throw new IllegalArgumentException("El ID del usuario no puede ser negativo.");
 		}
-		this.Usuario_id = usuarioId;
+		this.usuarioId = usuarioId;
 	}
 
 	public int getUsuarioId()
 	{
-		return Usuario_id;
+		return usuarioId != null ? usuarioId : 0;
+	}
+
+	public Operador_de_cibercafe getOperadorDeCibercafe()
+	{
+		return operadorDeCibercafe;
+	}
+
+	public void setOperadorDeCibercafe(Operador_de_cibercafe operadorDeCibercafe)
+	{
+		this.operadorDeCibercafe = operadorDeCibercafe;
+		if (operadorDeCibercafe != null)
+		{
+			this.usuarioId = operadorDeCibercafe.getIdUsuario();
+		}
 	}
 
 	public void setClave(String clave) throws IllegalArgumentException
 	{
-		if(clave.isBlank() || clave.isEmpty())
+		if (clave == null || clave.isBlank() || clave.isEmpty())
 		{
 			throw new IllegalArgumentException("La clave no puede ir vacía.");
-		} else if(clave.length() < 10)
+		} else if (clave.length() < 10)
 		{
 			throw new IllegalArgumentException("La longitud de la clave es demasiado corta.");
-		} else if(clave.length() > 30)
+		} else if (clave.length() > 30)
 		{
 			throw new IllegalArgumentException("La longitud de la clave es demasiado larga.");
 		} 
-			this.Clave = clave;
+		this.clave = clave;
 	}
 
 	public String getClave()
 	{
-		return Clave;
+		return clave;
+	}
+
+	public void setFechaCreacion(LocalDate fechaCreacion) throws IllegalArgumentException
+	{
+		if (fechaCreacion == null)
+		{
+			throw new IllegalArgumentException("La fecha de creación no puede ir vacía.");
+		}
+		this.fechaCreacion = fechaCreacion;
 	}
 
 	public void setFechaCreacion(Date fechaCreacion) throws IllegalArgumentException
 	{
-		if(fechaCreacion == null)
+		if (fechaCreacion == null)
 		{
 			throw new IllegalArgumentException("La fecha de creación no puede ir vacía.");
 		}
-		this.Fecha_creacion = fechaCreacion;
+		this.fechaCreacion = fechaCreacion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 
-	public Date getFechaCreacion()
+	public LocalDate getFechaCreacion()
 	{
-		return Fecha_creacion;
+		return fechaCreacion;
+	}
+
+	public void setFechaActualizacion(LocalDate fechaActualizacion) throws IllegalArgumentException
+	{
+		this.fechaActualizacion = fechaActualizacion;
 	}
 
 	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
 	{
-		if(fechaActualizacion == null)
+		if (fechaActualizacion != null)
 		{
-			throw new IllegalArgumentException("La fecha de actualización no puede estar vacía");
+			this.fechaActualizacion = fechaActualizacion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		} else 
+		{
+			this.fechaActualizacion = null;
 		}
-		this.Fecha_actualizacion = fechaActualizacion;
 	}
 
-	public Date getFechaActualizacion()
+	public LocalDate getFechaActualizacion()
 	{
-		return  Fecha_actualizacion;
+		return fechaActualizacion;
 	}
 }

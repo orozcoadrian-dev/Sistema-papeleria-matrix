@@ -8,10 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
-/**
- * Prenda del catálogo de ropa del aliado Pulguero Glam.
- * Corresponde a la tabla ropa.
- */
 @Entity
 @Table(name = "ropa")
 public class Ropa
@@ -51,7 +47,6 @@ public class Ropa
 	@Column(name = "Fecha_actualizacion")
 	private LocalDate fechaActualizacion;
 
-	// JPA necesita un constructor sin parámetros.
 	protected Ropa()
 	{
 	}

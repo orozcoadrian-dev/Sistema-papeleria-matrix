@@ -8,10 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
-/**
- * Servicio que ofrece el negocio, como impresiones, copias o escáner.
- * Corresponde a la tabla servicio.
- */
 @Entity
 @Table(name = "servicio")
 public class Servicio
@@ -42,7 +38,6 @@ public class Servicio
 	@Column(name = "Fecha_actualizacion")
 	private LocalDate fechaActualizacion;
 
-	// JPA necesita un constructor sin parámetros.
 	protected Servicio()
 	{
 	}
@@ -57,9 +52,6 @@ public class Servicio
 		this.fechaVinculacion = LocalDate.now();
 	}
 
-	/**
-	 * Cambia los datos del servicio y registra la fecha de actualización.
-	 */
 	public void actualizar(String codigoServicio, String nombre, String categoria, Double precio, String descripcion)
 	{
 		this.codigoServicio = codigoServicio;

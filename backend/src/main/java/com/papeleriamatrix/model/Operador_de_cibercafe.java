@@ -1,16 +1,59 @@
 package com.papeleriamatrix.model;
+
+import com.papeleriamatrix.common.Utils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
+@Entity
+@Table(name = "operador_de_cibercafe")
+@PrimaryKeyJoinColumn(name = "Id_usuario")
 public class Operador_de_cibercafe extends Usuario
 {
-	
-	private double Salario = 0;
-	private String Horario = "";
-	private String Direccion = "";
-	private Date Fecha_contrato;
+	@Column(name = "Salario", nullable = false)
+	private double salario = 0;
 
-	// Constructor con id incremental
+	@Column(name = "Horario", length = 80)
+	private String horario = "";
+
+	@Column(name = "Direccion", nullable = false, length = 80)
+	private String direccion = "";
+
+	@Column(name = "Fecha_contrato", nullable = false)
+	private LocalDate fechaContrato;
+
+	@Transient
+	private Utils utilidades = new Utils();
+
+	public Operador_de_cibercafe()
+	{
+		super();
+	}
+
+	public Operador_de_cibercafe(int idUsuario, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion, double salario, String horario, String direccion, LocalDate fechaContrato)
+	{
+		super(idUsuario, primerNombre, segundoNombre, primerApellido, segundoApellido, numeroDocumento, tipoDocumento, nombreUsuario, contrasenia, rol, email, telefono, ultimaSesion);
+		setSalario(salario);
+		setHorario(horario);
+		setDireccion(direccion);
+		setFechaContrato(fechaContrato);
+	}
+
+	public Operador_de_cibercafe(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion, double salario, String horario, String direccion, LocalDate fechaContrato)
+	{
+		super(primerNombre, segundoNombre, primerApellido, segundoApellido, numeroDocumento, tipoDocumento, nombreUsuario, contrasenia, rol, email, telefono, ultimaSesion);
+		setSalario(salario);
+		setHorario(horario);
+		setDireccion(direccion);
+		setFechaContrato(fechaContrato);
+	}
+
 	public Operador_de_cibercafe(int idUsuario, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion, double salario, String horario, String direccion, Date fechaContrato)
 	{
 		super(idUsuario, primerNombre, segundoNombre, primerApellido, segundoApellido, numeroDocumento, tipoDocumento, nombreUsuario, contrasenia, rol, email, telefono, ultimaSesion);
@@ -20,7 +63,6 @@ public class Operador_de_cibercafe extends Usuario
 		setFechaContrato(fechaContrato);
 	}
 
-	// Constructor sin id incremental
 	public Operador_de_cibercafe(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String numeroDocumento, String tipoDocumento, String nombreUsuario, String contrasenia, RolUsuario rol, String email, String telefono, LocalDateTime ultimaSesion, double salario, String horario, String direccion, Date fechaContrato)
 	{
 		super(primerNombre, segundoNombre, primerApellido, segundoApellido, numeroDocumento, tipoDocumento, nombreUsuario, contrasenia, rol, email, telefono, ultimaSesion);
@@ -32,72 +74,83 @@ public class Operador_de_cibercafe extends Usuario
 
 	public void setSalario(double salario) throws IllegalArgumentException
 	{
-		if(salario == 0)
+		if (salario == 0)
 		{
 			throw new IllegalArgumentException("El salario no puede ser igual a 0.");
 		} else if (salario <= -1)
 		{
 			throw new IllegalArgumentException("El salario no puede ser negativo.");
 		}
-		this.Salario = salario; 
+		this.salario = salario; 
 	}
 
 	public double getSalario()
 	{
-		return Salario;
+		return salario;
 	}
 
 	public void setHorario(String horario) throws IllegalArgumentException
 	{
-		if(horario.isBlank() || horario.isEmpty())
+		if (horario == null || horario.isBlank() || horario.isEmpty())
 		{
-			throw new IllegalArgumentException("El horario no puede ir vacío.");
-		} else if(horario.length() < 10)
+			this.horario = "";
+			return;
+		}
+		if (horario.length() < 10)
 		{
 			throw new IllegalArgumentException("La longitud del horario es demasiado corta.");
-		} else if(horario.length() > 80)
+		} else if (horario.length() > 80)
 		{
 			throw new IllegalArgumentException("La longitud del horario es demasiado larga.");
 		}
-		this.Horario= horario; 
+		this.horario = horario; 
 	}
 
 	public String getHorario()
 	{
-		return Horario;
+		return horario;
 	}
 
 	public void setDireccion(String direccion) throws IllegalArgumentException
 	{
-		if(direccion.isBlank() || direccion.isEmpty())
+		if (direccion == null || direccion.isBlank() || direccion.isEmpty())
 		{
 			throw new IllegalArgumentException("La dirección no puede ir vacía.");
-		} else if(direccion.length() < 10)
+		} else if (direccion.length() < 10)
 		{
 			throw new IllegalArgumentException("La longitud de la dirección es demasiado corta.");
-		} else if(direccion.length() > 80)
+		} else if (direccion.length() > 80)
 		{
 			throw new IllegalArgumentException("La longitud de la dirección es demasiado larga.");
 		}
-		this.Direccion= direccion; 
+		this.direccion = direccion; 
 	}
 
 	public String getDireccion()
 	{
-		return Direccion;
+		return direccion;
+	}
+
+	public void setFechaContrato(LocalDate fechaContrato) throws IllegalArgumentException
+	{
+		if (fechaContrato == null)
+		{
+			throw new IllegalArgumentException("La fecha de contrato no puede estar vacía.");
+		}
+		this.fechaContrato = fechaContrato; 
 	}
 
 	public void setFechaContrato(Date fechaContrato) throws IllegalArgumentException
 	{
-		if(fechaContrato == null)
+		if (fechaContrato == null)
 		{
 			throw new IllegalArgumentException("La fecha de contrato no puede estar vacía.");
 		}
-		this.Fecha_contrato = fechaContrato; 
+		this.fechaContrato = fechaContrato.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
 	}
 
-	public Date getFechaContrato()
+	public LocalDate getFechaContrato()
 	{
-		return Fecha_contrato;
+		return fechaContrato;
 	}
 }

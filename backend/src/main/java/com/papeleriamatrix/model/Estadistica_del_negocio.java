@@ -1,37 +1,82 @@
 package com.papeleriamatrix.model;
-import com.papeleriamatrix.common.Utils;
 
-public class Estadistica_del_negocio extends Object 
+import com.papeleriamatrix.common.Utils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
+@Entity
+@Table(name = "estadistica_del_negocio")
+public class Estadistica_del_negocio 
 {
-	
-	//Los atributos int (Aparte del ID) cumplen con la función de un contador.
-	private int Id_estadistica = 0;
-	private String Codigo_estadistica = "";
-	private String Tipo_estadistica = "";
-	private int Numero_informacion_eliminada = 0;
-	private int Servicios_eliminados = 0;
-	private int Numero_informacion_agregada = 0;
-	private int Numero_servicios_ofrecidos = 0;
-	private int Numero_productos_vendidos = 0;
-	private int Operadores_cibercafe_despedidos = 0;
-	private int Ropa_actual_catalogo = 0;
-	private int Numero_productos_papeleria = 0;
-	private int Ropa_removida_catalogo = 0;
-	private int Productos_removidos = 0;
-	private int Numero_ropa_vendida = 0;
-	private int Numero_servicios = 0;
-	private int Numero_facturas_generadas = 0;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id_estadistica")
+	private Integer idEstadistica;
+
+	@Column(name = "Codigo_estadistica", nullable = false, unique = true, length = 15)
+	private String codigoEstadistica = "";
+
+	@Column(name = "Tipo_estadistica", nullable = false, length = 15)
+	private String tipoEstadistica = "";
+
+	@Column(name = "Numero_informacion_eliminada")
+	private Integer numeroInformacionEliminada = 0;
+
+	@Column(name = "Servicios_eliminados")
+	private Integer serviciosEliminados = 0;
+
+	@Column(name = "Numero_informacion_agregada")
+	private Integer numeroInformacionAgregada = 0;
+
+	@Column(name = "Numero_servicios_ofrecidos")
+	private Integer numeroServiciosOfrecidos = 0;
+
+	@Column(name = "Numero_productos_vendidos")
+	private Integer numeroProductosVendidos = 0;
+
+	@Column(name = "Operadores_cibercafe_despedidos")
+	private Integer operadoresCibercafeDespedidos = 0;
+
+	@Column(name = "Ropa_actual_catalogo")
+	private Integer ropaActualCatalogo = 0;
+
+	@Column(name = "Numero_productos_papeleria")
+	private Integer numeroProductosPapeleria = 0;
+
+	@Column(name = "Ropa_removida_catalogo")
+	private Integer ropaRemovidaCatalogo = 0;
+
+	@Column(name = "Productos_removidos")
+	private Integer productosRemovidos = 0;
+
+	@Column(name = "Numero_ropa_vendida")
+	private Integer numeroRopaVendida = 0;
+
+	@Column(name = "Numero_servicios")
+	private Integer numeroServicios = 0;
+
+	@Column(name = "Numero_facturas_generadas")
+	private Integer numeroFacturasGeneradas = 0;
+
+	@Transient
 	private Utils utilidades = new Utils();
 
-	// Constructor con ID incremental
+	public Estadistica_del_negocio()
+	{
+	}
+
 	public Estadistica_del_negocio(int idEstadistica, String codigoEstadistica, String tipoEstadistica)
 	{
-		this.Id_estadistica = idEstadistica;
+		this.idEstadistica = idEstadistica;
 		setCodigoEstadistica(codigoEstadistica);
 		setTipoEstadistica(tipoEstadistica);
 	}
 
-	// Constructor sin ID incremental
 	public Estadistica_del_negocio(String codigoEstadistica, String tipoEstadistica)
 	{
 		setCodigoEstadistica(codigoEstadistica);
@@ -40,175 +85,255 @@ public class Estadistica_del_negocio extends Object
 
 	public int getIdEstadistica()
 	{
-		return Id_estadistica;
+		return idEstadistica != null ? idEstadistica : 0;
+	}
+
+	public void setIdEstadistica(int idEstadistica)
+	{
+		this.idEstadistica = idEstadistica;
 	}
 
 	public void setCodigoEstadistica(String codigoEstadistica) throws IllegalArgumentException
 	{
-		if(codigoEstadistica.isBlank() || codigoEstadistica.isEmpty())
+		if (codigoEstadistica == null || codigoEstadistica.isBlank() || codigoEstadistica.isEmpty())
 		{
 			throw new IllegalArgumentException("El código de la estadística no puede ir vacío.");
-		} else if(codigoEstadistica.length() < 15)
+		} else if (codigoEstadistica.length() != 15)
 		{
-			throw new IllegalArgumentException("El código de la estadística no puede tener una longitud inferior a 15 caracteres.");
-		} else if(codigoEstadistica.length() > 15)
+			throw new IllegalArgumentException("El código de la estadística debe tener una longitud exacta de 15 caracteres.");
+		} else if (utilidades.tieneSoloNumeros(codigoEstadistica))
 		{
-			throw new IllegalArgumentException("El código de la estadística no puede tener una longitud superior a 15 caracteres.");
-		} else if(utilidades.tieneSoloNumeros(codigoEstadistica) == true)
-		{
-			this.Codigo_estadistica = codigoEstadistica;
+			this.codigoEstadistica = codigoEstadistica;
 		}
 	}
 
 	public String getCodigoEstadistica()
 	{
-		return Codigo_estadistica;
+		return codigoEstadistica;
 	}
 
 	public void setTipoEstadistica(String tipoEstadistica) throws IllegalArgumentException
 	{
-		if(tipoEstadistica.isBlank() || tipoEstadistica.isEmpty())
+		if (tipoEstadistica == null || tipoEstadistica.isBlank() || tipoEstadistica.isEmpty())
 		{
 			throw new IllegalArgumentException("El tipo de la estadística no puede ir vacío.");
-		} else if(tipoEstadistica.length() > 15)
+		} else if (tipoEstadistica.length() > 15)
 		{
 			throw new IllegalArgumentException("El tipo de la estadística no puede superar los 15 caracteres.");
 		}
-		this.Tipo_estadistica = tipoEstadistica;
+		this.tipoEstadistica = tipoEstadistica;
 	}
 
 	public String getTipoEstadistica()
 	{
-		return Tipo_estadistica;
+		return tipoEstadistica;
 	}
 
 	public void contarInformacionEliminada()
 	{
-		this.Numero_informacion_eliminada++;
+		if (this.numeroInformacionEliminada == null) this.numeroInformacionEliminada = 0;
+		this.numeroInformacionEliminada++;
 	}
 
 	public int getNumeroInformacionEliminada()
 	{
-		return Numero_informacion_eliminada;
+		return numeroInformacionEliminada != null ? numeroInformacionEliminada : 0;
+	}
+
+	public void setNumeroInformacionEliminada(int numeroInformacionEliminada)
+	{
+		this.numeroInformacionEliminada = numeroInformacionEliminada;
 	}
 
 	public void contarServicioEliminado()
 	{
-		this.Servicios_eliminados++;
+		if (this.serviciosEliminados == null) this.serviciosEliminados = 0;
+		this.serviciosEliminados++;
 	}
 
 	public int getServiciosEliminados()
 	{
-		return Servicios_eliminados;
+		return serviciosEliminados != null ? serviciosEliminados : 0;
+	}
+
+	public void setServiciosEliminados(int serviciosEliminados)
+	{
+		this.serviciosEliminados = serviciosEliminados;
 	}
 
 	public void contarInformacionAgregada()
 	{
-		this.Numero_informacion_agregada++;
+		if (this.numeroInformacionAgregada == null) this.numeroInformacionAgregada = 0;
+		this.numeroInformacionAgregada++;
 	}
 
 	public int getNumeroInformacionAgregada()
 	{
-		return Numero_informacion_agregada;
+		return numeroInformacionAgregada != null ? numeroInformacionAgregada : 0;
+	}
+
+	public void setNumeroInformacionAgregada(int numeroInformacionAgregada)
+	{
+		this.numeroInformacionAgregada = numeroInformacionAgregada;
 	}
 
 	public void contarServicioOfrecido()
 	{
-		this.Numero_servicios_ofrecidos++;
+		if (this.numeroServiciosOfrecidos == null) this.numeroServiciosOfrecidos = 0;
+		this.numeroServiciosOfrecidos++;
 	}
 
 	public int getNumeroServiciosOfrecidos()
 	{
-		return Numero_servicios_ofrecidos;
+		return numeroServiciosOfrecidos != null ? numeroServiciosOfrecidos : 0;
+	}
+
+	public void setNumeroServiciosOfrecidos(int numeroServiciosOfrecidos)
+	{
+		this.numeroServiciosOfrecidos = numeroServiciosOfrecidos;
 	}
 
 	public void contarProductoVendido()
 	{
-		this.Numero_productos_vendidos++;
+		if (this.numeroProductosVendidos == null) this.numeroProductosVendidos = 0;
+		this.numeroProductosVendidos++;
 	}
 
 	public int getNumeroProductosVendidos()
 	{
-		return Numero_productos_vendidos;
+		return numeroProductosVendidos != null ? numeroProductosVendidos : 0;
+	}
+
+	public void setNumeroProductosVendidos(int numeroProductosVendidos)
+	{
+		this.numeroProductosVendidos = numeroProductosVendidos;
 	}
 
 	public void contarOperadorCibercafeDespedido()
 	{
-		this.Operadores_cibercafe_despedidos++;
+		if (this.operadoresCibercafeDespedidos == null) this.operadoresCibercafeDespedidos = 0;
+		this.operadoresCibercafeDespedidos++;
 	}
 
 	public int getOperadoresCibercafeDespedidos()
 	{
-		return Operadores_cibercafe_despedidos;
+		return operadoresCibercafeDespedidos != null ? operadoresCibercafeDespedidos : 0;
+	}
+
+	public void setOperadoresCibercafeDespedidos(int operadoresCibercafeDespedidos)
+	{
+		this.operadoresCibercafeDespedidos = operadoresCibercafeDespedidos;
 	}
 
 	public void contarRopaActualCatalogo()
 	{
-		this.Ropa_actual_catalogo++;
+		if (this.ropaActualCatalogo == null) this.ropaActualCatalogo = 0;
+		this.ropaActualCatalogo++;
 	}
 
 	public int getRopaActualCatalogo()
 	{
-		return Ropa_actual_catalogo;
+		return ropaActualCatalogo != null ? ropaActualCatalogo : 0;
+	}
+
+	public void setRopaActualCatalogo(int ropaActualCatalogo)
+	{
+		this.ropaActualCatalogo = ropaActualCatalogo;
 	}
 
 	public void contarNumeroProductoPapeleria()
 	{
-		this.Numero_productos_papeleria++;
+		if (this.numeroProductosPapeleria == null) this.numeroProductosPapeleria = 0;
+		this.numeroProductosPapeleria++;
 	}
 
 	public int getNumeroProductosPapeleria()
 	{
-		return Numero_productos_papeleria;
+		return numeroProductosPapeleria != null ? numeroProductosPapeleria : 0;
+	}
+
+	public void setNumeroProductosPapeleria(int numeroProductosPapeleria)
+	{
+		this.numeroProductosPapeleria = numeroProductosPapeleria;
 	}
 
 	public void contarRopaRemovidaCatalogo()
 	{
-		this.Ropa_removida_catalogo++;
+		if (this.ropaRemovidaCatalogo == null) this.ropaRemovidaCatalogo = 0;
+		this.ropaRemovidaCatalogo++;
 	}
 
 	public int getRopaRemovidaCatalogo()
 	{
-		return Ropa_removida_catalogo;
+		return ropaRemovidaCatalogo != null ? ropaRemovidaCatalogo : 0;
+	}
+
+	public void setRopaRemovidaCatalogo(int ropaRemovidaCatalogo)
+	{
+		this.ropaRemovidaCatalogo = ropaRemovidaCatalogo;
 	}
 
 	public void contarProductoRemovido()
 	{
-		this.Productos_removidos++;
+		if (this.productosRemovidos == null) this.productosRemovidos = 0;
+		this.productosRemovidos++;
 	}
 
 	public int getProductosRemovidos()
 	{
-		return Productos_removidos;
+		return productosRemovidos != null ? productosRemovidos : 0;
+	}
+
+	public void setProductosRemovidos(int productosRemovidos)
+	{
+		this.productosRemovidos = productosRemovidos;
 	}
 
 	public void contarRopaVendida()
 	{
-		this.Numero_ropa_vendida++;
+		if (this.numeroRopaVendida == null) this.numeroRopaVendida = 0;
+		this.numeroRopaVendida++;
 	}
 
 	public int getNumeroRopaVendida()
 	{
-		return Numero_ropa_vendida;
+		return numeroRopaVendida != null ? numeroRopaVendida : 0;
+	}
+
+	public void setNumeroRopaVendida(int numeroRopaVendida)
+	{
+		this.numeroRopaVendida = numeroRopaVendida;
 	}
 
 	public void contarNumeroServicio()
 	{
-		this.Numero_servicios++;
+		if (this.numeroServicios == null) this.numeroServicios = 0;
+		this.numeroServicios++;
 	}
 
 	public int getNumeroServicios()
 	{
-		return Numero_servicios;
+		return numeroServicios != null ? numeroServicios : 0;
+	}
+
+	public void setNumeroServicios(int numeroServicios)
+	{
+		this.numeroServicios = numeroServicios;
 	}
 
 	public void contarFacturaGenerada()
 	{
-		this.Numero_facturas_generadas++;
+		if (this.numeroFacturasGeneradas == null) this.numeroFacturasGeneradas = 0;
+		this.numeroFacturasGeneradas++;
 	}
 
 	public int getNumeroFacturasGeneradas()
 	{
-		return Numero_facturas_generadas;
+		return numeroFacturasGeneradas != null ? numeroFacturasGeneradas : 0;
+	}
+
+	public void setNumeroFacturasGeneradas(int numeroFacturasGeneradas)
+	{
+		this.numeroFacturasGeneradas = numeroFacturasGeneradas;
 	}
 }

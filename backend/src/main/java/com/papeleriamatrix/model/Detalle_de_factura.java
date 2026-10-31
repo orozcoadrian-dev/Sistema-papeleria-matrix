@@ -1,40 +1,95 @@
 package com.papeleriamatrix.model;
+
 import com.papeleriamatrix.common.Utils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 
-public class Detalle_de_factura extends Object 
+@Entity
+@Table(name = "detalle_de_factura")
+public class Detalle_de_factura 
 {
-	
-	private int Id_detalle = 0;
-	private int Factura_del_negocio_id = 0;
-	private String Descripcion = "";
-	private int Servicio_id = 0;
-	private int Cantidad_servicio = 0;
-	private int Producto_de_papeleria_id = 0;
-	private int Cantidad_producto = 0;
-	private int Ropa_id = 0;
-	private int Cantidad_ropa = 0;
-	private LocalDateTime Fecha_generacion;
-	private LocalDateTime Fecha_actualizacion;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id_detalle")
+	private Integer idDetalle;
+
+	@Column(name = "Factura_del_negocio_id", nullable = false)
+	private Integer facturaDelNegocioId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Factura_del_negocio_id", insertable = false, updatable = false)
+	private Factura_del_negocio factura;
+
+	@Column(name = "Descripcion", nullable = false, length = 120)
+	private String descripcion = "";
+
+	@Column(name = "Servicio_id")
+	private Integer servicioId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Servicio_id", insertable = false, updatable = false)
+	private Servicio servicio;
+
+	@Column(name = "Cantidad_servicio")
+	private Integer cantidadServicio;
+
+	@Column(name = "Producto_de_papeleria_id")
+	private Integer productoPapeleriaId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Producto_de_papeleria_id", insertable = false, updatable = false)
+	private ProductoPapeleria productoPapeleria;
+
+	@Column(name = "Cantidad_producto")
+	private Integer cantidadProducto;
+
+	@Column(name = "Ropa_id")
+	private Integer ropaId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Ropa_id", insertable = false, updatable = false)
+	private Ropa ropa;
+
+	@Column(name = "Cantidad_ropa")
+	private Integer cantidadRopa;
+
+	@Column(name = "Fecha_generacion", nullable = false)
+	private LocalDateTime fechaGeneracion;
+
+	@Column(name = "Fecha_actualizacion")
+	private LocalDateTime fechaActualizacion;
+
+	@Transient
 	private Utils utilidades = new Utils();
 
-	// Constructor con id autoincremental
-	public Detalle_de_factura(int idDetalle, int facturaDelNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int Ropa_id, int cantidadRopa, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
+	public Detalle_de_factura()
 	{
-		this.Id_detalle = idDetalle;
+	}
+
+	public Detalle_de_factura(int idDetalle, int facturaDelNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int ropaId, int cantidadRopa, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
+	{
+		this.idDetalle = idDetalle;
 		setFacturaDelNegocioId(facturaDelNegocioId);
 		setDescripcion(descripcion);
 		setServicioId(servicioId);
 		setCantidadServicio(cantidadServicio);
 		setProductoPapeleriaId(productoPapeleriaId);
 		setCantidadProducto(cantidadProducto);
-		setRopaId(Ropa_id);
+		setRopaId(ropaId);
 		setCantidadRopa(cantidadRopa);
 		setFechaGeneracion(fechaGeneracion);
 		setFechaActualizacion(fechaActualizacion);
 	}
 
-	//Constructor sin id incremental
 	public Detalle_de_factura(int facturaDelNegocioId, String descripcion, int servicioId, int cantidadServicio, int productoPapeleriaId, int cantidadProducto, int ropaId, int cantidadRopa, LocalDateTime fechaGeneracion, LocalDateTime fechaActualizacion)
 	{
 		setFacturaDelNegocioId(facturaDelNegocioId);
@@ -49,181 +104,219 @@ public class Detalle_de_factura extends Object
 		setFechaActualizacion(fechaActualizacion);
 	}
 
-
 	public int getIdDetalle()
 	{
-		return Id_detalle;
+		return idDetalle != null ? idDetalle : 0;
+	}
+
+	public void setIdDetalle(int idDetalle)
+	{
+		this.idDetalle = idDetalle;
 	}
 
 	public void setFacturaDelNegocioId(int facturaDelNegocioId) throws IllegalArgumentException
 	{
-
-		if(facturaDelNegocioId == 0)
+		if (facturaDelNegocioId == 0)
 		{
 			throw new IllegalArgumentException("El ID de la factura del negocio no puede ser 0.");
 		} else if (facturaDelNegocioId <= -1)
 		{
 			throw new IllegalArgumentException("El ID de la factura del negocio no puede ser negativo.");
 		}
-		Factura_del_negocio_id = facturaDelNegocioId;
+		this.facturaDelNegocioId = facturaDelNegocioId;
 	}
 
 	public int getFacturaDelNegocioId() 
 	{
-		return Factura_del_negocio_id;
+		return facturaDelNegocioId != null ? facturaDelNegocioId : 0;
+	}
+
+	public Factura_del_negocio getFactura()
+	{
+		return factura;
+	}
+
+	public void setFactura(Factura_del_negocio factura)
+	{
+		this.factura = factura;
+		if (factura != null)
+		{
+			this.facturaDelNegocioId = factura.getIdFactura();
+		}
 	}
 
 	public void setDescripcion(String descripcion) throws IllegalArgumentException
 	{
-
-		if(descripcion.isBlank() || descripcion.isEmpty())
+		if (descripcion == null || descripcion.isBlank() || descripcion.isEmpty())
 		{
 			throw new IllegalArgumentException("La descripción no puede estar vacía.");
-		} else if(descripcion.length() < 12)
+		} else if (descripcion.length() < 12)
 		{
 			throw new IllegalArgumentException("La longitud de la descripción es demasiado corta.");
-		} else if(descripcion.length() > 120)
+		} else if (descripcion.length() > 120)
 		{
 			throw new IllegalArgumentException("La longitud de la descripción es demasiado larga.");
-		} else if(utilidades.tieneSoloTexto(descripcion) == true)
+		} else if (utilidades.tieneSoloTexto(descripcion))
 		{
-			this.Descripcion = descripcion;
+			this.descripcion = descripcion;
 		}
 	}
 
 	public String getDescripcion() 
 	{
-		return Descripcion;
+		return descripcion;
 	}
 
 	public void setServicioId(int servicioId) throws IllegalArgumentException
 	{
-		if(servicioId == 0)
-		{
-			throw new IllegalArgumentException("El ID del servicio no puede ser 0.");
-		} else if (servicioId <= -1)
+		if (servicioId <= -1)
 		{
 			throw new IllegalArgumentException("El ID del servicio no puede ser negativo.");
 		}
-		this.Servicio_id = servicioId;
+		this.servicioId = servicioId != 0 ? servicioId : null;
 	}
 
 	public int getServicioId() 
 	{
-		return Servicio_id;
+		return servicioId != null ? servicioId : 0;
+	}
+
+	public Servicio getServicio()
+	{
+		return servicio;
+	}
+
+	public void setServicio(Servicio servicio)
+	{
+		this.servicio = servicio;
+		if (servicio != null)
+		{
+			this.servicioId = servicio.getId();
+		}
 	}
 
 	public void setCantidadServicio(int cantidadServicio) throws IllegalArgumentException
 	{
-
-		if(cantidadServicio == 0)
-		{
-			throw new IllegalArgumentException("La cantidad del servicio ofrecido no puede ser 0.");
-		} else if (cantidadServicio <= -1)
+		if (cantidadServicio < 0)
 		{
 			throw new IllegalArgumentException("La cantidad del servicio ofrecido no puede ser negativo.");
-		} else if(cantidadServicio > 150)
+		} else if (cantidadServicio > 150)
 		{
 			throw new IllegalArgumentException("La cantidad del servicio no puede superar las 150 unidades.");
 		}
-		Cantidad_servicio = cantidadServicio;
+		this.cantidadServicio = cantidadServicio;
 	}
 
 	public int getCantidadServicio() 
 	{
-		return Cantidad_servicio;
+		return cantidadServicio != null ? cantidadServicio : 0;
 	}
 
 	public void setProductoPapeleriaId(int productoPapeleriaId) throws IllegalArgumentException
 	{
-		if(productoPapeleriaId == 0)
-		{
-			throw new IllegalArgumentException("El ID del producto de la papelería no puede ser 0.");
-		} else if (productoPapeleriaId <= -1)
+		if (productoPapeleriaId <= -1)
 		{
 			throw new IllegalArgumentException("El ID del producto de la papelería no puede ser negativo.");
 		}
-		Producto_de_papeleria_id = productoPapeleriaId;
+		this.productoPapeleriaId = productoPapeleriaId != 0 ? productoPapeleriaId : null;
 	}
 
 	public int getProductoPapeleriaId() 
 	{
-		return Producto_de_papeleria_id;
+		return productoPapeleriaId != null ? productoPapeleriaId : 0;
+	}
+
+	public ProductoPapeleria getProductoPapeleria()
+	{
+		return productoPapeleria;
+	}
+
+	public void setProductoPapeleria(ProductoPapeleria productoPapeleria)
+	{
+		this.productoPapeleria = productoPapeleria;
+		if (productoPapeleria != null)
+		{
+			this.productoPapeleriaId = productoPapeleria.getId();
+		}
 	}
 
 	public void setCantidadProducto(int cantidadProducto) throws IllegalArgumentException
 	{
-		if(cantidadProducto == 0)
-		{
-			throw new IllegalArgumentException("La cantidad de productos no puede ser 0.");
-		}else if(cantidadProducto < -1)
+		if (cantidadProducto < 0)
 		{
 			throw new IllegalArgumentException("La cantidad de productos no puede ser negativa.");
 		}
-		Cantidad_producto = cantidadProducto;
+		this.cantidadProducto = cantidadProducto;
 	}
 
 	public int getCantidadProducto() 
 	{
-		return Cantidad_producto;
+		return cantidadProducto != null ? cantidadProducto : 0;
 	}
 
 	public void setRopaId(int ropaId) throws IllegalArgumentException
 	{
-		if(ropaId == 0)
-		{
-			throw new IllegalArgumentException("El ID de la ropa no puede ser 0.");
-		} else if (ropaId <= -1)
+		if (ropaId <= -1)
 		{
 			throw new IllegalArgumentException("El ID de la ropa no puede ser negativo.");
 		}
-		Ropa_id = ropaId;
+		this.ropaId = ropaId != 0 ? ropaId : null;
 	}
 
 	public int getRopaId() 
 	{
-		return Ropa_id;
+		return ropaId != null ? ropaId : 0;
+	}
+
+	public Ropa getRopa()
+	{
+		return ropa;
+	}
+
+	public void setRopa(Ropa ropa)
+	{
+		this.ropa = ropa;
+		if (ropa != null)
+		{
+			this.ropaId = ropa.getId();
+		}
 	}
 
 	public void setCantidadRopa(int cantidadRopa) throws IllegalArgumentException
 	{
-		if(cantidadRopa < 0)
+		if (cantidadRopa < 0)
 		{
 			throw new IllegalArgumentException("La cantidad de ropa no puede ser negativa.");
 		}
-		Cantidad_ropa = cantidadRopa;
+		this.cantidadRopa = cantidadRopa;
 	}
 
 	public int getCantidadRopa() 
 	{
-		return Cantidad_ropa;
+		return cantidadRopa != null ? cantidadRopa : 0;
 	}
 
 	public void setFechaGeneracion(LocalDateTime fechaGeneracion) throws IllegalArgumentException
 	{
-		if(fechaGeneracion == null)
+		if (fechaGeneracion == null)
 		{
 			throw new IllegalArgumentException("La fecha de generación no puede estar vacía.");
 		}
-		Fecha_generacion = fechaGeneracion;
+		this.fechaGeneracion = fechaGeneracion;
 	}
 
 	public LocalDateTime getFechaGeneracion() 
 	{
-		return Fecha_generacion;
+		return fechaGeneracion;
 	}
 
-	public void setFechaActualizacion(LocalDateTime fechaActualizacion) throws IllegalArgumentException
+	public void setFechaActualizacion(LocalDateTime fechaActualizacion)
 	{
-		if(fechaActualizacion == null)
-		{
-			throw new IllegalArgumentException("La fecha de actualización no puede estar vacía.");
-		}
-		Fecha_actualizacion = fechaActualizacion;
+		this.fechaActualizacion = fechaActualizacion;
 	}
 	
 	public LocalDateTime getFechaActualizacion() 
 	{
-		return Fecha_actualizacion;
+		return fechaActualizacion;
 	}
 }

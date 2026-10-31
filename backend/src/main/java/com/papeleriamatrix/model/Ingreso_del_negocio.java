@@ -1,23 +1,57 @@
 package com.papeleriamatrix.model;
-import com.papeleriamatrix.common.Utils;
 
-public class Ingreso_del_negocio extends Object 
+import com.papeleriamatrix.common.Utils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
+@Entity
+@Table(name = "ingreso_del_negocio")
+public class Ingreso_del_negocio 
 {
-	private int Id_ingreso = 0;
-	private String Codigo_ingreso = "";
-	private double Total_salario_operadores = 0;
-	private double Total_vendido_ropa = 0;
-	private double Inversion_total_papeleria = 0;
-	private double Total_vendido_servicios = 0;
-	private double Total_vendido_productos = 0;
-	private double Total_recaudo_esperado_papeleria = 0;
-	private String Tipo_ingreso = "";
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id_ingreso")
+	private Integer idIngreso;
+
+	@Column(name = "Codigo_ingreso", nullable = false, unique = true, length = 15)
+	private String codigoIngreso = "";
+
+	@Column(name = "Total_salario_operadores")
+	private Double totalSalarioOperadores;
+
+	@Column(name = "Total_vendido_ropa")
+	private Double totalVendidoRopa;
+
+	@Column(name = "Inversion_total_papeleria")
+	private Double inversionTotalPapeleria;
+
+	@Column(name = "Total_vendido_servicios")
+	private Double totalVendidoServicios;
+
+	@Column(name = "Total_vendido_productos")
+	private Double totalVendidoProductos;
+
+	@Column(name = "Total_recaudo_esperado_papeleria")
+	private Double totalRecaudoEsperadoPapeleria;
+
+	@Column(name = "Tipo_ingreso", nullable = false, length = 15)
+	private String tipoIngreso = "";
+
+	@Transient
 	private Utils utilidades = new Utils();
 
-	// Constructor con id autoincremental
+	public Ingreso_del_negocio()
+	{
+	}
+
 	public Ingreso_del_negocio(int idIngreso, String codigoIngreso, double totalSalarioOperadores, double totalVendidoRopa, double inversionTotalPapeleria, double totalVendidoServicios, double totalVendidoProductos, double totalRecaudoEsperadoPapeleria, String tipoIngreso)
 	{
-		this.Id_ingreso = idIngreso;
+		this.idIngreso = idIngreso;
 		setCodigoIngreso(codigoIngreso);
 		setTotalSalarioOperadores(totalSalarioOperadores);
 		setTotalVendidoRopa(totalVendidoRopa);
@@ -28,7 +62,6 @@ public class Ingreso_del_negocio extends Object
 		setTipoIngreso(tipoIngreso);
 	}
 
-	// Constructor sin id incremental
 	public Ingreso_del_negocio(String codigoIngreso, double totalSalarioOperadores, double totalVendidoRopa, double inversionTotalPapeleria, double totalVendidoServicios, double totalVendidoProductos, double totalRecaudoEsperadoPapeleria, String tipoIngreso)
 	{
 		setCodigoIngreso(codigoIngreso);
@@ -43,12 +76,17 @@ public class Ingreso_del_negocio extends Object
 
 	public int getIdIngreso()
 	{
-		return Id_ingreso;
+		return idIngreso != null ? idIngreso : 0;
+	}
+
+	public void setIdIngreso(int idIngreso)
+	{
+		this.idIngreso = idIngreso;
 	}
 
 	public void setCodigoIngreso(String codigoIngreso) throws IllegalArgumentException
 	{
-		if (codigoIngreso.isEmpty() || codigoIngreso.isBlank())
+		if (codigoIngreso == null || codigoIngreso.isEmpty() || codigoIngreso.isBlank())
 		{
 			throw new IllegalArgumentException("El código de ingreso no puede estar vacío.");
 		} else if (codigoIngreso.length() < 10)
@@ -57,122 +95,104 @@ public class Ingreso_del_negocio extends Object
 		} else if (codigoIngreso.length() > 15)
 		{
 			throw new IllegalArgumentException("El código de ingreso no puede superar una longitud de 15 caracteres.");
-		} else if(utilidades.tieneSoloNumeros(codigoIngreso) == true)
+		} else if (utilidades.tieneSoloNumeros(codigoIngreso))
 		{
-			this.Codigo_ingreso = codigoIngreso;
+			this.codigoIngreso = codigoIngreso;
 		}
 	}
 
 	public String getCodigoIngreso()
 	{
-		return Codigo_ingreso;
+		return codigoIngreso;
 	}
 
 	public void setTotalSalarioOperadores(double totalSalarioOperadores) throws IllegalArgumentException
 	{
-		if (totalSalarioOperadores == 0)
-		{
-			throw new IllegalArgumentException("El total de salario de operadores no puede ser 0.");
-		} else if (totalSalarioOperadores <= -1)
+		if (totalSalarioOperadores <= -1)
 		{
 			throw new IllegalArgumentException("El total de salario de operadores no puede ser negativo.");
 		}
-		this.Total_salario_operadores = totalSalarioOperadores;
+		this.totalSalarioOperadores = totalSalarioOperadores;
 	}
 
 	public double getTotalSalarioOperadores()
 	{
-		return Total_salario_operadores;
+		return totalSalarioOperadores != null ? totalSalarioOperadores : 0;
 	}
 
 	public void setTotalVendidoRopa(double totalVendidoRopa) throws IllegalArgumentException
 	{
-		if (totalVendidoRopa == 0)
-		{
-			throw new IllegalArgumentException("El total vendido de ropa no puede ser 0.");
-		} else if (totalVendidoRopa <= -1)
+		if (totalVendidoRopa <= -1)
 		{
 			throw new IllegalArgumentException("El total vendido de ropa no puede ser negativo.");
 		}
-		this.Total_vendido_ropa = totalVendidoRopa;
+		this.totalVendidoRopa = totalVendidoRopa;
 	}
 
 	public double getTotalVendidoRopa()
 	{
-		return Total_vendido_ropa;
+		return totalVendidoRopa != null ? totalVendidoRopa : 0;
 	}
 
 	public void setInversionTotalPapeleria(double inversionTotalPapeleria) throws IllegalArgumentException
 	{
-		if (inversionTotalPapeleria == 0)
-		{
-			throw new IllegalArgumentException("La inversión total de papelería no puede ser 0.");
-		} else if (inversionTotalPapeleria <= -1)
+		if (inversionTotalPapeleria <= -1)
 		{
 			throw new IllegalArgumentException("La inversión total de papelería no puede ser negativo.");
 		}
-		this.Inversion_total_papeleria = inversionTotalPapeleria;
+		this.inversionTotalPapeleria = inversionTotalPapeleria;
 	}
 
 	public double getInversionTotalPapeleria()
 	{
-		return Inversion_total_papeleria;
+		return inversionTotalPapeleria != null ? inversionTotalPapeleria : 0;
 	}
 
 	public void setTotalVendidoServicios(double totalVendidoServicios) throws IllegalArgumentException
 	{
-		if (totalVendidoServicios == 0)
-		{
-			throw new IllegalArgumentException("El total vendido de servicios no puede ser 0.");
-		} else if (totalVendidoServicios <= -1)
+		if (totalVendidoServicios <= -1)
 		{
 			throw new IllegalArgumentException("El total vendido de servicios no puede ser negativo.");
 		}
-		this.Total_vendido_servicios = totalVendidoServicios;
+		this.totalVendidoServicios = totalVendidoServicios;
 	}
 
 	public double getTotalVendidoServicios()
 	{
-		return Total_vendido_servicios;
+		return totalVendidoServicios != null ? totalVendidoServicios : 0;
 	}
 
 	public void setTotalVendidoProductos(double totalVendidoProductos) throws IllegalArgumentException
 	{
-		if (totalVendidoProductos == 0)
-		{
-			throw new IllegalArgumentException("El total vendido de productos no puede ser 0.");
-		} else if (totalVendidoProductos <= -1)
+		if (totalVendidoProductos <= -1)
 		{
 			throw new IllegalArgumentException("El total vendido de productos no puede ser negativo.");
 		}
-		this.Total_vendido_productos = totalVendidoProductos;
+		this.totalVendidoProductos = totalVendidoProductos;
 	}
 
 	public double getTotalVendidoProductos()
 	{
-		return Total_vendido_productos;
+		return totalVendidoProductos != null ? totalVendidoProductos : 0;
 	}
 
 	public void setTotalRecaudoEsperadoPapeleria(double totalRecaudoEsperadoPapeleria) throws IllegalArgumentException
 	{
-		if (totalRecaudoEsperadoPapeleria == 0)
-		{
-			throw new IllegalArgumentException("El total de recaudo esperado de papelería no puede ser 0.");
-		} else if (totalRecaudoEsperadoPapeleria <= -1)
+		if (totalRecaudoEsperadoPapeleria <= -1)
 		{
 			throw new IllegalArgumentException("El total de recaudo esperado de papelería no puede ser negativo.");
 		}
-		this.Total_recaudo_esperado_papeleria = totalRecaudoEsperadoPapeleria;
+		this.totalRecaudoEsperadoPapeleria = totalRecaudoEsperadoPapeleria;
 	}
 
 	public double getTotalRecaudoEsperadoPapeleria()
 	{
-		return Total_recaudo_esperado_papeleria;
+		return totalRecaudoEsperadoPapeleria != null ? totalRecaudoEsperadoPapeleria : 0;
 	}
 
 	public void setTipoIngreso(String tipoIngreso) throws IllegalArgumentException
 	{
-		if (tipoIngreso.isEmpty() || tipoIngreso.isBlank())
+		if (tipoIngreso == null || tipoIngreso.isEmpty() || tipoIngreso.isBlank())
 		{
 			throw new IllegalArgumentException("El tipo de ingreso no puede estar vacío.");
 		} else if (tipoIngreso.length() < 10)
@@ -181,14 +201,14 @@ public class Ingreso_del_negocio extends Object
 		} else if (tipoIngreso.length() > 15)
 		{
 			throw new IllegalArgumentException("El tipo de ingreso no puede superar una longitud de 15 caracteres.");
-		} else if(utilidades.tieneSoloTexto(tipoIngreso) == true)
+		} else if (utilidades.tieneSoloTexto(tipoIngreso))
 		{
-			this.Tipo_ingreso = tipoIngreso;
+			this.tipoIngreso = tipoIngreso;
 		}
 	}
 
 	public String getTipoIngreso()
 	{
-		return Tipo_ingreso;
+		return tipoIngreso;
 	}
 }

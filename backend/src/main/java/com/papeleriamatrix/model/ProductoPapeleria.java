@@ -8,10 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
-/**
- * Producto de papelería que vende el negocio.
- * Corresponde a la tabla producto_de_papeleria.
- */
 @Entity
 @Table(name = "producto_de_papeleria")
 public class ProductoPapeleria
@@ -48,7 +44,6 @@ public class ProductoPapeleria
 	@Column(name = "Fecha_actualizacion")
 	private LocalDate fechaActualizacion;
 
-	// JPA necesita un constructor sin parámetros.
 	protected ProductoPapeleria()
 	{
 	}

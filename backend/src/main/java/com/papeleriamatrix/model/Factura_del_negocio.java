@@ -1,22 +1,61 @@
 package com.papeleriamatrix.model;
+
 import com.papeleriamatrix.common.Utils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
-public class Factura_del_negocio extends Object 
+@Entity
+@Table(name = "factura_del_negocio")
+public class Factura_del_negocio 
 {
-	private int Id_factura = 0;
-	private String Codigo_factura = "";
-	private String Tipo_factura = "";
-	private int Usuario_id = 0;
-	private double Monto = 0;
-	private Date Fecha_generacion;
-	private Date Fecha_actualizacion;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id_factura")
+	private Integer idFactura;
+
+	@Column(name = "Codigo_factura", nullable = false, unique = true, length = 15)
+	private String codigoFactura = "";
+
+	@Column(name = "Tipo_factura", nullable = false, length = 15)
+	private String tipoFactura = "";
+
+	@Column(name = "Usuario_id", nullable = false)
+	private Integer usuarioId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Usuario_id", insertable = false, updatable = false)
+	private Operador_de_cibercafe operador;
+
+	@Column(name = "Monto", nullable = false)
+	private double monto = 0;
+
+	@Column(name = "Fecha_generacion", nullable = false)
+	private LocalDate fechaGeneracion;
+
+	@Column(name = "Fecha_actualizacion")
+	private LocalDate fechaActualizacion;
+
+	@Transient
 	private Utils utilidades = new Utils();
 
-	// Constructor con ID autoincremental
-	public Factura_del_negocio(int idFactura, String codigoFactura, String tipoFactura, int usuarioId, double monto, Date fechaGeneracion, Date fechaActualizacion)
+	public Factura_del_negocio()
 	{
-		this.Id_factura = idFactura;
+	}
+
+	public Factura_del_negocio(int idFactura, String codigoFactura, String tipoFactura, int usuarioId, double monto, LocalDate fechaGeneracion, LocalDate fechaActualizacion)
+	{
+		this.idFactura = idFactura;
 		setCodigoFactura(codigoFactura);
 		setTipoFactura(tipoFactura);
 		setUsuarioId(usuarioId);
@@ -25,7 +64,27 @@ public class Factura_del_negocio extends Object
 		setFechaActualizacion(fechaActualizacion);
 	}
 
-	// Constructor sin ID autoincremental
+	public Factura_del_negocio(String codigoFactura, String tipoFactura, int usuarioId, double monto, LocalDate fechaGeneracion, LocalDate fechaActualizacion)
+	{
+		setCodigoFactura(codigoFactura);
+		setTipoFactura(tipoFactura);
+		setUsuarioId(usuarioId);
+		setMonto(monto);
+		setFechaGeneracion(fechaGeneracion);
+		setFechaActualizacion(fechaActualizacion);
+	}
+
+	public Factura_del_negocio(int idFactura, String codigoFactura, String tipoFactura, int usuarioId, double monto, Date fechaGeneracion, Date fechaActualizacion)
+	{
+		this.idFactura = idFactura;
+		setCodigoFactura(codigoFactura);
+		setTipoFactura(tipoFactura);
+		setUsuarioId(usuarioId);
+		setMonto(monto);
+		setFechaGeneracion(fechaGeneracion);
+		setFechaActualizacion(fechaActualizacion);
+	}
+
 	public Factura_del_negocio(String codigoFactura, String tipoFactura, int usuarioId, double monto, Date fechaGeneracion, Date fechaActualizacion)
 	{
 		setCodigoFactura(codigoFactura);
@@ -38,111 +97,144 @@ public class Factura_del_negocio extends Object
 
 	public int getIdFactura()
 	{
-		return Id_factura;
+		return idFactura != null ? idFactura : 0;
+	}
+
+	public void setIdFactura(int idFactura)
+	{
+		this.idFactura = idFactura;
 	}
 
 	public void setCodigoFactura(String codigoFactura) throws IllegalArgumentException
 	{
-		if(codigoFactura.isBlank() || codigoFactura.isEmpty())
+		if (codigoFactura == null || codigoFactura.isBlank() || codigoFactura.isEmpty())
 		{
 			throw new IllegalArgumentException("El código de la factura no puede ir vacío.");
-		} else if(codigoFactura.length() < 15)
+		} else if (codigoFactura.length() != 15)
 		{
-			throw new IllegalArgumentException("El código de la factura no puede tener una longitud inferior a 15 caracteres.");
-		} else if(codigoFactura.length() > 15)
+			throw new IllegalArgumentException("El código de la factura debe tener una longitud de 15 caracteres.");
+		} else if (utilidades.tieneSoloNumeros(codigoFactura))
 		{
-			throw new IllegalArgumentException("El código de la factura no puede tener una longitud superior a 15 caracteres.");
-		} else if(utilidades.tieneSoloNumeros(codigoFactura) == true)
-		{
-			this.Codigo_factura = codigoFactura;
+			this.codigoFactura = codigoFactura;
 		}
 	}
 
 	public String getCodigoFactura()
 	{
-		return Codigo_factura;
+		return codigoFactura;
 	}
 
 	public void setTipoFactura(String tipoFactura) throws IllegalArgumentException
 	{
-		if(tipoFactura.isBlank() || tipoFactura.isEmpty())
+		if (tipoFactura == null || tipoFactura.isBlank() || tipoFactura.isEmpty())
 		{
 			throw new IllegalArgumentException("El tipo de la factura no puede ir vacío.");
-		} else if(tipoFactura.length() < 8)
+		} else if (tipoFactura.length() < 8)
 		{
 			throw new IllegalArgumentException("El tipo de la factura tiene una longitud muy corta.");
-		} else if(tipoFactura.length() > 15)
+		} else if (tipoFactura.length() > 15)
 		{
 			throw new IllegalArgumentException("El tipo de la factura no puede tener una longitud superior a 15 caracteres.");
-		} else if(utilidades.tieneSoloTexto(tipoFactura) == true)
+		} else if (utilidades.tieneSoloTexto(tipoFactura))
 		{
-			this.Tipo_factura = tipoFactura;
+			this.tipoFactura = tipoFactura;
 		}
 	}
 
 	public String getTipoFactura()
 	{
-		return Tipo_factura;
+		return tipoFactura;
 	}
 
 	public void setUsuarioId(int usuarioId) throws IllegalArgumentException
 	{
-		if(usuarioId == 0)
+		if (usuarioId == 0)
 		{
 			throw new IllegalArgumentException("El ID del usuario no puede ser 0.");
-		} else if(usuarioId <= -1)
+		} else if (usuarioId <= -1)
 		{
 			throw new IllegalArgumentException("El ID del usuario no puede ser negativo.");
 		}
-		this.Usuario_id = usuarioId;
+		this.usuarioId = usuarioId;
 	}
 
 	public int getUsuarioId()
 	{
-		return Usuario_id;
+		return usuarioId != null ? usuarioId : 0;
+	}
+
+	public Operador_de_cibercafe getOperador()
+	{
+		return operador;
+	}
+
+	public void setOperador(Operador_de_cibercafe operador)
+	{
+		this.operador = operador;
+		if (operador != null)
+		{
+			this.usuarioId = operador.getIdUsuario();
+		}
 	}
 
 	public void setMonto(double monto) throws IllegalArgumentException
 	{
-		if(monto == 0)
+		if (monto == 0)
 		{
 			throw new IllegalArgumentException("El monto no puede ser igual a 0.");
-		} else if(monto <= -1)
+		} else if (monto <= -1)
 		{
 			throw new IllegalArgumentException("El monto no puede ser negativo.");
 		}
-		this.Monto = monto;
+		this.monto = monto;
 	}
 
 	public double getMonto()
 	{
-		return Monto;
+		return monto;
+	}
+
+	public void setFechaGeneracion(LocalDate fechaGeneracion) throws IllegalArgumentException
+	{
+		if (fechaGeneracion == null)
+		{
+			throw new IllegalArgumentException("La fecha de generación no puede ir vacía.");
+		}
+		this.fechaGeneracion = fechaGeneracion;
 	}
 
 	public void setFechaGeneracion(Date fechaGeneracion) throws IllegalArgumentException
 	{
-		if(fechaGeneracion == null)
+		if (fechaGeneracion == null)
 		{
 			throw new IllegalArgumentException("La fecha de generación no puede ir vacía.");
 		}
-		this.Fecha_generacion = fechaGeneracion;
+		this.fechaGeneracion = fechaGeneracion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 
-	public Date getFechaGeneracion()
+	public LocalDate getFechaGeneracion()
 	{
-		return Fecha_generacion;
+		return fechaGeneracion;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion) throws IllegalArgumentException
+	public void setFechaActualizacion(LocalDate fechaActualizacion)
 	{
-		if (fechaActualizacion == null) {
-			throw new IllegalArgumentException("La fecha de actualización no puede ir vacía.");
+		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion)
+	{
+		if (fechaActualizacion != null)
+		{
+			this.fechaActualizacion = fechaActualizacion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		} else
+		{
+			this.fechaActualizacion = null;
 		}
-		this.Fecha_actualizacion = fechaActualizacion;
 	}
 
-	public Date getFechaActualizacion()
+	public LocalDate getFechaActualizacion()
 	{
-		return Fecha_actualizacion;
+		return fechaActualizacion;
 	}
 }
