@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RopaRepository extends JpaRepository<Ropa, Integer>
 {
+	boolean existsByCodigoRopa(String codigoRopa);
+	boolean existsByCodigoRopaAndIdNot(String codigoRopa, Integer id);
 }
