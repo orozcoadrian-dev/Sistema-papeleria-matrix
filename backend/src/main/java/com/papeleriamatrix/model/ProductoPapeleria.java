@@ -48,6 +48,30 @@ public class ProductoPapeleria
 	{
 	}
 
+	public ProductoPapeleria(String codigoProducto, String nombre, Integer cantidad, Double precioVenta, Double precioCompra, String descripcion, String lugarCompra)
+	{
+		this.codigoProducto = codigoProducto;
+		this.nombre = nombre;
+		this.cantidad = cantidad;
+		this.precioVenta = precioVenta;
+		this.precioCompra = precioCompra;
+		this.descripcion = descripcion;
+		this.lugarCompra = lugarCompra;
+		this.fechaPublicacion = LocalDate.now();
+	}
+
+	public void actualizar(String codigoProducto, String nombre, Integer cantidad, Double precioVenta, Double precioCompra, String descripcion, String lugarCompra)
+	{
+		this.codigoProducto = codigoProducto;
+		this.nombre = nombre;
+		this.cantidad = cantidad;
+		this.precioVenta = precioVenta;
+		this.precioCompra = precioCompra;
+		this.descripcion = descripcion;
+		this.lugarCompra = lugarCompra;
+		this.fechaActualizacion = LocalDate.now();
+	}
+
 	public Integer getId()
 	{
 		return id;

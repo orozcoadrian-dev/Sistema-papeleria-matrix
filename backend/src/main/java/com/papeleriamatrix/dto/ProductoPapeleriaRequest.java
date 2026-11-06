@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-public record ProductoPaperiaRequest(
+public record ProductoPapeleriaRequest(
 	@NotBlank(message = "El código es obligatorio.")
 	@Size(max = 20, message = "El código no puede superar los 20 caracteres.")
 	String codigo,

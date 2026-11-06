@@ -51,6 +51,32 @@ public class Ropa
 	{
 	}
 
+	public Ropa(String codigoRopa, String tipoRopa, String material, String talla, String descripcion, String nombre, Double precio, String color)
+	{
+		this.codigoRopa = codigoRopa;
+		this.tipoRopa = tipoRopa;
+		this.material = material;
+		this.talla = talla;
+		this.descripcion = descripcion;
+		this.nombre = nombre;
+		this.precio = precio;
+		this.color = color;
+		this.fechaRegistro = LocalDate.now();
+	}
+
+	public void actualizar(String codigoRopa, String tipoRopa, String material, String talla, String descripcion, String nombre, Double precio, String color)
+	{
+		this.codigoRopa = codigoRopa;
+		this.tipoRopa = tipoRopa;
+		this.material = material;
+		this.talla = talla;
+		this.descripcion = descripcion;
+		this.nombre = nombre;
+		this.precio = precio;
+		this.color = color;
+		this.fechaActualizacion = LocalDate.now();
+	}
+
 	public Integer getId()
 	{
 		return id;

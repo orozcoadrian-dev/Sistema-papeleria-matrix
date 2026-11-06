@@ -1,10 +1,8 @@
 package com.papeleriamatrix.model;
 
 import com.papeleriamatrix.common.Utils;
-import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,53 +12,6 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
-
-enum RolUsuario 
-{
-	ADMINISTRADOR("Administrador"),
-	OPERADOR_DE_CIBERCAFE("Operador de cibercafé");
-
-	private final String rol;
-
-	RolUsuario(String rol) 
-	{
-		this.rol = rol;
-	}
-
-	public String getRol() 
-	{
-		return rol;
-	}
-
-	public static RolUsuario fromString(String valor)
-	{
-		if (valor == null) return null;
-		for (RolUsuario r : values())
-		{
-			if (r.rol.equalsIgnoreCase(valor) || r.name().equalsIgnoreCase(valor))
-			{
-				return r;
-			}
-		}
-		throw new IllegalArgumentException("Rol desconocido: " + valor);
-	}
-}
-
-@Converter(autoApply = true)
-class RolUsuarioConverter implements AttributeConverter<RolUsuario, String>
-{
-	@Override
-	public String convertToDatabaseColumn(RolUsuario attribute)
-	{
-		return attribute != null ? attribute.getRol() : null;
-	}
-
-	@Override
-	public RolUsuario convertToEntityAttribute(String dbData)
-	{
-		return dbData != null ? RolUsuario.fromString(dbData) : null;
-	}
-}
 
 @Entity 
 @Table(name = "usuario")
