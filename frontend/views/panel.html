@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi negocio · Papelería Matrix</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/x-icon" href="../assets/icons/logo-papeleria-matrix.ico">
+    <link rel="stylesheet" href="../css/vistas/estilo-panel.css">
+</head>
+
+<body>
+    <header class="barra">
+        <div class="barra__marca">
+            <img src="../assets/icons/logo-papeleria-matrix.ico" alt="" width="40" height="40">
+            <span>Papelería <span class="barra__acento">Matrix</span></span>
+        </div>
+        <a href="../index.html" class="barra__enlace">Ver la página de clientes</a>
+    </header>
+
+    <main class="contenido">
+        <section class="saludo" aria-labelledby="saludo-titulo">
+            <h1 id="saludo-titulo"><span id="saludo-texto">¡Hola!</span> <span aria-hidden="true">👋</span></h1>
+            <p class="saludo__sub">¿Qué quieres revisar hoy? Toca una de las opciones.</p>
+            <p class="saludo__fecha" id="fecha-hoy"></p>
+        </section>
+
+        <nav class="mosaicos" aria-label="Secciones de mi negocio" id="mosaicos"></nav>
+
+        <section class="seccion" aria-labelledby="seccion-titulo">
+            <div class="seccion__cabecera">
+                <div>
+                    <h2 id="seccion-titulo"></h2>
+                    <p class="seccion__ayuda" id="seccion-ayuda"></p>
+                </div>
+                <button type="button" class="boton boton--principal boton--grande" id="boton-agregar">
+                    <span aria-hidden="true" class="boton__mas">+</span>
+                    <span id="boton-agregar-texto">Agregar</span>
+                </button>
+            </div>
+
+            <div class="buscador">
+                <span class="buscador__icono" aria-hidden="true">🔍</span>
+                <label for="buscar" class="oculto">Buscar</label>
+                <input type="search" id="buscar" class="buscador__entrada" placeholder="Buscar por nombre…" autocomplete="off">
+            </div>
+
+            <p class="contador" id="contador" aria-live="polite"></p>
+
+            <div class="tarjetas" id="tarjetas" aria-busy="true"></div>
+
+            <div class="estado" id="estado" hidden>
+                <p class="estado__icono" id="estado-icono" aria-hidden="true"></p>
+                <p class="estado__titulo" id="estado-titulo"></p>
+                <p class="estado__texto" id="estado-texto"></p>
+                <button type="button" class="boton boton--principal" id="estado-boton" hidden></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Agregar o cambiar -->
+    <dialog class="ventana" id="ventana-formulario" aria-labelledby="formulario-titulo">
+        <form id="formulario" novalidate>
+            <h2 id="formulario-titulo" class="ventana__titulo"></h2>
+            <p class="aviso-suave" id="formulario-nota" hidden></p>
+            <div class="campos" id="campos"></div>
+            <details class="avanzado" id="avanzado">
+                <summary>Opciones avanzadas</summary>
+                <div class="campos" id="campos-avanzados"></div>
+            </details>
+            <p class="ventana__error" id="formulario-error" role="alert"></p>
+            <div class="ventana__botones">
+                <button type="button" class="boton boton--suave" data-cerrar>Cancelar</button>
+                <button type="submit" class="boton boton--principal" id="boton-guardar">Guardar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Quitar -->
+    <dialog class="ventana ventana--chica" id="ventana-quitar" aria-labelledby="quitar-titulo">
+        <p class="ventana__icono" aria-hidden="true">🗑️</p>
+        <h2 id="quitar-titulo" class="ventana__titulo"></h2>
+        <p class="ventana__texto">Después de quitarlo no se puede recuperar.</p>
+        <div class="ventana__botones ventana__botones--centro">
+            <button type="button" class="boton boton--suave" data-cerrar>No, dejarlo</button>
+            <button type="button" class="boton boton--peligro" id="boton-confirmar-quitar">Sí, quitar</button>
+        </div>
+    </dialog>
+
+    <!-- Llave de acceso -->
+    <dialog class="ventana ventana--chica" id="ventana-llave" aria-labelledby="llave-titulo">
+        <form id="formulario-llave" novalidate>
+            <p class="ventana__icono" aria-hidden="true">🔑</p>
+            <h2 id="llave-titulo" class="ventana__titulo">Escribe la llave para hacer cambios</h2>
+            <p class="ventana__texto">Para agregar, cambiar o quitar cosas se necesita la llave del negocio. Si no la tienes, pídesela a Osvaldo.</p>
+            <label for="llave" class="campo__etiqueta">Llave</label>
+            <input type="password" id="llave" class="campo__entrada" autocomplete="off">
+            <p class="ventana__error" id="llave-error" role="alert"></p>
+            <div class="ventana__botones ventana__botones--centro">
+                <button type="button" class="boton boton--suave" data-cerrar>Cancelar</button>
+                <button type="submit" class="boton boton--principal">Continuar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/panel.js"></script>
+</body>
+
+</html>
