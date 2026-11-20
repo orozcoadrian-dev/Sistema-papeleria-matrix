@@ -349,8 +349,9 @@ iniciarCatalogo({
     crearTarjeta: (r) => crearTarjeta({
         imagen: IMAGENES[r.codigo],
         icono: '👗',
-        titulo: r.nombre,
-        texto: 'Talla ' + r.talla + ' · ' + r.color,
+        // El nombre y el color son opcionales en la base: sin ellos la tarjeta no debe mostrar "null".
+        titulo: r.nombre || r.tipo,
+        texto: ['Talla ' + r.talla, r.color].filter(Boolean).join(' · '),
         precio: r.precio
     })
 });
@@ -388,7 +389,7 @@ function construirIndice() {
         indice.push({ tipo: 'Papelería', titulo: p.nombre, detalle: formatearPrecio(p.precio), claves: [p.descripcion, 'precio valor costo'].join(' '), destino: '#papeleria' });
     });
     catalogos.ropa.elementos.forEach((r) => {
-        indice.push({ tipo: 'Ropa', titulo: r.nombre, detalle: formatearPrecio(r.precio) + ' · Talla ' + r.talla, claves: [r.tipo, r.color, r.material, 'precio valor costo'].join(' '), destino: '#ropa-glam' });
+        indice.push({ tipo: 'Ropa', titulo: r.nombre || r.tipo, detalle: formatearPrecio(r.precio) + ' · Talla ' + r.talla, claves: [r.tipo, r.color, r.material, 'precio valor costo'].join(' '), destino: '#ropa-glam' });
     });
 
     return indice;
