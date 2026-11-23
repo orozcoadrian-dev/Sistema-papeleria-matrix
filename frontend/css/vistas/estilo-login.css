@@ -92,6 +92,48 @@ h1 {
     border-color: var(--color-morado-electrico);
 }
 
+.login__clave {
+    position: relative;
+}
+
+.login__clave .login__input {
+    padding-right: 5.5rem;
+}
+
+.login__ver {
+    position: absolute;
+    top: 50%;
+    right: 0.4rem;
+    transform: translateY(-50%);
+    padding: 0.35rem 0.7rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-blanco-perlado);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.login__ver:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.login__aviso {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(254, 206, 75, 0.35);
+    background: rgba(254, 206, 75, 0.1);
+    font-size: 0.92rem;
+    color: var(--color-blanco-principal);
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+}
+
 .login__message {
     min-height: 1.4rem;
     font-size: 0.9rem;

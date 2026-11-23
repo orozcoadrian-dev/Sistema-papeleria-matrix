@@ -4,11 +4,14 @@
    Lo usa una persona que no es técnica, así que los textos son cotidianos ("Agregar", "Cambiar",
    "Quitar"), los códigos se llenan solos y cada error dice qué hacer.
    Cada sección se describe una vez en SECCIONES; el resto del código sirve para todas.
-   Los datos se insertan con textContent, nunca con innerHTML, para que nada guardado ejecute código. */
+   Los datos se insertan con textContent, nunca con innerHTML, para que nada guardado ejecute código.
+   Solo entra la administradora: sin sesión se va al inicio de sesión y el operador va a la pantalla de ventas. */
 
-const CONFIG = window.MATRIX_CONFIG;
-const LLAVE_ALMACEN = 'matrix.llave';
+const SESION = Sesion.exigir(['ADMINISTRADOR']);
 const SECCION_ALMACEN = 'matrix.seccion';
+
+// Con menos de estas unidades se avisa que el producto se está acabando.
+const POCAS_UNIDADES = 5;
 
 // Topes para atrapar ceros de más al escribir. La base acepta más, pero estos valores no son normales en el negocio.
 const PRECIO_MAXIMO = 10000000;
@@ -59,12 +62,15 @@ const SECCIONES = {
         ayuda: 'Cuadernos, lapiceros, carpetas y todo lo que vendes.',
         buscarPor: 'nombre',
         ruta: '/api/productos',
+        // La lista interna trae las unidades, el precio de compra y el lugar de compra.
+        rutaLista: '/api/productos/interno',
         prefijoCodigo: 'PAP',
-        buscarEn: (p) => [p.nombre, p.descripcion, p.disponible ? 'hay en la tienda disponible' : 'agotado'],
+        buscarEn: (p) => [p.nombre, p.descripcion, p.lugarCompra, p.cantidad > 0 ? (p.cantidad < POCAS_UNIDADES ? 'pocas quedan' : 'hay disponible') : 'agotado'],
         tarjeta: (p) => ({
             nombre: p.nombre,
             precio: p.precio,
-            estado: p.disponible ? { texto: 'Hay en la tienda', bien: true } : { texto: 'Agotado', bien: false },
+            estado: existencias(p.cantidad),
+            etiquetas: [p.lugarCompra],
             descripcion: p.descripcion
         }),
         mismoQue: (a, b) => normalizar(a.nombre) === normalizar(b.nombre),
@@ -76,9 +82,7 @@ const SECCIONES = {
             { nombre: 'lugarCompra', etiqueta: '¿Dónde lo compras?', ejemplo: 'Ej: Distribuidora del centro', max: 40, privado: true, ancho: true },
             { nombre: 'descripcion', etiqueta: 'Descripción', ejemplo: 'Marca, color, tamaño…', max: 150, area: true }
         ],
-        // La lista pública no trae cantidad, precio de compra ni lugar de compra (son datos internos).
-        notaAlCambiar: 'Por seguridad, la lista no muestra cuántas unidades tienes, a cuánto lo compraste ni dónde. Escríbelos otra vez en los recuadros amarillos.',
-        paraFormulario: (p) => ({ codigo: p.codigo, nombre: p.nombre, precioVenta: p.precio, descripcion: p.descripcion }),
+        paraFormulario: (p) => ({ ...p, precioVenta: p.precio }),
         // Vender más barato de lo que costó puede ser un error al escribir.
         advertencias: (c) => (c.precioCompra > c.precioVenta
             ? [`Lo vas a vender a ${pesos.format(c.precioVenta)} pero lo compraste a ${pesos.format(c.precioCompra)}: perderías plata.`]
@@ -125,6 +129,12 @@ const SECCIONES = {
 const CAMPO_CODIGO = { nombre: 'codigo', etiqueta: 'Código interno', max: 20, requerido: true, codigo: true,
     ayuda: 'Se llena solo. Cámbialo solo si te lo piden.' };
 
+function existencias(cantidad) {
+    if (!(cantidad > 0)) return { texto: 'Agotado', bien: false };
+    if (cantidad < POCAS_UNIDADES) return { texto: cantidad === 1 ? 'Queda 1' : `Quedan ${cantidad}: ya se acaba`, bien: false };
+    return { texto: `Quedan ${miles.format(cantidad)}`, bien: true };
+}
+
 /* ---------- Estado ---------- */
 
 const $ = (id) => document.getElementById(id);
@@ -132,7 +142,6 @@ const datos = {};           // registros cargados por sección (undefined = carg
 let seccionActual = 'servicios';
 let editando = null;        // registro que se está cambiando, o null si es nuevo
 let porQuitar = null;       // registro que se va a quitar
-let accionPendiente = null; // lo que se reintenta después de escribir la llave
 let formularioCambiado = false;
 let advertenciasVistas = ''; // avisos que la persona ya vio y aceptó guardar igual
 
@@ -168,17 +177,6 @@ function este(seccion) {
     return seccion.femenino ? `esta ${seccion.singular}` : `este ${seccion.singular}`;
 }
 
-function leerLlave() {
-    try { return localStorage.getItem(LLAVE_ALMACEN) || ''; } catch { return ''; }
-}
-
-function guardarLlave(valor) {
-    try {
-        if (valor) localStorage.setItem(LLAVE_ALMACEN, valor);
-        else localStorage.removeItem(LLAVE_ALMACEN);
-    } catch { /* sin almacenamiento la llave se pide cada vez */ }
-}
-
 /* Convierte lo que escribe la persona en pesos enteros. En Colombia no se usan centavos, así que
    el punto y la coma solo valen como separadores de miles: "1.500", "1,500" y "$ 1500" valen 1500.
    "1.5" o "2.000,50" se rechazan en vez de adivinar: podrían ser 15, 1.500 o centavos.
@@ -202,47 +200,15 @@ function avisar(texto, tipo = 'bien') {
 
 /* ---------- Comunicación con el sistema ---------- */
 
-class ErrorDelSistema extends Error {
-    constructor(contenido, estado) {
-        super(contenido?.detail || contenido?.title || '');
-        this.estado = estado;
-        this.titulo = contenido?.title || '';
-        this.errores = contenido?.errores || {}; // errores por campo cuando la API rechaza los datos (400)
-    }
-}
-
-async function llamar(ruta, { metodo = 'GET', cuerpo } = {}) {
-    const cabeceras = { Accept: 'application/json' };
-    if (cuerpo !== undefined) cabeceras['Content-Type'] = 'application/json';
-    if (metodo !== 'GET') cabeceras['X-API-Key'] = leerLlave();
-
-    const control = new AbortController();
-    const temporizador = setTimeout(() => control.abort(), CONFIG.tiempoMaximoMs);
-    let respuesta;
-    try {
-        respuesta = await fetch(CONFIG.apiUrl + ruta, {
-            method: metodo,
-            headers: cabeceras,
-            body: cuerpo === undefined ? undefined : JSON.stringify(cuerpo),
-            signal: control.signal
-        });
-    } catch {
-        throw new ErrorDelSistema(null, 0);
-    } finally {
-        clearTimeout(temporizador);
-    }
-
-    if (respuesta.status === 204) return null;
-    const contenido = await respuesta.json().catch(() => null);
-    if (!respuesta.ok) throw new ErrorDelSistema(contenido, respuesta.status);
-    return contenido;
-}
+// La sesión va en cada petición. Si se vence, sesion.js lleva al inicio de sesión.
+const llamar = Sesion.llamar;
 
 /* ---------- Saludo y secciones ---------- */
 
 function dibujarSaludo() {
     const hora = new Date().getHours();
-    $('saludo-texto').textContent = hora < 12 ? '¡Buenos días!' : hora < 19 ? '¡Buenas tardes!' : '¡Buenas noches!';
+    const nombre = SESION.nombre.split(' ')[0];
+    $('saludo-texto').textContent = (hora < 12 ? '¡Buenos días' : hora < 19 ? '¡Buenas tardes' : '¡Buenas noches') + `, ${nombre}!`;
     $('fecha-hoy').textContent = new Date().toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
@@ -278,6 +244,28 @@ function dibujarMosaicos() {
         boton.append(icono, textos);
         contenedor.append(boton);
     }
+    contenedor.append(mosaicoDeVentas());
+}
+
+/* Las ventas tienen su propia pantalla: el mosaico lleva allá. */
+function mosaicoDeVentas() {
+    const enlace = document.createElement('a');
+    enlace.className = 'mosaico mosaico--enlace';
+    enlace.href = 'ventas.html';
+    const icono = document.createElement('span');
+    icono.className = 'mosaico__icono';
+    icono.setAttribute('aria-hidden', 'true');
+    icono.textContent = '🧾';
+    const textos = document.createElement('span');
+    const titulo = document.createElement('span');
+    titulo.className = 'mosaico__titulo';
+    titulo.textContent = 'Ventas';
+    const detalle = document.createElement('span');
+    detalle.className = 'mosaico__detalle';
+    detalle.textContent = 'Vender y ver lo vendido';
+    textos.append(titulo, detalle);
+    enlace.append(icono, textos);
+    return enlace;
 }
 
 function elegirSeccion(clave) {
@@ -297,7 +285,7 @@ function elegirSeccion(clave) {
 
 async function cargar(clave) {
     try {
-        datos[clave] = await llamar(SECCIONES[clave].ruta);
+        datos[clave] = await llamar(SECCIONES[clave].rutaLista || SECCIONES[clave].ruta);
     } catch {
         datos[clave] = null;
     }
@@ -724,8 +712,9 @@ async function guardar() {
 
 function manejarErrorAlGuardar(error) {
     const caja = $('formulario-error');
-    if (error.estado === 401) {
-        pedirLlaveOtraVez(guardar);
+    if (error.estado === 401) return; // la sesión se venció: ya se está yendo al inicio de sesión
+    if (error.estado === 403) {
+        caja.textContent = 'Tu usuario no tiene permiso para hacer cambios aquí.';
         return;
     }
     if (error.estado === 400 && Object.keys(error.errores).length) {
@@ -787,7 +776,7 @@ async function quitar() {
     } catch (error) {
         $('ventana-quitar').close();
         if (error.estado === 401) {
-            pedirLlaveOtraVez(() => { porQuitar = registro; quitar(); });
+            // La sesión se venció: ya se está yendo al inicio de sesión.
         } else if (error.estado === 404) {
             // Ya no estaba: el resultado es el mismo que se quería.
             avisar(`«${nombre}» ya no estaba en la lista.`);
@@ -801,38 +790,6 @@ async function quitar() {
         boton.disabled = false;
     }
 }
-
-/* ---------- Llave ---------- */
-
-function pedirLlaveOtraVez(reintentar) {
-    const habiaLlave = Boolean(leerLlave());
-    guardarLlave('');
-    pedirLlave(reintentar, habiaLlave ? 'Esa llave no funcionó. Revísala e intenta otra vez.' : '');
-}
-
-function pedirLlave(reintentar, mensaje = '') {
-    accionPendiente = reintentar;
-    $('llave').value = '';
-    $('llave-error').textContent = mensaje;
-    $('ventana-llave').showModal();
-    $('llave').focus();
-}
-
-$('formulario-llave').addEventListener('submit', (evento) => {
-    evento.preventDefault();
-    const valor = $('llave').value.trim();
-    if (!valor) {
-        $('llave-error').textContent = 'Escribe la llave para continuar.';
-        return;
-    }
-    guardarLlave(valor);
-    $('ventana-llave').close();
-    const accion = accionPendiente;
-    accionPendiente = null;
-    if (accion) accion();
-});
-
-$('ventana-llave').addEventListener('close', () => { accionPendiente = null; });
 
 /* ---------- Salir sin guardar ---------- */
 
@@ -876,6 +833,9 @@ try {
     if (guardada && SECCIONES[guardada]) seccionActual = guardada;
 } catch { /* se empieza en servicios */ }
 
-dibujarSaludo();
-elegirSeccion(seccionActual);
-cargarTodo();
+if (SESION) {
+    Sesion.dibujarUsuario(SESION, $('barra-usuario'));
+    dibujarSaludo();
+    elegirSeccion(seccionActual);
+    cargarTodo();
+}

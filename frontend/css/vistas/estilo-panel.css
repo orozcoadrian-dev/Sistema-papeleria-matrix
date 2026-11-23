@@ -96,6 +96,65 @@ h2 {
     color: var(--color-dorado-premium);
 }
 
+.barra__lado {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.6rem 1.2rem;
+}
+
+.barra__usuario {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    font-weight: 600;
+    text-align: right;
+}
+
+.barra__rol {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--color-gris-lavanda);
+}
+
+.barra__salir {
+    min-height: 2.4rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-blanco-principal);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.barra__salir:hover {
+    border-color: var(--color-dorado-premium);
+    color: var(--color-dorado-premium);
+}
+
+@media (max-width: 560px) {
+    .barra {
+        flex-wrap: wrap;
+    }
+
+    .barra__lado {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .barra__usuario {
+        text-align: left;
+    }
+}
+
+.mosaico--enlace {
+    text-decoration: none;
+    border-style: dashed;
+}
+
 /* ---------- Contenido ---------- */
 .contenido {
     width: min(100% - 2rem, 1100px);

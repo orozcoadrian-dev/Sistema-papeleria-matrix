@@ -16,7 +16,9 @@
             <img src="../assets/icons/logo-papeleria-matrix.ico" alt="" width="40" height="40">
             <span>Papelería <span class="barra__acento">Matrix</span></span>
         </div>
-        <a href="../index.html" class="barra__enlace">Ver la página de clientes</a>
+        <div class="barra__lado" id="barra-usuario">
+            <a href="../index.html" class="barra__enlace">Ver la página de clientes</a>
+        </div>
     </header>
 
     <main class="contenido">
@@ -88,25 +90,10 @@
         </div>
     </dialog>
 
-    <!-- Llave de acceso -->
-    <dialog class="ventana ventana--chica" id="ventana-llave" aria-labelledby="llave-titulo">
-        <form id="formulario-llave" novalidate>
-            <p class="ventana__icono" aria-hidden="true">🔑</p>
-            <h2 id="llave-titulo" class="ventana__titulo">Escribe la llave para hacer cambios</h2>
-            <p class="ventana__texto">Para agregar, cambiar o quitar cosas se necesita la llave del negocio. Si no la tienes, pídesela a Osvaldo.</p>
-            <label for="llave" class="campo__etiqueta">Llave</label>
-            <input type="password" id="llave" class="campo__entrada" autocomplete="off">
-            <p class="ventana__error" id="llave-error" role="alert"></p>
-            <div class="ventana__botones ventana__botones--centro">
-                <button type="button" class="boton boton--suave" data-cerrar>Cancelar</button>
-                <button type="submit" class="boton boton--principal">Continuar</button>
-            </div>
-        </form>
-    </dialog>
-
     <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
 
     <script src="../js/config.js"></script>
+    <script src="../js/sesion.js"></script>
     <script src="../js/panel.js"></script>
 </body>
 

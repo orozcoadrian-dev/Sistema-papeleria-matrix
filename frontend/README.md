@@ -1,6 +1,16 @@
 # Frontend de Papelería Matrix
 
-Página pública hecha con HTML, CSS y JavaScript, sin librerías. Consulta la API del backend para mostrar los servicios, la papelería y la ropa.
+Página pública y pantallas internas hechas con HTML, CSS y JavaScript, sin librerías. La página pública consulta la API para mostrar los servicios, la papelería y la ropa. Las pantallas internas (panel de la administradora y ventas) piden iniciar sesión.
+
+## Pantallas internas
+
+| Pantalla | Quién entra | Qué hace |
+|----------|-------------|----------|
+| `views/login.html` | Todos | Inicio de sesión con usuario y contraseña. Cada rol va a su pantalla. |
+| `views/panel.html` | Administradora | Servicios, papelería (con existencias y precio de compra) y ropa. Lleva a ventas. |
+| `views/ventas.html` | Administradora y operador | Caja: elegir artículos, cobrar con cálculo del cambio y ver lo vendido. Solo la administradora anula ventas y ve las de todos. |
+
+La sesión se guarda en la pestaña (`sessionStorage`) y se cierra tras 15 minutos sin uso. En el modo demo los usuarios de prueba están al final de `backend/src/main/resources/demo/datos-demo.sql`.
 
 ## Cómo abrirlo
 
@@ -31,12 +41,17 @@ Render gratis se duerme y tarda cerca de un minuto en despertar. Mientras tanto 
 ```
 index.html            Página principal
 views/login.html      Inicio de sesión
+views/panel.html      Panel de la administradora
+views/ventas.html     Caja y ventas
 css/styles.css        Punto de entrada de los estilos
 css/bases/            Fuentes, variables de la marca y reset
 css/vistas/           Estilos de cada vista
 js/config.js          Dirección de la API
 js/datos-respaldo.js  Catálogo que se muestra si la API no responde
 js/main.js            Menú, modales, catálogos y buscadores
+js/sesion.js          Sesión, permisos por rol y cierre por inactividad
+js/panel.js           Panel de la administradora
+js/ventas.js          Caja y ventas
 assets/               Fuentes, íconos e imágenes
 ```
 
@@ -52,8 +67,10 @@ assets/               Fuentes, íconos e imágenes
 | RNF-16: términos y condiciones, cookies | Hecho. El texto de los términos debe revisarlo el negocio. |
 | RNF-02: accesibilidad | Parcial. Hay enlace para saltar al contenido, etiquetas, foco visible, textos alternativos y respeto a la preferencia de menos movimiento. No hay una auditoría formal. |
 | RNF-09: respuesta en menos de 2,5 s | Sin medir. Con la API despierta la carga es inmediata. Con Render dormido, tarda hasta un minuto. |
-| RF-38: inicio de sesión | Solo la pantalla. Valida los datos, pero no da acceso hasta que el backend tenga autenticación. |
-| Panel de la administradora y de los operadores (servicios, productos, ropa, operadores, facturas, ventas, ingresos, estadísticas y reportes) | Pendiente. |
-| RNF-18: cierre de sesión a los 15 minutos | Pendiente, depende del inicio de sesión. |
+| RF-38: inicio de sesión | Hecho. Usuario y contraseña, con roles de administradora y operador. |
+| Panel de la administradora: servicios, productos y ropa | Hecho. |
+| Ventas y facturas, con descuento de existencias | Hecho. |
+| Panel: operadores, información del negocio, ingresos, estadísticas y reportes | Pendiente, cuando estén sus rutas en el backend. |
+| RNF-18: cierre de sesión a los 15 minutos | Hecho, en el servidor y en el navegador. |
 
 El botón "Registrarse" abre un formulario que avisa que el registro no está disponible. La documentación lo menciona, pero RF-41 dice que el sistema solo tiene dos usuarios internos, así que falta decidir si se queda.
