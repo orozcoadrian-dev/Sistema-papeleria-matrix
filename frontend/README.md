@@ -7,8 +7,9 @@ Página pública y pantallas internas hechas con HTML, CSS y JavaScript, sin lib
 | Pantalla | Quién entra | Qué hace |
 |----------|-------------|----------|
 | `views/login.html` | Todos | Inicio de sesión con usuario y contraseña. Cada rol va a su pantalla. |
-| `views/panel.html` | Administradora | Servicios, papelería (con existencias y precio de compra) y ropa. Lleva a ventas. |
+| `views/panel.html` | Administradora | Servicios, papelería (con existencias y precio de compra), ropa, operadores (con su clave de permiso) y datos de la tienda. Lleva a ventas y cuentas. |
 | `views/ventas.html` | Administradora y operador | Caja: elegir artículos, cobrar con cálculo del cambio y ver lo vendido. Solo la administradora anula ventas y ve las de todos. |
+| `views/cuentas.html` | Administradora | Lo vendido por tipo, ganancia en papelería, inventario, sueldos y lo más vendido. Guarda cortes en ingresos y estadísticas, e imprime. |
 
 La sesión se guarda en la pestaña (`sessionStorage`) y se cierra tras 15 minutos sin uso. En el modo demo los usuarios de prueba están al final de `backend/src/main/resources/demo/datos-demo.sql`.
 
@@ -43,6 +44,7 @@ index.html            Página principal
 views/login.html      Inicio de sesión
 views/panel.html      Panel de la administradora
 views/ventas.html     Caja y ventas
+views/cuentas.html    Cuentas del negocio
 css/styles.css        Punto de entrada de los estilos
 css/bases/            Fuentes, variables de la marca y reset
 css/vistas/           Estilos de cada vista
@@ -52,6 +54,7 @@ js/main.js            Menú, modales, catálogos y buscadores
 js/sesion.js          Sesión, permisos por rol y cierre por inactividad
 js/panel.js           Panel de la administradora
 js/ventas.js          Caja y ventas
+js/cuentas.js         Cuentas del negocio
 assets/               Fuentes, íconos e imágenes
 ```
 
@@ -70,7 +73,9 @@ assets/               Fuentes, íconos e imágenes
 | RF-38: inicio de sesión | Hecho. Usuario y contraseña, con roles de administradora y operador. |
 | Panel de la administradora: servicios, productos y ropa | Hecho. |
 | Ventas y facturas, con descuento de existencias | Hecho. |
-| Panel: operadores, información del negocio, ingresos, estadísticas y reportes | Pendiente, cuando estén sus rutas en el backend. |
+| Panel: operadores y claves de permiso | Hecho. |
+| Panel: información del negocio | Hecho en la pantalla. El servidor falla al listarla (ver el PR). |
+| Ingresos, estadísticas y reportes | Parcial. Las cuentas se calculan en la pantalla y se guardan como cortes; los historiales y reportes en archivo esperan al backend. |
 | RNF-18: cierre de sesión a los 15 minutos | Hecho, en el servidor y en el navegador. |
 
 El botón "Registrarse" abre un formulario que avisa que el registro no está disponible. La documentación lo menciona, pero RF-41 dice que el sistema solo tiene dos usuarios internos, así que falta decidir si se queda.

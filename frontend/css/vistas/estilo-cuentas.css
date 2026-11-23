@@ -1,0 +1,135 @@
+/* Cuentas del negocio. Usa estilo-panel.css y las cifras y filtros de estilo-ventas.css. */
+
+#cuentas {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+#cuentas[hidden] {
+    display: none;
+}
+
+.cuentas__controles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.cuentas__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.cuentas__nota,
+.cuentas__vacio {
+    font-size: 0.92rem;
+    color: var(--p-texto-suave);
+}
+
+.cuentas__listas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.2rem;
+}
+
+.cuentas__subtitulo {
+    margin-bottom: 0.4rem;
+    font-size: 1.05rem;
+}
+
+.cuentas__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-left: 1.2rem;
+}
+
+.cuentas__lista .cuentas__vacio {
+    list-style: none;
+    margin-left: -1.2rem;
+}
+
+/* ---------- Barras por tipo ---------- */
+.barras {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.barra-fila {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.barra-fila__nombre {
+    font-weight: 600;
+}
+
+.barra-fila__pista {
+    height: 0.9rem;
+    border-radius: 999px;
+    background: var(--p-morado-claro);
+    overflow: hidden;
+}
+
+.barra-fila__relleno {
+    display: block;
+    height: 100%;
+    min-width: 0.3rem;
+    border-radius: 999px;
+}
+
+.barra-fila__relleno--servicio {
+    background: var(--p-morado);
+}
+
+.barra-fila__relleno--producto {
+    background: var(--p-dorado);
+}
+
+.barra-fila__relleno--ropa {
+    background: var(--p-verde);
+}
+
+.barra-fila__valor {
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-align: right;
+}
+
+@media (max-width: 600px) {
+    .barra-fila {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+    }
+
+    .barra-fila__valor {
+        text-align: left;
+    }
+}
+
+/* ---------- Al imprimir: solo las cuentas, sin botones ---------- */
+@media print {
+    .barra,
+    .cuentas__controles,
+    .cuentas__cortes,
+    .aviso-flotante {
+        display: none !important;
+    }
+
+    body {
+        background: #FFFFFF;
+    }
+
+    .seccion {
+        box-shadow: none;
+        border: 1px solid #DDDDDD;
+        break-inside: avoid;
+    }
+}

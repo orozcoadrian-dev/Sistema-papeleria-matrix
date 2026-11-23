@@ -122,12 +122,116 @@ const SECCIONES = {
             { nombre: 'descripcion', etiqueta: 'Descripción', ejemplo: 'Estado, detalles…', max: 150, area: true }
         ],
         paraFormulario: (r) => ({ ...r, tipoRopa: r.tipo })
+    },
+
+    operadores: {
+        icono: '🧑‍💻',
+        titulo: 'Operadores',
+        plural: 'operadores',
+        singular: 'operador',
+        femenino: false,
+        ayuda: 'Las personas que atienden el cibercafé. Cada una entra con su usuario y registra sus ventas.',
+        buscarPor: 'nombre o usuario',
+        ruta: '/api/operadores-cibercafe',
+        id: (o) => o.idUsuario,
+        sinCodigo: true,
+        buscarEn: (o) => [o.primerNombre, o.segundoNombre, o.primerApellido, o.segundoApellido, o.nombreUsuario, o.telefono],
+        tarjeta: (o) => ({
+            nombre: nombreCompleto(o),
+            precio: o.salario,
+            precioSufijo: ' al mes',
+            estado: clavesDePermiso.has(o.idUsuario)
+                ? { texto: '🔑 Tiene clave de permiso', bien: true }
+                : { texto: 'Sin clave de permiso', bien: false },
+            etiquetas: [`Usuario: ${o.nombreUsuario}`, o.telefono && `Tel. ${o.telefono}`, o.horario],
+            descripcion: o.direccion
+        }),
+        mismoQue: (a, b) => normalizar(a.nombreUsuario) === normalizar(b.nombreUsuario),
+        campos: [
+            { nombre: 'primerNombre', etiqueta: 'Primer nombre', ejemplo: 'Ej: Daniel', min: 3, max: 30, requerido: true, soloLetras: true },
+            { nombre: 'segundoNombre', etiqueta: 'Segundo nombre', min: 3, max: 30, soloLetras: true },
+            { nombre: 'primerApellido', etiqueta: 'Primer apellido', ejemplo: 'Ej: Pérez', min: 3, max: 30, requerido: true, soloLetras: true },
+            { nombre: 'segundoApellido', etiqueta: 'Segundo apellido', ejemplo: 'Ej: Mora', min: 3, max: 30, requerido: true, soloLetras: true },
+            { nombre: 'tipoDocumento', etiqueta: 'Tipo de documento', ejemplo: 'Ej: CC', max: 5, requerido: true, mayusculas: true,
+                sugerencias: () => ['CC', 'CE', 'TI', 'PPT', 'PA'] },
+            { nombre: 'numeroDocumento', etiqueta: 'Número de documento', min: 15, max: 20, requerido: true, soloNumeros: true,
+                ayuda: 'El sistema pide entre 15 y 20 números.' },
+            { nombre: 'nombreUsuario', etiqueta: 'Usuario para entrar', ejemplo: 'Ej: daniel.perez', min: 8, max: 15, requerido: true, minusculas: true,
+                patron: { regla: /^[a-z0-9._-]+$/, mensaje: 'Usa solo letras sin tilde, números, punto o guion. Sin espacios.' } },
+            { nombre: 'contrasenia', etiqueta: 'Contraseña', tipo: 'clave', min: 10, max: 255, requeridoAlCrear: true,
+                ayuda: 'Mínimo 10 letras o números. Al cambiar un operador, déjala vacía para no cambiarla.' },
+            { nombre: 'salario', etiqueta: 'Sueldo al mes', tipo: 'pesos', requerido: true },
+            { nombre: 'fechaContrato', etiqueta: 'Fecha en que empezó', tipo: 'fecha', requerido: true },
+            { nombre: 'telefono', etiqueta: 'Celular', ejemplo: 'Ej: 3001234567', min: 8, max: 15, soloNumeros: true },
+            { nombre: 'email', etiqueta: 'Correo', ejemplo: 'Ej: daniel.perez@gmail.com', min: 20, max: 60, minusculas: true,
+                patron: { regla: /^[\w.-]+@[\w.-]+\.com$/, mensaje: 'Escribe un correo completo que termine en .com' } },
+            { nombre: 'horario', etiqueta: 'Horario', ejemplo: 'Ej: Lunes a sábado de 8 a 6', min: 10, max: 80, ancho: true },
+            { nombre: 'direccion', etiqueta: 'Dirección de la casa', ejemplo: 'Ej: Calle 10 # 20-30, barrio Centro', min: 10, max: 80, requerido: true, ancho: true }
+        ],
+        valoresNuevos: () => ({ fechaContrato: hoyISO() }),
+        cuerpoExtra: () => ({ rol: 'Operador de cibercafé' }),
+        paraFormulario: (o) => ({ ...o, contrasenia: '' }),
+        accionesExtra: (o) => [{
+            texto: clavesDePermiso.has(o.idUsuario) ? '🔑 Cambiar clave' : '🔑 Poner clave',
+            nombre: `Clave de permiso de ${nombreCompleto(o)}`,
+            accion: () => abrirClave(o)
+        }],
+        cargarExtra: cargarClavesDePermiso,
+        mensajeAlQuitar409: 'porque ya tiene ventas o una clave de permiso registradas. Quítale primero la clave.'
+    },
+
+    informacion: {
+        icono: '🏪',
+        titulo: 'Datos de la tienda',
+        plural: 'datos',
+        singular: 'dato',
+        femenino: false,
+        ayuda: 'Horarios, dirección, medios de pago… lo que quieras que se sepa de la tienda.',
+        buscarPor: 'nombre o texto',
+        ruta: '/api/informacion-negocio',
+        id: (i) => i.idInformacion,
+        sinCodigo: true,
+        ordenar: (a, b) => (a.valorInformacion ?? 0) - (b.valorInformacion ?? 0),
+        buscarEn: (i) => [i.tipoInformacion, i.informacion],
+        tarjeta: (i) => ({
+            nombre: i.tipoInformacion,
+            etiquetas: [`Puesto ${i.valorInformacion}`],
+            descripcion: i.informacion
+        }),
+        mismoQue: (a, b) => normalizar(a.tipoInformacion) === normalizar(b.tipoInformacion),
+        campos: [
+            { nombre: 'tipoInformacion', etiqueta: '¿Qué dato es?', ejemplo: 'Ej: Horario tienda', min: 10, max: 15, requerido: true, soloLetras: true, ancho: true,
+                sugerencias: () => ['Horario tienda', 'Dirección local', 'Medios de pago', 'Servicio a casa', 'Días festivos'] },
+            { nombre: 'informacion', etiqueta: 'Escribe el dato', ejemplo: 'Ej: Abrimos de lunes a sábado en la mañana y en la tarde', min: 10, max: 255,
+                requerido: true, area: true, soloLetras: true },
+            { nombre: 'valorInformacion', etiqueta: 'Puesto en la lista', tipo: 'cantidad', requerido: true, ayuda: 'El 1 sale primero.' }
+        ],
+        valoresNuevos: (registros) => ({ valorInformacion: registros.length + 1 }),
+        cuerpoExtra: () => ({ usuarioId: SESION.idUsuario }),
+        paraFormulario: (i) => i
     }
 };
+
+// Por ahora el sistema solo acepta letras y espacios en estos datos (sin números ni signos).
+const SOLO_LETRAS = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
 
 // El código lo exige la base de datos, pero a la administradora no le dice nada: se llena solo.
 const CAMPO_CODIGO = { nombre: 'codigo', etiqueta: 'Código interno', max: 20, requerido: true, codigo: true,
     ayuda: 'Se llena solo. Cámbialo solo si te lo piden.' };
+
+function nombreCompleto(o) {
+    return [o.primerNombre, o.segundoNombre, o.primerApellido, o.segundoApellido].filter(Boolean).join(' ');
+}
+
+function hoyISO() {
+    const fecha = new Date();
+    return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
+}
+
+/* El id de un registro: los operadores usan idUsuario y los datos de la tienda idInformacion. */
+function idDe(seccion, registro) {
+    return seccion.id ? seccion.id(registro) : registro.id;
+}
 
 function existencias(cantidad) {
     if (!(cantidad > 0)) return { texto: 'Agotado', bien: false };
@@ -142,6 +246,9 @@ const datos = {};           // registros cargados por sección (undefined = carg
 let seccionActual = 'servicios';
 let editando = null;        // registro que se está cambiando, o null si es nuevo
 let porQuitar = null;       // registro que se va a quitar
+const fallosDelServidor = new Set(); // secciones cuya lista el servidor no pudo armar (error 500)
+const clavesDePermiso = new Map(); // id del operador → id de su clave de permiso
+let operadorDeLaClave = null;      // operador al que se le pone o cambia la clave
 let formularioCambiado = false;
 let advertenciasVistas = ''; // avisos que la persona ya vio y aceptó guardar igual
 
@@ -238,31 +345,36 @@ function dibujarMosaicos() {
         const detalle = document.createElement('span');
         detalle.className = 'mosaico__detalle';
         const lista = datos[clave];
-        detalle.textContent = lista === undefined ? 'Cargando…' : lista === null ? 'Sin conexión' : contarTexto(seccion, lista.length);
+        detalle.textContent = lista === undefined ? 'Cargando…'
+            : lista === null ? (fallosDelServidor.has(clave) ? 'No se pudo abrir' : 'Sin conexión')
+            : contarTexto(seccion, lista.length);
         textos.append(titulo, detalle);
 
         boton.append(icono, textos);
         contenedor.append(boton);
     }
-    contenedor.append(mosaicoDeVentas());
+    contenedor.append(
+        mosaicoEnlace('ventas.html', '🧾', 'Ventas', 'Vender y ver lo vendido'),
+        mosaicoEnlace('cuentas.html', '📊', 'Cuentas', 'Cuánto entra y cuánto sale')
+    );
 }
 
-/* Las ventas tienen su propia pantalla: el mosaico lleva allá. */
-function mosaicoDeVentas() {
+/* Las ventas y las cuentas tienen su propia pantalla: estos mosaicos llevan allá. */
+function mosaicoEnlace(ruta, simbolo, nombre, texto) {
     const enlace = document.createElement('a');
     enlace.className = 'mosaico mosaico--enlace';
-    enlace.href = 'ventas.html';
+    enlace.href = ruta;
     const icono = document.createElement('span');
     icono.className = 'mosaico__icono';
     icono.setAttribute('aria-hidden', 'true');
-    icono.textContent = '🧾';
+    icono.textContent = simbolo;
     const textos = document.createElement('span');
     const titulo = document.createElement('span');
     titulo.className = 'mosaico__titulo';
-    titulo.textContent = 'Ventas';
+    titulo.textContent = nombre;
     const detalle = document.createElement('span');
     detalle.className = 'mosaico__detalle';
-    detalle.textContent = 'Vender y ver lo vendido';
+    detalle.textContent = texto;
     textos.append(titulo, detalle);
     enlace.append(icono, textos);
     return enlace;
@@ -285,9 +397,14 @@ function elegirSeccion(clave) {
 
 async function cargar(clave) {
     try {
-        datos[clave] = await llamar(SECCIONES[clave].rutaLista || SECCIONES[clave].ruta);
-    } catch {
+        const seccion = SECCIONES[clave];
+        const [lista] = await Promise.all([llamar(seccion.rutaLista || seccion.ruta), seccion.cargarExtra?.()]);
+        datos[clave] = seccion.ordenar ? [...lista].sort(seccion.ordenar) : lista;
+        fallosDelServidor.delete(clave);
+    } catch (error) {
         datos[clave] = null;
+        if (error.estado >= 500) fallosDelServidor.add(clave);
+        else fallosDelServidor.delete(clave);
     }
     dibujarMosaicos();
     if (clave === seccionActual) dibujarTarjetas();
@@ -356,6 +473,17 @@ function dibujarTarjetas() {
     }
     contenedor.setAttribute('aria-busy', 'false');
 
+    if (lista === null && fallosDelServidor.has(seccionActual)) {
+        contador.textContent = '';
+        mostrarEstado({
+            icono: '🛠️',
+            titulo: 'Esta lista no se pudo abrir',
+            texto: 'El sistema tuvo un problema al traerla. No es el internet: avísale a Osvaldo para que lo revise.',
+            boton: { texto: 'Intentar de nuevo', accion: () => recargar(seccionActual) }
+        });
+        return;
+    }
+
     if (lista === null) {
         contador.textContent = '';
         mostrarEstado({
@@ -410,11 +538,14 @@ function crearTarjeta(registro, seccion) {
     nombre.className = 'tarjeta__nombre';
     nombre.textContent = info.nombre || 'Sin nombre';
 
-    const precio = document.createElement('p');
-    precio.className = 'tarjeta__precio';
-    precio.textContent = typeof info.precio === 'number' ? pesos.format(info.precio) : 'Sin precio';
-
-    tarjeta.append(nombre, precio);
+    tarjeta.append(nombre);
+    // Los datos de la tienda no tienen precio: en esas tarjetas no se muestra.
+    if ('precio' in info) {
+        const precio = document.createElement('p');
+        precio.className = 'tarjeta__precio';
+        precio.textContent = typeof info.precio === 'number' ? pesos.format(info.precio) + (info.precioSufijo || '') : 'Sin precio';
+        tarjeta.append(precio);
+    }
 
     const etiquetas = document.createElement('div');
     etiquetas.className = 'etiquetas';
@@ -436,10 +567,11 @@ function crearTarjeta(registro, seccion) {
     const acciones = document.createElement('div');
     acciones.className = 'tarjeta__acciones';
     const nombreVisible = info.nombre || seccion.singular;
-    acciones.append(
-        crearBoton('✏️ Cambiar', 'boton boton--suave', `Cambiar ${nombreVisible}`, () => abrirFormulario(registro)),
-        crearBoton('🗑️ Quitar', 'boton boton--peligro-suave', `Quitar ${nombreVisible}`, () => pedirQuitar(registro))
-    );
+    acciones.append(crearBoton('✏️ Cambiar', 'boton boton--suave', `Cambiar ${nombreVisible}`, () => abrirFormulario(registro)));
+    for (const extra of seccion.accionesExtra?.(registro) || []) {
+        acciones.append(crearBoton(extra.texto, 'boton boton--suave', extra.nombre, extra.accion));
+    }
+    acciones.append(crearBoton('🗑️ Quitar', 'boton boton--peligro-suave', `Quitar ${nombreVisible}`, () => pedirQuitar(registro)));
     tarjeta.append(acciones);
     return tarjeta;
 }
@@ -474,7 +606,7 @@ function crearCampo(campo, valor, registros, resaltar) {
     etiqueta.className = 'campo__etiqueta';
     etiqueta.htmlFor = id;
     etiqueta.textContent = campo.etiqueta + ' ';
-    if (!campo.requerido) {
+    if (!campo.requerido && !(campo.requeridoAlCrear && !editando)) {
         const opcional = document.createElement('span');
         opcional.className = 'campo__opcional';
         opcional.textContent = '(opcional)';
@@ -486,7 +618,16 @@ function crearCampo(campo, valor, registros, resaltar) {
     entrada.id = id;
     entrada.name = campo.nombre;
     if (campo.area) entrada.rows = 3;
-    else entrada.type = 'text';
+    else if (campo.tipo === 'fecha') entrada.type = 'date';
+    else if (campo.tipo === 'clave') {
+        entrada.type = 'password';
+        entrada.autocomplete = 'new-password';
+    } else entrada.type = 'text';
+    if (campo.soloNumeros) entrada.inputMode = 'numeric';
+    if (campo.minusculas) {
+        entrada.autocapitalize = 'none';
+        entrada.spellcheck = false;
+    }
     if (campo.max) entrada.maxLength = campo.max;
     if (campo.ejemplo) entrada.placeholder = campo.ejemplo;
 
@@ -573,7 +714,7 @@ function marcarError(nombre, mensaje) {
 function abrirFormulario(registro = null) {
     const seccion = SECCIONES[seccionActual];
     editando = registro;
-    const valores = registro ? seccion.paraFormulario(registro) : {};
+    const valores = registro ? seccion.paraFormulario(registro) : (seccion.valoresNuevos?.(datos[seccionActual] || []) || {});
     const nombreVisible = registro ? seccion.tarjeta(registro).nombre : '';
 
     $('formulario-titulo').textContent = registro ? `Cambiar «${nombreVisible || seccion.singular}»` : `Agregar ${seccion.singular}`;
@@ -587,8 +728,13 @@ function abrirFormulario(registro = null) {
     const campos = $('campos');
     campos.replaceChildren(...seccion.campos.map((c) => crearCampo(c, valores[c.nombre], registros, conNota && c.privado)));
 
-    const codigo = valores.codigo || `${seccion.prefijoCodigo}-${Date.now().toString(36).toUpperCase().slice(-6)}`;
-    $('campos-avanzados').replaceChildren(crearCampo(CAMPO_CODIGO, codigo, registros, false));
+    $('avanzado').hidden = Boolean(seccion.sinCodigo);
+    if (seccion.sinCodigo) {
+        $('campos-avanzados').replaceChildren();
+    } else {
+        const codigo = valores.codigo || `${seccion.prefijoCodigo}-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+        $('campos-avanzados').replaceChildren(crearCampo(CAMPO_CODIGO, codigo, registros, false));
+    }
     $('avanzado').open = false;
 
     formularioCambiado = false;
@@ -600,10 +746,14 @@ function abrirFormulario(registro = null) {
 /* Pone el texto como ya se escribe en el sistema: si "impresion" coincide con la sugerencia "Impresión",
    se guarda "Impresión". Así no quedan "Blusa", "blusa" y "BLUSA" como tres tipos distintos. */
 function ajustarTexto(campo, texto, registros) {
+    // La contraseña se guarda tal cual: un espacio también cuenta.
+    if (campo.tipo === 'clave' || campo.tipo === 'fecha') return String(texto);
     let valor = limpiarTexto(texto);
     if (!valor) return valor;
     if (campo.codigo) return valor.replace(/\s+/g, '-').toUpperCase();
     if (campo.mayusculas) return valor.toUpperCase();
+    if (campo.minusculas) return valor.toLowerCase();
+    if (campo.soloNumeros) return valor.replace(/[\s.-]/g, '');
     if (campo.sugerencias) {
         const igual = campo.sugerencias(registros).find((s) => normalizar(s) === normalizar(valor));
         if (igual) return igual;
@@ -619,7 +769,8 @@ function leerFormulario(seccion) {
     const cuerpo = {};
     let primerError = null;
 
-    for (const campo of [...seccion.campos, CAMPO_CODIGO]) {
+    for (const campo of seccion.sinCodigo ? seccion.campos : [...seccion.campos, CAMPO_CODIGO]) {
+        const requerido = campo.requerido || (campo.requeridoAlCrear && !editando);
         const entrada = formulario.elements[campo.nombre];
         const crudo = entrada.value;
         let mensaje = '';
@@ -628,7 +779,7 @@ function leerFormulario(seccion) {
             const texto = crudo.trim();
             const numero = leerEntero(texto);
             if (texto === '') {
-                if (campo.requerido) mensaje = 'Este dato hace falta.';
+                if (requerido) mensaje = 'Este dato hace falta.';
                 else cuerpo[campo.nombre] = null;
             } else if (!Number.isFinite(numero)) {
                 mensaje = campo.tipo === 'pesos'
@@ -646,8 +797,12 @@ function leerFormulario(seccion) {
         } else {
             const texto = ajustarTexto(campo, crudo, registros);
             entrada.value = texto;
-            if (campo.requerido && texto === '') mensaje = 'Este dato hace falta.';
-            else if (campo.max && texto.length > campo.max) mensaje = `Es muy largo: máximo ${campo.max} letras.`;
+            if (requerido && texto === '') mensaje = 'Este dato hace falta.';
+            else if (texto !== '' && campo.min && texto.length < campo.min) mensaje = `Es muy corto: mínimo ${campo.min} ${campo.soloNumeros ? 'números' : 'letras'}.`;
+            else if (campo.max && texto.length > campo.max) mensaje = `Es muy largo: máximo ${campo.max} ${campo.soloNumeros ? 'números' : 'letras'}.`;
+            else if (texto !== '' && campo.soloNumeros && !/^\d+$/.test(texto)) mensaje = 'Escribe solo números, sin letras ni espacios.';
+            else if (texto !== '' && campo.soloLetras && !SOLO_LETRAS.test(texto)) mensaje = 'Por ahora aquí solo se pueden usar letras y espacios (sin números, puntos ni comas).';
+            else if (texto !== '' && campo.patron && !campo.patron.regla.test(texto)) mensaje = campo.patron.mensaje;
             else cuerpo[campo.nombre] = texto === '' ? null : texto;
         }
 
@@ -662,14 +817,14 @@ function leerFormulario(seccion) {
         return null;
     }
     $('formulario-error').textContent = '';
-    return cuerpo;
+    return { ...cuerpo, ...seccion.cuerpoExtra?.() };
 }
 
 /* Cosas que no son errores pero conviene confirmar: un nombre repetido o un precio de venta menor al de compra. */
 function buscarAdvertencias(seccion, cuerpo) {
     const avisos = [];
     const comparable = { ...cuerpo, tipo: cuerpo.tipoRopa };
-    const repetido = (datos[seccionActual] || []).find((r) => r.id !== editando?.id && seccion.mismoQue(r, comparable));
+    const repetido = (datos[seccionActual] || []).find((r) => (!editando || idDe(seccion, r) !== idDe(seccion, editando)) && seccion.mismoQue(r, comparable));
     if (repetido) {
         avisos.push(`Ya tienes ${seccion.femenino ? 'una' : 'uno'} que se llama «${seccion.tarjeta(repetido).nombre}»${repetido.talla ? ` en talla ${repetido.talla}` : ''}.`);
     }
@@ -695,12 +850,12 @@ async function guardar() {
     boton.disabled = true;
     boton.textContent = 'Guardando…';
     try {
-        if (editando) await llamar(`${seccion.ruta}/${editando.id}`, { metodo: 'PUT', cuerpo });
+        if (editando) await llamar(`${seccion.ruta}/${idDe(seccion, editando)}`, { metodo: 'PUT', cuerpo });
         else await llamar(seccion.ruta, { metodo: 'POST', cuerpo });
 
         formularioCambiado = false;
         $('ventana-formulario').close();
-        avisar(`✓ ¡Listo! Se guardó «${cuerpo.nombre}».`);
+        avisar(`✓ ¡Listo! Se guardó «${seccion.tarjeta(cuerpo).nombre || seccion.singular}».`);
         await cargar(seccionActual);
     } catch (error) {
         manejarErrorAlGuardar(error);
@@ -727,6 +882,18 @@ function manejarErrorAlGuardar(error) {
         if (primerCampo === 'codigo') $('avanzado').open = true;
         if (primerCampo) $(`campo-${primerCampo}`).focus();
         caja.textContent = 'Revisa los recuadros marcados en rojo.';
+        return;
+    }
+    if (error.estado === 409 && error.titulo === 'Código repetido' && SECCIONES[seccionActual].sinCodigo) {
+        caja.textContent = error.message || 'Ya existe uno igual. Revisa los datos.';
+        return;
+    }
+    if (error.estado === 409 && error.titulo === 'Operación no permitida' && seccionActual === 'operadores') {
+        caja.textContent = 'Ya hay alguien con ese usuario, documento, celular o correo. Revisa esos datos.';
+        return;
+    }
+    if (error.estado === 400 && !Object.keys(error.errores).length && error.titulo === 'Datos inválidos') {
+        caja.textContent = 'El sistema no aceptó algún dato. Revisa que cada recuadro tenga el largo pedido.';
         return;
     }
     if (error.estado === 409 && error.titulo === 'Código repetido') {
@@ -769,7 +936,7 @@ async function quitar() {
     const boton = $('boton-confirmar-quitar');
     boton.disabled = true;
     try {
-        await llamar(`${seccion.ruta}/${registro.id}`, { metodo: 'DELETE' });
+        await llamar(`${seccion.ruta}/${idDe(seccion, registro)}`, { metodo: 'DELETE' });
         $('ventana-quitar').close();
         avisar(`✓ Se quitó «${nombre}».`);
         await cargar(seccionActual);
@@ -782,7 +949,7 @@ async function quitar() {
             avisar(`«${nombre}» ya no estaba en la lista.`);
             recargar(seccionActual);
         } else if (error.estado === 409) {
-            avisar(`No se puede quitar «${nombre}» porque ya aparece en facturas o ventas.`, 'error');
+            avisar(`No se puede quitar «${nombre}» ${seccion.mensajeAlQuitar409 || 'porque ya aparece en facturas o ventas.'}`, 'error');
         } else {
             avisar(mensajeGeneral(error), 'error');
         }
@@ -790,6 +957,60 @@ async function quitar() {
         boton.disabled = false;
     }
 }
+
+/* ---------- Clave de permiso de los operadores ---------- */
+
+async function cargarClavesDePermiso() {
+    const claves = await llamar('/api/claves-permiso');
+    clavesDePermiso.clear();
+    for (const clave of claves) clavesDePermiso.set(clave.usuarioId, clave.idClave);
+}
+
+function abrirClave(operador) {
+    operadorDeLaClave = operador;
+    const tiene = clavesDePermiso.has(operador.idUsuario);
+    $('clave-titulo').textContent = tiene ? `Cambiar la clave de ${operador.primerNombre}` : `Poner clave a ${operador.primerNombre}`;
+    $('clave-permiso').value = '';
+    $('clave-error').textContent = '';
+    $('boton-quitar-clave').hidden = !tiene;
+    $('ventana-clave').showModal();
+    $('clave-permiso').focus();
+}
+
+$('formulario-clave').addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    const operador = operadorDeLaClave;
+    const clave = $('clave-permiso').value;
+    if (clave.length < 10 || clave.length > 30) {
+        $('clave-error').textContent = 'La clave debe tener entre 10 y 30 letras o números.';
+        $('clave-permiso').focus();
+        return;
+    }
+    const idClave = clavesDePermiso.get(operador.idUsuario);
+    const cuerpo = { usuarioId: operador.idUsuario, clave };
+    try {
+        if (idClave) await llamar(`/api/claves-permiso/${idClave}`, { metodo: 'PUT', cuerpo });
+        else await llamar('/api/claves-permiso', { metodo: 'POST', cuerpo });
+        $('ventana-clave').close();
+        avisar(`✓ Se guardó la clave de ${operador.primerNombre}.`);
+        recargar('operadores');
+    } catch (error) {
+        if (error.estado !== 401) $('clave-error').textContent = error.estado === 409 ? error.message : mensajeGeneral(error);
+    }
+});
+
+$('boton-quitar-clave').addEventListener('click', async () => {
+    const operador = operadorDeLaClave;
+    if (!window.confirm(`¿Quitar la clave de permiso de ${operador.primerNombre}?`)) return;
+    try {
+        await llamar(`/api/claves-permiso/${clavesDePermiso.get(operador.idUsuario)}`, { metodo: 'DELETE' });
+        $('ventana-clave').close();
+        avisar(`✓ Se quitó la clave de ${operador.primerNombre}.`);
+        recargar('operadores');
+    } catch (error) {
+        if (error.estado !== 401) $('clave-error').textContent = mensajeGeneral(error);
+    }
+});
 
 /* ---------- Salir sin guardar ---------- */
 

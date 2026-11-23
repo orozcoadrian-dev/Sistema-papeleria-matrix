@@ -90,6 +90,24 @@
         </div>
     </dialog>
 
+    <!-- Clave de permiso de un operador -->
+    <dialog class="ventana ventana--chica" id="ventana-clave" aria-labelledby="clave-titulo">
+        <form id="formulario-clave" novalidate>
+            <p class="ventana__icono" aria-hidden="true">🔑</p>
+            <h2 id="clave-titulo" class="ventana__titulo"></h2>
+            <p class="ventana__texto">Es una clave aparte de la contraseña, para los permisos especiales del operador. Por seguridad no se puede ver después de guardarla.</p>
+            <label for="clave-permiso" class="campo__etiqueta">Clave nueva</label>
+            <input type="password" id="clave-permiso" class="campo__entrada" autocomplete="new-password" maxlength="30">
+            <p class="campo__ayuda">Entre 10 y 30 letras o números.</p>
+            <p class="ventana__error" id="clave-error" role="alert"></p>
+            <div class="ventana__botones ventana__botones--centro">
+                <button type="button" class="boton boton--peligro-suave" id="boton-quitar-clave" hidden>Quitar clave</button>
+                <button type="button" class="boton boton--suave" data-cerrar>Cancelar</button>
+                <button type="submit" class="boton boton--principal">Guardar clave</button>
+            </div>
+        </form>
+    </dialog>
+
     <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
 
     <script src="../js/config.js"></script>
