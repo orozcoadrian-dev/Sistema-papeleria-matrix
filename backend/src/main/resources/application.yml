@@ -25,6 +25,9 @@ app:
   # Clave que se exige en la cabecera X-API-Key para crear, modificar y borrar.
   # En Render se genera sola, con la variable API_KEY definida en render.yaml.
   api-key: ${API_KEY:clave-de-prueba}
+  sesion:
+    # Minutos sin usar el sistema después de los cuales la sesión se cierra sola.
+    minutos-inactividad: ${SESION_MINUTOS:15}
   cors:
     # Direcciones desde las que el frontend puede consultar la API, separadas por comas.
     # Por defecto, el servidor local del frontend. Al publicar la página, se agrega su dirección en CORS_ORIGENES.

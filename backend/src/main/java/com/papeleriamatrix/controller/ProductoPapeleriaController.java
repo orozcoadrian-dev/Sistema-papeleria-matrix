@@ -1,5 +1,6 @@
 package com.papeleriamatrix.controller;
 
+import com.papeleriamatrix.dto.ProductoInternoResponse;
 import com.papeleriamatrix.dto.ProductoResponse;
 import com.papeleriamatrix.service.ProductoPapeleriaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/productos")
-@Tag(name = "Productos de papelería", description = "Catálogo de papelería para el público. Solo consulta.")
+@Tag(name = "Productos de papelería", description = "Catálogo de papelería. Consultar es público; las existencias y el precio de compra solo se ven con sesión.")
 public class ProductoPapeleriaController {
 	private final ProductoPapeleriaService productoService;
 
@@ -33,6 +34,14 @@ public class ProductoPapeleriaController {
 	@Operation(summary = "Listar los productos de papelería")
 	public List<ProductoResponse> listar() {
 		return productoService.listar();
+	}
+
+	@GetMapping("/interno")
+	@Operation(summary = "Listar los productos con sus existencias y precio de compra",
+		description = "Para el panel interno. Lo pueden ver el administrador y el operador de cibercafé.",
+		security = { @SecurityRequirement(name = "sesion"), @SecurityRequirement(name = "claveApi") })
+	public List<ProductoInternoResponse> listarInterno() {
+		return productoService.listarInterno();
 	}
 
 	@GetMapping("/{id}")

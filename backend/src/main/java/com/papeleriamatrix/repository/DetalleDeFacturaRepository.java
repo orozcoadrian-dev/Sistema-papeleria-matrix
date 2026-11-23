@@ -1,6 +1,8 @@
 package com.papeleriamatrix.repository;
 
 import com.papeleriamatrix.model.Detalle_de_factura;
+import java.util.Collection;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +18,7 @@ public interface DetalleDeFacturaRepository extends JpaRepository<Detalle_de_fac
 
 	@Query("SELECT COALESCE(SUM(d.cantidadServicio), 0L) FROM Detalle_de_factura d JOIN d.factura f WHERE f.fechaGeneracion BETWEEN :desde AND :hasta")
 	Long sumarCantidadServicioPorFechaFactura(@Param("desde") LocalDate desde, @Param("hasta") LocalDate hasta);
+
+	List<Detalle_de_factura> findByFacturaDelNegocioIdIn(Collection<Integer> facturas);
+	List<Detalle_de_factura> findByFacturaDelNegocioId(Integer factura);
 }

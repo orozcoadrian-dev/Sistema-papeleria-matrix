@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuentas · Papelería Matrix</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/x-icon" href="../assets/icons/logo-papeleria-matrix.ico">
+    <link rel="stylesheet" href="../css/vistas/estilo-panel.css">
+    <link rel="stylesheet" href="../css/vistas/estilo-ventas.css">
+    <link rel="stylesheet" href="../css/vistas/estilo-cuentas.css">
+</head>
+
+<body>
+    <header class="barra">
+        <div class="barra__marca">
+            <img src="../assets/icons/logo-papeleria-matrix.ico" alt="" width="40" height="40">
+            <span>Papelería <span class="barra__acento">Matrix</span></span>
+        </div>
+        <div class="barra__lado" id="barra-usuario">
+            <a href="panel.html" class="barra__enlace">Volver a mi negocio</a>
+        </div>
+    </header>
+
+    <main class="contenido">
+        <section class="saludo" aria-labelledby="saludo-titulo">
+            <h1 id="saludo-titulo">Cuentas del negocio <span aria-hidden="true">📊</span></h1>
+            <p class="saludo__sub">Cuánto se vendió, cuánto hay en la tienda y cuánto se paga en sueldos.</p>
+            <p class="saludo__fecha" id="periodo-texto"></p>
+        </section>
+
+        <div class="cuentas__controles">
+            <div class="filtros" role="group" aria-label="Qué días mostrar" id="periodos"></div>
+            <div class="cuentas__acciones">
+                <button type="button" class="boton boton--suave" id="boton-imprimir">🖨️ Imprimir</button>
+                <button type="button" class="boton boton--principal" id="boton-guardar-corte">💾 Guardar este corte</button>
+            </div>
+        </div>
+
+        <p class="contador" id="estado-carga" aria-live="polite"></p>
+
+        <div id="cuentas" hidden>
+            <section class="seccion" aria-labelledby="ventas-titulo">
+                <h2 id="ventas-titulo">Lo que se vendió</h2>
+                <div class="resumen" id="resumen-ventas"></div>
+                <div class="barras" id="barras-ventas" aria-label="Ventas por tipo"></div>
+                <p class="cuentas__nota" id="nota-precios" hidden>Lo de cada tipo se calcula con los precios de hoy, por eso puede no sumar exacto el total cobrado.</p>
+            </section>
+
+            <section class="seccion" aria-labelledby="tienda-titulo">
+                <h2 id="tienda-titulo">La papelería en la tienda</h2>
+                <div class="resumen" id="resumen-tienda"></div>
+                <div class="cuentas__listas">
+                    <div>
+                        <h3 class="cuentas__subtitulo">Se está acabando</h3>
+                        <ul class="cuentas__lista" id="lista-pocas"></ul>
+                    </div>
+                    <div>
+                        <h3 class="cuentas__subtitulo">Lo que más se vendió</h3>
+                        <ol class="cuentas__lista" id="lista-mas-vendido"></ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="seccion" aria-labelledby="gastos-titulo">
+                <h2 id="gastos-titulo">Sueldos</h2>
+                <div class="resumen" id="resumen-gastos"></div>
+            </section>
+
+            <section class="seccion cuentas__cortes" aria-labelledby="cortes-titulo">
+                <h2 id="cortes-titulo">Cortes guardados</h2>
+                <p class="seccion__ayuda">Cada vez que guardas un corte queda una foto de las cuentas de ese momento.</p>
+                <div class="ventas" id="cortes"></div>
+            </section>
+        </div>
+    </main>
+
+    <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/sesion.js"></script>
+    <script src="../js/cuentas.js"></script>
+</body>
+
+</html>

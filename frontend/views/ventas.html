@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas · Papelería Matrix</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/x-icon" href="../assets/icons/logo-papeleria-matrix.ico">
+    <link rel="stylesheet" href="../css/vistas/estilo-panel.css">
+    <link rel="stylesheet" href="../css/vistas/estilo-ventas.css">
+</head>
+
+<body>
+    <header class="barra">
+        <div class="barra__marca">
+            <img src="../assets/icons/logo-papeleria-matrix.ico" alt="" width="40" height="40">
+            <span>Papelería <span class="barra__acento">Matrix</span></span>
+        </div>
+        <div class="barra__lado" id="barra-usuario"></div>
+    </header>
+
+    <main class="contenido">
+        <section class="saludo" aria-labelledby="saludo-titulo">
+            <h1 id="saludo-titulo"><span id="saludo-texto">Ventas</span> <span aria-hidden="true">🛒</span></h1>
+            <p class="saludo__sub" id="saludo-sub">Toca lo que se lleva el cliente y después «Cobrar».</p>
+        </section>
+
+        <div class="pestanas" role="tablist" aria-label="Ventas">
+            <button type="button" class="pestana" role="tab" id="pestana-vender" aria-controls="vista-vender" aria-selected="true">🛒 Nueva venta</button>
+            <button type="button" class="pestana" role="tab" id="pestana-vendido" aria-controls="vista-vendido" aria-selected="false" tabindex="-1">🧾 Lo vendido</button>
+        </div>
+
+        <!-- Nueva venta -->
+        <section class="caja-registradora" id="vista-vender" role="tabpanel" aria-labelledby="pestana-vender">
+            <div class="seccion catalogo">
+                <div class="campo operador-venta" id="caja-operador" hidden>
+                    <label class="campo__etiqueta" for="operador">¿A nombre de quién queda la venta?</label>
+                    <select class="campo__entrada" id="operador"></select>
+                    <p class="campo__ayuda">Las ventas quedan registradas a nombre de un operador del cibercafé.</p>
+                </div>
+
+                <div class="buscador">
+                    <span class="buscador__icono" aria-hidden="true">🔍</span>
+                    <label for="buscar" class="oculto">Buscar</label>
+                    <input type="search" id="buscar" class="buscador__entrada" placeholder="Buscar lo que se lleva…" autocomplete="off">
+                </div>
+
+                <div class="filtros" role="group" aria-label="Qué mostrar" id="filtros"></div>
+
+                <p class="contador" id="contador" aria-live="polite"></p>
+                <div class="articulos" id="articulos" aria-busy="true"></div>
+
+                <div class="estado" id="estado" hidden>
+                    <p class="estado__icono" id="estado-icono" aria-hidden="true"></p>
+                    <p class="estado__titulo" id="estado-titulo"></p>
+                    <p class="estado__texto" id="estado-texto"></p>
+                    <button type="button" class="boton boton--principal" id="estado-boton" hidden></button>
+                </div>
+            </div>
+
+            <aside class="seccion carrito" aria-labelledby="carrito-titulo">
+                <h2 id="carrito-titulo">Lo que se lleva</h2>
+                <p class="carrito__vacio" id="carrito-vacio">Todavía no hay nada. Toca un producto o servicio para agregarlo.</p>
+                <ul class="carrito__lineas" id="carrito-lineas"></ul>
+                <div class="carrito__total">
+                    <span>Total</span>
+                    <strong id="carrito-total">$ 0</strong>
+                </div>
+                <button type="button" class="boton boton--principal boton--grande boton--ancho" id="boton-cobrar" disabled>Cobrar</button>
+                <button type="button" class="boton boton--suave boton--ancho" id="boton-vaciar" hidden>Empezar de nuevo</button>
+            </aside>
+        </section>
+
+        <!-- Lo vendido -->
+        <section class="seccion" id="vista-vendido" role="tabpanel" aria-labelledby="pestana-vendido" hidden>
+            <div class="seccion__cabecera">
+                <div>
+                    <h2 id="vendido-titulo">Lo vendido</h2>
+                    <p class="seccion__ayuda" id="vendido-ayuda"></p>
+                </div>
+            </div>
+            <div class="filtros" role="group" aria-label="Qué días mostrar" id="periodos"></div>
+            <div class="resumen" id="resumen"></div>
+            <div class="ventas" id="ventas" aria-busy="true"></div>
+            <div class="estado" id="vendido-estado" hidden>
+                <p class="estado__icono" id="vendido-estado-icono" aria-hidden="true"></p>
+                <p class="estado__titulo" id="vendido-estado-titulo"></p>
+                <p class="estado__texto" id="vendido-estado-texto"></p>
+                <button type="button" class="boton boton--principal" id="vendido-estado-boton" hidden></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- En el celular: el total y el botón de cobrar quedan siempre abajo -->
+    <div class="barra-cobro" id="barra-cobro" hidden>
+        <button type="button" class="barra-cobro__resumen" id="barra-cobro-ver">
+            <span id="barra-cobro-cantidad"></span>
+            <strong id="barra-cobro-total"></strong>
+        </button>
+        <button type="button" class="boton boton--principal boton--grande" id="barra-cobro-boton">Cobrar</button>
+    </div>
+
+    <!-- Cobrar -->
+    <dialog class="ventana ventana--chica" id="ventana-cobrar" aria-labelledby="cobrar-titulo">
+        <form id="formulario-cobrar" novalidate>
+            <p class="ventana__icono" aria-hidden="true">💵</p>
+            <h2 id="cobrar-titulo" class="ventana__titulo">Cobrar <span id="cobrar-total"></span></h2>
+            <p class="ventana__texto" id="cobrar-detalle"></p>
+            <label for="pago" class="campo__etiqueta">¿Con cuánto paga? <span class="campo__opcional">(opcional)</span></label>
+            <div class="campo__caja">
+                <input type="text" id="pago" class="campo__entrada campo__entrada--con-prefijo" inputmode="numeric" autocomplete="off" placeholder="Ej: 20.000">
+                <span class="campo__prefijo" aria-hidden="true">$</span>
+            </div>
+            <div class="pagos-rapidos" id="pagos-rapidos"></div>
+            <p class="cambio" id="cambio" aria-live="polite"></p>
+            <p class="ventana__error" id="cobrar-error" role="alert"></p>
+            <div class="ventana__botones ventana__botones--centro">
+                <button type="button" class="boton boton--suave" data-cerrar>Volver</button>
+                <button type="submit" class="boton boton--principal" id="boton-confirmar-cobro">Listo, registrar venta</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Venta registrada -->
+    <dialog class="ventana ventana--chica" id="ventana-recibo" aria-labelledby="recibo-titulo">
+        <p class="ventana__icono" aria-hidden="true">✅</p>
+        <h2 id="recibo-titulo" class="ventana__titulo">¡Venta registrada!</h2>
+        <div class="recibo" id="recibo"></div>
+        <div class="ventana__botones ventana__botones--centro">
+            <button type="button" class="boton boton--principal boton--grande" id="boton-nueva-venta">Nueva venta</button>
+        </div>
+    </dialog>
+
+    <!-- Anular -->
+    <dialog class="ventana ventana--chica" id="ventana-anular" aria-labelledby="anular-titulo">
+        <p class="ventana__icono" aria-hidden="true">↩️</p>
+        <h2 id="anular-titulo" class="ventana__titulo"></h2>
+        <p class="ventana__texto">Se borra la venta y los productos vuelven a la tienda. No se puede deshacer.</p>
+        <div class="ventana__botones ventana__botones--centro">
+            <button type="button" class="boton boton--suave" data-cerrar>No, dejarla</button>
+            <button type="button" class="boton boton--peligro" id="boton-confirmar-anular">Sí, anular</button>
+        </div>
+    </dialog>
+
+    <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/sesion.js"></script>
+    <script src="../js/ventas.js"></script>
+</body>
+
+</html>

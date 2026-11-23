@@ -1,6 +1,7 @@
 package com.papeleriamatrix.repository;
 
 import com.papeleriamatrix.model.Factura_del_negocio;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,7 @@ public interface FacturaDelNegocioRepository extends JpaRepository<Factura_del_n
 	Double sumarMontoPorFechaGeneracion(@Param("desde") LocalDate desde, @Param("hasta") LocalDate hasta);
 
 	long countByFechaGeneracionBetween(LocalDate desde, LocalDate hasta);
+
+	List<Factura_del_negocio> findByFechaGeneracionBetweenOrderByIdFacturaDesc(LocalDate desde, LocalDate hasta);
+	List<Factura_del_negocio> findByUsuarioIdAndFechaGeneracionBetweenOrderByIdFacturaDesc(Integer usuarioId, LocalDate desde, LocalDate hasta);
 }
