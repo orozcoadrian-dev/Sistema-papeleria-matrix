@@ -36,6 +36,12 @@ public class ManejadorDeErrores
 		return respuesta(HttpStatus.CONFLICT, "Código repetido", error.getMessage());
 	}
 
+	@ExceptionHandler(OperacionRechazadaException.class)
+	public ProblemDetail rechazada(OperacionRechazadaException error)
+	{
+		return respuesta(error.getEstado(), error.getTitulo(), error.getMessage());
+	}
+
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ProblemDetail argumentoInvalido(IllegalArgumentException error)
 	{

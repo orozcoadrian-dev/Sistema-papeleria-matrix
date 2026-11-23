@@ -1,5 +1,6 @@
 # Modo demo: es el que corre en Render. Usa una base de datos H2 dentro del contenedor.
-# Las tablas se crean desde las entidades y se cargan los datos de ejemplo de demo/datos-demo.sql.
+# Las tablas se crean desde las entidades y se cargan los datos de ejemplo de demo/datos-demo.sql
+# (catálogo, usuarios y ventas) y de demo/datos-demo-negocio.sql (módulos del negocio).
 # Todo se pierde cuando el servicio se reinicia.
 spring:
   datasource:
@@ -15,4 +16,6 @@ spring:
   sql:
     init:
       mode: always
-      data-locations: classpath:demo/datos-demo.sql
+      data-locations:
+        - classpath:demo/datos-demo.sql
+        - classpath:demo/datos-demo-negocio.sql

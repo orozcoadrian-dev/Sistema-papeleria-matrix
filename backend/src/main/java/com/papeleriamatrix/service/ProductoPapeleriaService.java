@@ -1,5 +1,6 @@
 package com.papeleriamatrix.service;
 
+import com.papeleriamatrix.dto.ProductoInternoResponse;
 import com.papeleriamatrix.dto.ProductoResponse;
 import com.papeleriamatrix.dto.ProductoPapeleriaRequest;
 import com.papeleriamatrix.exception.RecursoDuplicadoException;
@@ -28,6 +29,12 @@ public class ProductoPapeleriaService
 	public List<ProductoResponse> listar()
 	{
 		return repositorio.findAll(Sort.by("id")).stream().map(ProductoResponse::desde).toList();
+	}
+
+	@Transactional(readOnly = true)
+	public List<ProductoInternoResponse> listarInterno()
+	{
+		return repositorio.findAll(Sort.by("id")).stream().map(ProductoInternoResponse::desde).toList();
 	}
 
 	@Transactional(readOnly = true)

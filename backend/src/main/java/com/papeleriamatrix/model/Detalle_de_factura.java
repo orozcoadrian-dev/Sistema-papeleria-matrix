@@ -1,5 +1,6 @@
 package com.papeleriamatrix.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.papeleriamatrix.common.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ public class Detalle_de_factura
 	@Column(name = "Factura_del_negocio_id", nullable = false)
 	private Integer facturaDelNegocioId;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Factura_del_negocio_id", insertable = false, updatable = false)
 	private Factura_del_negocio factura;
@@ -35,6 +37,7 @@ public class Detalle_de_factura
 	@Column(name = "Servicio_id")
 	private Integer servicioId;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Servicio_id", insertable = false, updatable = false)
 	private Servicio servicio;
@@ -45,6 +48,7 @@ public class Detalle_de_factura
 	@Column(name = "Producto_de_papeleria_id")
 	private Integer productoPapeleriaId;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Producto_de_papeleria_id", insertable = false, updatable = false)
 	private ProductoPapeleria productoPapeleria;
@@ -55,6 +59,7 @@ public class Detalle_de_factura
 	@Column(name = "Ropa_id")
 	private Integer ropaId;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Ropa_id", insertable = false, updatable = false)
 	private Ropa ropa;
@@ -131,6 +136,7 @@ public class Detalle_de_factura
 		return facturaDelNegocioId != null ? facturaDelNegocioId : 0;
 	}
 
+	@JsonIgnore
 	public Factura_del_negocio getFactura()
 	{
 		return factura;
@@ -156,10 +162,9 @@ public class Detalle_de_factura
 		} else if (descripcion.length() > 120)
 		{
 			throw new IllegalArgumentException("La longitud de la descripción es demasiado larga.");
-		} else if (utilidades.tieneSoloTexto(descripcion))
-		{
-			this.descripcion = descripcion;
 		}
+		// Se permiten números y signos porque los nombres de los productos los pueden tener (por ejemplo, «Hojas 75 g»).
+		this.descripcion = descripcion;
 	}
 
 	public String getDescripcion() 
@@ -181,6 +186,7 @@ public class Detalle_de_factura
 		return servicioId != null ? servicioId : 0;
 	}
 
+	@JsonIgnore
 	public Servicio getServicio()
 	{
 		return servicio;
@@ -226,6 +232,7 @@ public class Detalle_de_factura
 		return productoPapeleriaId != null ? productoPapeleriaId : 0;
 	}
 
+	@JsonIgnore
 	public ProductoPapeleria getProductoPapeleria()
 	{
 		return productoPapeleria;
@@ -268,6 +275,7 @@ public class Detalle_de_factura
 		return ropaId != null ? ropaId : 0;
 	}
 
+	@JsonIgnore
 	public Ropa getRopa()
 	{
 		return ropa;

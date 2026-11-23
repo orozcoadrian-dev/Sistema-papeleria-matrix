@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "API de Papelería Matrix",
-    "description": "Pruebas de la API REST de Papelería Matrix. Antes de ejecutarla, elige el entorno Local o Render y revisa la variable apiKey. Hay datos de ejemplo solo en el modo demo.",
+    "description": "Pruebas de la API REST de Papelería Matrix. Antes de ejecutarla, elige el entorno Local o Render y revisa la variable apiKey. Hay datos de ejemplo solo en el modo demo. Las carpetas 5 y 6 usan los usuarios de prueba del modo demo (backend/src/main/resources/demo/datos-demo.sql).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -19,6 +19,42 @@
     },
     {
       "key": "codigoPrueba",
+      "value": ""
+    },
+    {
+      "key": "usuarioAdministrador",
+      "value": "admin.matrix"
+    },
+    {
+      "key": "contraseniaAdministrador",
+      "value": "Matrix-Admin-2026"
+    },
+    {
+      "key": "usuarioOperador",
+      "value": "operador.matrix"
+    },
+    {
+      "key": "contraseniaOperador",
+      "value": "Matrix-Operador-2026"
+    },
+    {
+      "key": "sesionAdministrador",
+      "value": ""
+    },
+    {
+      "key": "sesionOperador",
+      "value": ""
+    },
+    {
+      "key": "productoVentaId",
+      "value": ""
+    },
+    {
+      "key": "existenciasAntes",
+      "value": ""
+    },
+    {
+      "key": "ventaId",
       "value": ""
     }
   ],
@@ -602,6 +638,715 @@
                 "api",
                 "ropa",
                 "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Sesión y permisos",
+      "description": "Inicio de sesión con los usuarios de prueba del modo demo. La sesión se cierra sola tras 15 minutos sin uso.",
+      "item": [
+        {
+          "name": "Entrar como administrador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var sesion = pm.response.json();",
+                  "pm.collectionVariables.set(\"sesionAdministrador\", sesion.codigo);",
+                  "pm.test(\"Es el administrador\", function () { pm.expect(sesion.rol).to.eql(\"ADMINISTRADOR\"); });",
+                  "pm.test(\"La sesión dura 15 minutos sin uso\", function () { pm.expect(sesion.minutosInactividad).to.eql(15); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sesion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sesion"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"{{usuarioAdministrador}}\",\n  \"contrasenia\": \"{{contraseniaAdministrador}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Entrar como operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var sesion = pm.response.json();",
+                  "pm.collectionVariables.set(\"sesionOperador\", sesion.codigo);",
+                  "pm.test(\"Es el operador\", function () { pm.expect(sesion.rol).to.eql(\"OPERADOR_DE_CIBERCAFE\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sesion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sesion"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"{{usuarioOperador}}\",\n  \"contrasenia\": \"{{contraseniaOperador}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Entrar con una contraseña incorrecta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"No dice si el usuario existe\", function () { pm.expect(pm.response.json().detail).to.eql(\"El usuario o la contraseña no son correctos.\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sesion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sesion"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"{{usuarioAdministrador}}\",\n  \"contrasenia\": \"contrasenia-incorrecta\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Consultar la sesión actual",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Trae el nombre para mostrar\", function () { pm.expect(pm.response.json().nombre).to.be.a(\"string\").that.is.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionAdministrador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sesion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sesion"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ver usuarios sin entrar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ver usuarios como operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ver usuarios como administrador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var lista = pm.response.json();",
+                  "pm.test(\"Nunca muestra la contraseña\", function () { lista.forEach(function (usuario) { pm.expect(usuario).to.not.have.property(\"contrasenia\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionAdministrador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ver existencias como operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var lista = pm.response.json();",
+                  "pm.test(\"Trae la cantidad y el precio de compra\", function () { pm.expect(lista[0]).to.have.property(\"cantidad\"); pm.expect(lista[0]).to.have.property(\"precioCompra\"); });",
+                  "pm.collectionVariables.set(\"productoVentaId\", lista[0].id);",
+                  "pm.collectionVariables.set(\"existenciasAntes\", lista[0].cantidad);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/interno",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "productos",
+                "interno"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Ventas",
+      "description": "Registrar, consultar y anular ventas. Ejecutar después de la carpeta 5.",
+      "item": [
+        {
+          "name": "Registrar una venta como operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 201\", function () { pm.response.to.have.status(201); });",
+                  "var venta = pm.response.json();",
+                  "pm.collectionVariables.set(\"ventaId\", venta.id);",
+                  "pm.test(\"El código de la factura tiene 15 cifras\", function () { pm.expect(venta.codigo).to.match(/^[0-9]{15}$/); });",
+                  "pm.test(\"Trae los dos artículos\", function () { pm.expect(venta.articulos).to.have.lengthOf(2); });",
+                  "pm.test(\"El total es mayor que cero\", function () { pm.expect(venta.total).to.be.above(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ventas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"articulos\": [\n    { \"tipo\": \"producto\", \"id\": {{productoVentaId}}, \"cantidad\": 1 },\n    { \"tipo\": \"servicio\", \"id\": 1, \"cantidad\": 3 }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Las existencias bajaron",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var id = Number(pm.collectionVariables.get(\"productoVentaId\"));",
+                  "var producto = pm.response.json().find(function (p) { return p.id === id; });",
+                  "pm.test(\"Se descontó una unidad\", function () { pm.expect(producto.cantidad).to.eql(Number(pm.collectionVariables.get(\"existenciasAntes\")) - 1); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionAdministrador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/interno",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "productos",
+                "interno"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Vender más de lo que hay",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Explica cuántas quedan\", function () { pm.expect(pm.response.json().detail).to.include(\"quedan\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ventas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"articulos\": [\n    { \"tipo\": \"producto\", \"id\": {{productoVentaId}}, \"cantidad\": 150 }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Listar mis ventas como operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Todas son del operador\", function () { pm.response.json().forEach(function (venta) { pm.expect(venta.operadorId).to.eql(2); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ventas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar la venta registrada",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Es la misma venta\", function () { pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get(\"ventaId\"))); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionAdministrador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ventas/{{ventaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ventas",
+                "{{ventaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Anular como operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ventas/{{ventaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ventas",
+                "{{ventaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Anular como administrador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionAdministrador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ventas/{{ventaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ventas",
+                "{{ventaId}}"
+              ]
+            },
+            "description": "Devuelve las existencias de los productos y borra la factura con sus detalles."
+          }
+        },
+        {
+          "name": "Las existencias volvieron",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });",
+                  "var id = Number(pm.collectionVariables.get(\"productoVentaId\"));",
+                  "var producto = pm.response.json().find(function (p) { return p.id === id; });",
+                  "pm.test(\"La cantidad es la de antes\", function () { pm.expect(producto.cantidad).to.eql(Number(pm.collectionVariables.get(\"existenciasAntes\"))); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionAdministrador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/interno",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "productos",
+                "interno"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cerrar la sesión del operador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sesion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sesion"
+              ]
+            }
+          }
+        },
+        {
+          "name": "La sesión cerrada ya no sirve",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sesionOperador}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ventas"
               ]
             }
           }

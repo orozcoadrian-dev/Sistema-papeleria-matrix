@@ -24,7 +24,7 @@ public class CorsConfig
 		CorsConfiguration configuracion = new CorsConfiguration();
 		configuracion.setAllowedOrigins(origenes);
 		configuracion.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		configuracion.setAllowedHeaders(List.of("Content-Type", "X-API-Key"));
+		configuracion.setAllowedHeaders(List.of("Content-Type", "X-API-Key", "Authorization"));
 		configuracion.setMaxAge(3600L);
 
 		UrlBasedCorsConfigurationSource fuente = new UrlBasedCorsConfigurationSource();

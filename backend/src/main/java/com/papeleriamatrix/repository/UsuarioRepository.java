@@ -1,10 +1,13 @@
 package com.papeleriamatrix.repository;
 
 import com.papeleriamatrix.model.Usuario;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>
 {
+	Optional<Usuario> findByNombreUsuario(String nombreUsuario);
+
 	boolean existsByNumeroDocumento(String numeroDocumento);
 	boolean existsByNumeroDocumentoAndIdUsuarioNot(String numeroDocumento, int idUsuario);
 
