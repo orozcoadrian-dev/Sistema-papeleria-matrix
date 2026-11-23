@@ -1,0 +1,501 @@
+/* Pantalla de ventas. Usa los colores, botones, ventanas y tarjetas de estilo-panel.css.
+   Pensada para el mostrador: botones grandes, el total siempre a la vista y nada que leer de más. */
+
+/* ---------- Pestañas ---------- */
+.pestanas {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.35rem;
+    border-radius: var(--radius-md);
+    background: var(--p-morado-claro);
+    width: fit-content;
+    max-width: 100%;
+}
+
+.pestana {
+    min-height: 2.9rem;
+    padding: 0.55rem 1.2rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--p-texto);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pestana[aria-selected="true"] {
+    background: var(--p-tarjeta);
+    color: var(--p-morado);
+    box-shadow: var(--p-sombra);
+}
+
+/* ---------- Caja registradora ---------- */
+.caja-registradora {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.caja-registradora[hidden] {
+    display: none;
+}
+
+.operador-venta {
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--p-dorado-claro);
+}
+
+.operador-venta select {
+    margin-top: 0.3rem;
+}
+
+/* ---------- Filtros ---------- */
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filtro {
+    min-height: 2.5rem;
+    padding: 0.4rem 1rem;
+    border: 2px solid var(--p-borde);
+    border-radius: 999px;
+    background: var(--p-tarjeta);
+    color: var(--p-texto);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.filtro:hover {
+    border-color: var(--p-morado);
+}
+
+.filtro[aria-pressed="true"] {
+    border-color: var(--p-morado);
+    background: var(--p-morado);
+    color: #FFFFFF;
+}
+
+/* ---------- Artículos del catálogo ---------- */
+.articulos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 0.8rem;
+}
+
+.articulo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    min-height: 8.5rem;
+    padding: 0.9rem;
+    border: 2px solid var(--p-borde);
+    border-radius: var(--radius-md);
+    background: var(--p-tarjeta);
+    color: var(--p-texto);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--transition-base), transform var(--transition-base);
+}
+
+.articulo:hover:not(:disabled) {
+    border-color: var(--p-morado);
+    transform: translateY(-2px);
+}
+
+.articulo:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.articulo--elegido {
+    border-color: var(--p-morado);
+    background: var(--p-morado-claro);
+}
+
+.articulo--agotado {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.articulo__icono {
+    font-size: 1.4rem;
+}
+
+.articulo__nombre {
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.articulo__precio {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--p-morado);
+}
+
+.articulo__detalle {
+    font-size: 0.85rem;
+    color: var(--p-texto-suave);
+}
+
+.articulo__existencias {
+    margin-top: auto;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--p-verde);
+}
+
+.articulo__existencias--pocas {
+    color: var(--p-rojo);
+}
+
+.articulo__insignia {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    min-width: 2rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--p-morado);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.articulo--cargando {
+    min-height: 8.5rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(90deg, var(--p-borde), var(--p-morado-claro), var(--p-borde));
+    background-size: 200% 100%;
+    animation: brillo 1.4s ease-in-out infinite;
+}
+
+@keyframes brillo {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+}
+
+/* ---------- Carrito ---------- */
+.carrito {
+    position: sticky;
+    top: 1rem;
+    gap: 0.8rem;
+}
+
+.carrito h2 {
+    font-size: 1.3rem;
+}
+
+.carrito__vacio {
+    padding: 1rem;
+    border: 2px dashed var(--p-borde);
+    border-radius: var(--radius-sm);
+    color: var(--p-texto-suave);
+    text-align: center;
+}
+
+.carrito__lineas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 45vh;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.linea {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "textos subtotal"
+        "cantidad cantidad";
+    gap: 0.35rem 0.6rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--p-borde);
+}
+
+.linea__textos {
+    grid-area: textos;
+    display: flex;
+    flex-direction: column;
+}
+
+.linea__nombre {
+    font-weight: 600;
+}
+
+.linea__precio {
+    font-size: 0.85rem;
+    color: var(--p-texto-suave);
+}
+
+.linea__subtotal {
+    grid-area: subtotal;
+    font-weight: 700;
+}
+
+.linea__cantidad {
+    grid-area: cantidad;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.linea__boton {
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 2px solid var(--p-borde);
+    border-radius: 50%;
+    background: var(--p-tarjeta);
+    color: var(--p-texto);
+    font: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.linea__boton:hover:not(:disabled) {
+    border-color: var(--p-morado);
+}
+
+.linea__boton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.linea__numero {
+    min-width: 2rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.carrito__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 0.4rem;
+    font-size: 1.1rem;
+}
+
+.carrito__total strong {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--p-morado);
+}
+
+.boton--ancho {
+    width: 100%;
+}
+
+/* ---------- Cobrar y recibo ---------- */
+.pagos-rapidos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.cambio {
+    min-height: 1.6rem;
+    margin-top: 0.8rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.cambio--bien {
+    color: var(--p-verde);
+}
+
+.cambio--mal {
+    color: var(--p-rojo);
+}
+
+.recibo {
+    margin: 0.5rem 0 1rem;
+    text-align: left;
+}
+
+.recibo__lineas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    list-style: none;
+}
+
+.recibo__lineas li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px dashed var(--p-borde);
+}
+
+.recibo__total {
+    margin-top: 0.7rem;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+.recibo .cambio {
+    text-align: right;
+}
+
+.recibo__codigo {
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--p-texto-suave);
+    text-align: center;
+}
+
+/* ---------- Lo vendido ---------- */
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.8rem;
+}
+
+.cifra {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-md);
+    background: var(--p-morado-claro);
+}
+
+.cifra__titulo {
+    font-size: 0.9rem;
+    color: var(--p-texto-suave);
+}
+
+.cifra__valor {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--p-texto);
+}
+
+.ventas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.ventas__dia {
+    margin-top: 0.6rem;
+    font-size: 1.05rem;
+    color: var(--p-texto-suave);
+}
+
+.ventas__dia::first-letter {
+    text-transform: uppercase;
+}
+
+.venta__cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.venta__codigo {
+    font-size: 0.85rem;
+    color: var(--p-texto-suave);
+}
+
+.venta__lineas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-left: 1.1rem;
+}
+
+/* ---------- Barra de cobro (solo en pantallas angostas) ---------- */
+.barra-cobro {
+    display: none;
+}
+
+/* ---------- Pantallas angostas ---------- */
+@media (max-width: 860px) {
+    .caja-registradora {
+        grid-template-columns: 1fr;
+    }
+
+    /* En el celular el carrito queda abajo y el total con el botón de cobrar siempre a la vista. */
+    .carrito {
+        position: static;
+        scroll-margin-top: 1rem;
+    }
+
+    .barra-cobro:not([hidden]) {
+        position: fixed;
+        inset: auto 0 0 0;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+        background: var(--p-tarjeta);
+        box-shadow: 0 -8px 24px rgba(36, 20, 51, 0.14);
+    }
+
+    .barra-cobro__resumen {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border: 0;
+        background: transparent;
+        color: var(--p-texto);
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .barra-cobro__resumen span {
+        font-size: 0.85rem;
+        color: var(--p-texto-suave);
+        text-decoration: underline;
+    }
+
+    .barra-cobro__resumen strong {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        color: var(--p-morado);
+    }
+
+    .contenido {
+        padding-bottom: 6rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .articulos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pestana {
+        padding: 0.55rem 0.8rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .articulo,
+    .articulo--cargando {
+        transition: none;
+        animation: none;
+    }
+}

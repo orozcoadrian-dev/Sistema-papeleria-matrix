@@ -22,43 +22,113 @@
             <p class="login__hint">Acceso para la administradora y los operadores del cibercafé.</p>
         </div>
 
+        <p class="login__aviso" id="login-aviso" hidden></p>
+
         <form class="login__form" id="form-login" novalidate>
-            <label class="login__label" for="correo">Correo electrónico</label>
-            <input class="login__input" type="email" id="correo" name="correo" autocomplete="username" required>
+            <label class="login__label" for="usuario">Usuario</label>
+            <input class="login__input" type="text" id="usuario" name="usuario" autocomplete="username"
+                autocapitalize="none" spellcheck="false" maxlength="20" required>
 
             <label class="login__label" for="clave">Contraseña</label>
-            <input class="login__input" type="password" id="clave" name="clave" autocomplete="current-password" required>
+            <div class="login__clave">
+                <input class="login__input" type="password" id="clave" name="clave" autocomplete="current-password" maxlength="255" required>
+                <button type="button" class="login__ver" id="ver-clave" aria-controls="clave" aria-pressed="false">Ver</button>
+            </div>
 
-            <button type="submit" class="btn btn--primary btn--full">Entrar</button>
+            <button type="submit" class="btn btn--primary btn--full" id="boton-entrar">Entrar</button>
             <p class="login__message" id="login-mensaje" role="status" aria-live="polite"></p>
         </form>
 
         <a href="../index.html" class="login__back">Volver al inicio</a>
     </main>
 
+    <script src="../js/config.js"></script>
+    <script src="../js/sesion.js"></script>
     <script>
         'use strict';
 
-        /* El inicio de sesión se conectará con el backend cuando exista (RF-38). Mientras tanto,
-           el formulario valida los datos y dice con claridad que todavía no da acceso. */
         const formulario = document.getElementById('form-login');
         const mensaje = document.getElementById('login-mensaje');
+        const boton = document.getElementById('boton-entrar');
+        const parametros = new URLSearchParams(location.search);
 
-        formulario.addEventListener('submit', (evento) => {
+        // Solo se vuelve a una de las pantallas internas, nunca a otra dirección.
+        const PANTALLAS = ['panel.html', 'ventas.html'];
+
+        const AVISOS = {
+            inactividad: 'Tu sesión se cerró porque pasaron 15 minutos sin usar el sistema. Vuelve a entrar para seguir.',
+            salio: 'Saliste del sistema. ¡Hasta pronto!',
+            entrar: 'Entra con tu usuario para usar el sistema.'
+        };
+        const motivo = parametros.get('motivo');
+        if (AVISOS[motivo]) {
+            const aviso = document.getElementById('login-aviso');
+            aviso.textContent = AVISOS[motivo];
+            aviso.hidden = false;
+        }
+
+        // Si ya había entrado en esta pestaña, va directo a su pantalla.
+        const abierta = Sesion.leer();
+        if (abierta && !motivo) location.replace(Sesion.pantallaDe(abierta.rol));
+
+        document.getElementById('ver-clave').addEventListener('click', (evento) => {
+            const mostrar = formulario.clave.type === 'password';
+            formulario.clave.type = mostrar ? 'text' : 'password';
+            evento.currentTarget.textContent = mostrar ? 'Ocultar' : 'Ver';
+            evento.currentTarget.setAttribute('aria-pressed', String(mostrar));
+        });
+
+        function destino(rol) {
+            // Después de salir puede entrar otra persona: cada una va a su propia pantalla.
+            const pedido = motivo === 'salio' ? null : parametros.get('volver');
+            const propia = Sesion.pantallaDe(rol);
+            // El operador no puede ir al panel: si lo pidió, va a ventas.
+            if (PANTALLAS.includes(pedido) && (rol === 'ADMINISTRADOR' || pedido === propia)) return pedido;
+            return propia;
+        }
+
+        formulario.addEventListener('submit', async (evento) => {
             evento.preventDefault();
-            const correo = formulario.correo.value.trim();
+            const usuario = formulario.usuario.value.trim();
             const clave = formulario.clave.value;
 
-            if (!correo || !formulario.correo.validity.valid) {
-                mensaje.textContent = 'Escribe un correo electrónico válido.';
-                formulario.correo.focus();
-            } else if (!clave) {
+            if (!usuario) {
+                mensaje.textContent = 'Escribe tu usuario.';
+                formulario.usuario.focus();
+                return;
+            }
+            if (!clave) {
                 mensaje.textContent = 'Escribe tu contraseña.';
                 formulario.clave.focus();
-            } else {
-                mensaje.textContent = 'El acceso al sistema interno todavía no está disponible.';
+                return;
+            }
+
+            boton.disabled = true;
+            boton.textContent = 'Entrando…';
+            mensaje.textContent = '';
+            const despertando = setTimeout(() => {
+                mensaje.textContent = 'Estamos despertando el sistema. La primera vez del día puede tardar hasta un minuto ☕';
+            }, 4000);
+
+            try {
+                const sesion = await Sesion.llamar('/api/sesion', { metodo: 'POST', cuerpo: { nombreUsuario: usuario, contrasenia: clave } });
+                Sesion.guardar(sesion);
+                mensaje.textContent = `¡Hola, ${sesion.nombre}!`;
+                location.replace(destino(sesion.rol));
+            } catch (error) {
+                if (error.estado === 401) mensaje.textContent = 'El usuario o la contraseña no son correctos. Revisa las mayúsculas.';
+                else if (error.estado === 429) mensaje.textContent = 'Fallaste la contraseña varias veces. Espera 5 minutos y vuelve a intentarlo.';
+                else if (error.estado === 0) mensaje.textContent = 'No pudimos conectar con el sistema. Revisa el internet e intenta otra vez.';
+                else mensaje.textContent = 'Algo salió mal. Intenta otra vez en un momento.';
+                formulario.clave.select();
+            } finally {
+                clearTimeout(despertando);
+                boton.disabled = false;
+                boton.textContent = 'Entrar';
             }
         });
+
+        formulario.usuario.focus();
     </script>
 </body>
 
