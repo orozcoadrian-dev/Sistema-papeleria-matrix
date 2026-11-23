@@ -54,10 +54,10 @@ public class Usuario
 	private RolUsuario rol;
 
 	@Column(name = "Email", unique = true, length = 60)
-	private String email = "";
+	private String email;
 
 	@Column(name = "Telefono", unique = true, length = 15)
-	private String telefono = "";
+	private String telefono;
 
 	@Column(name = "Ultima_sesion", nullable = false)
 	private LocalDateTime ultimaSesion;
@@ -292,9 +292,11 @@ public class Usuario
 
 	public void setEmail(String email) throws IllegalArgumentException
 	{
-		if (email == null || email.isBlank() || email.isEmpty())
+		if (email == null || email.isBlank())
 		{
-			System.out.println("El email no puede estar vacío.");
+			// Es opcional. Se guarda vacío (NULL) y no como texto vacío, porque la columna es única:
+			// dos usuarios sin email chocarían.
+			this.email = null;
 		} else if (email.length() < 20)
 		{
 			throw new IllegalArgumentException("La longitud del email es demasiado corta.");
@@ -314,9 +316,10 @@ public class Usuario
 
 	public void setTelefono(String telefono) throws IllegalArgumentException
 	{
-		if (telefono == null || telefono.isBlank() || telefono.isEmpty())
+		if (telefono == null || telefono.isBlank())
 		{
-			System.out.println("El teléfono no puede estar vacío.");
+			// Es opcional y la columna es única: igual que el email, se guarda NULL.
+			this.telefono = null;
 		} else if (telefono.length() < 8)
 		{
 			throw new IllegalArgumentException("La longitud del teléfono es demasiado corta.");
