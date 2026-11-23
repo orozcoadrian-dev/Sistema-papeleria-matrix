@@ -67,11 +67,6 @@ public class Historial_ingreso_del_negocio
 		this.idHistorialIngreso = idHistorialIngreso;
 	}
 
-	public int getIdHistorialEstadistica()
-	{
-		return getIdHistorialIngreso();
-	}
-
 	public void setIngresoId(int ingresoId) throws IllegalArgumentException
 	{
 		if (ingresoId == 0)
@@ -87,11 +82,6 @@ public class Historial_ingreso_del_negocio
 	public int getIngresoId()
 	{
 		return ingresoId != null ? ingresoId : 0;
-	}
-
-	public int getEstadisticaDelNegocioId()
-	{
-		return getIngresoId();
 	}
 
 	public Ingreso_del_negocio getIngreso()
@@ -122,6 +112,9 @@ public class Historial_ingreso_del_negocio
 		} else if (utilidades.tieneSoloTexto(motivoIngreso))
 		{
 			this.motivoIngreso = motivoIngreso;
+		} else
+		{
+			throw new IllegalArgumentException("El motivo del ingreso solo puede contener letras y espacios.");
 		}
 	}
 

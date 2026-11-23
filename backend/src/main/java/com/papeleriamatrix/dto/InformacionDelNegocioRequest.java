@@ -15,7 +15,7 @@ public record InformacionDelNegocioRequest(
 	Integer valorInformacion,
 
 	@NotBlank(message = "El tipo de información es obligatorio.")
-	@Size(min = 10, max = 15, message = "El tipo de información debe tener entre 10 y 15 caracteres.")
+	@Size(min = 3, max = 15, message = "El tipo de información debe tener entre 3 y 15 caracteres.")
 	String tipoInformacion,
 
 	@NotBlank(message = "La información es obligatoria.")
@@ -23,4 +23,3 @@ public record InformacionDelNegocioRequest(
 	String informacion)
 {
 }
-

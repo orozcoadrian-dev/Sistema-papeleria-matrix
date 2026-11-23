@@ -98,6 +98,9 @@ public class Ingreso_del_negocio
 		} else if (utilidades.tieneSoloNumeros(codigoIngreso))
 		{
 			this.codigoIngreso = codigoIngreso;
+		} else
+		{
+			throw new IllegalArgumentException("El código de ingreso solo puede contener números.");
 		}
 	}
 
@@ -204,6 +207,9 @@ public class Ingreso_del_negocio
 		} else if (utilidades.tieneSoloTexto(tipoIngreso))
 		{
 			this.tipoIngreso = tipoIngreso;
+		} else
+		{
+			throw new IllegalArgumentException("El tipo de ingreso solo puede contener letras y espacios.");
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.papeleriamatrix.controller;
 
+import com.papeleriamatrix.dto.ClaveDePermisoCambioRequest;
 import com.papeleriamatrix.dto.ClaveDePermisoRequest;
 import com.papeleriamatrix.model.Clave_de_permiso;
 import com.papeleriamatrix.service.ClaveDePermisoService;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,14 +34,14 @@ public class ClaveDePermisoController
 	}
 
 	@GetMapping
-	@Operation(summary = "Listar claves de permiso")
+	@Operation(summary = "Listar claves de permiso", security = @SecurityRequirement(name = "claveApi"))
 	public List<Clave_de_permiso> listar()
 	{
 		return claveDePermisoService.listar();
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Consultar una clave de permiso por su id")
+	@Operation(summary = "Consultar una clave de permiso por su id", security = @SecurityRequirement(name = "claveApi"))
 	public Clave_de_permiso obtener(@PathVariable Integer id)
 	{
 		return claveDePermisoService.obtener(id);
@@ -59,6 +61,14 @@ public class ClaveDePermisoController
 	public Clave_de_permiso actualizar(@PathVariable Integer id, @Valid @RequestBody ClaveDePermisoRequest peticion)
 	{
 		return claveDePermisoService.actualizar(id, peticion);
+	}
+
+	@PatchMapping("/{id}/cambiar")
+	@ResponseStatus(HttpStatus.OK)
+	@Operation(summary = "Cambiar solo el valor de una clave de permiso", security = @SecurityRequirement(name = "claveApi"))
+	public Clave_de_permiso cambiar(@PathVariable Integer id, @Valid @RequestBody ClaveDePermisoCambioRequest peticion)
+	{
+		return claveDePermisoService.cambiar(id, peticion);
 	}
 
 	@DeleteMapping("/{id}")

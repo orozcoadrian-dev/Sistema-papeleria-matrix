@@ -17,7 +17,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "reporte_del_negocio")
-public class Reporte_del_negocio 
+public class ReporteDelNegocio
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,32 +57,11 @@ public class Reporte_del_negocio
 	@Transient
 	private Utils utilidades = new Utils();
 
-	public Reporte_del_negocio()
+	public ReporteDelNegocio()
 	{
 	}
 
-	public Reporte_del_negocio(int idReporte, String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, LocalDate fechaGeneracion)
-	{
-		this.idReporte = idReporte;
-		setCodigoReporte(codigoReporte);
-		setHistorialEstadisticaDelNegocioId(historialEstadisticaDelNegocioId);
-		setHistorialIngresoDelNegocioId(historialIngresoDelNegocioId);
-		setUsuarioId(usuarioId);
-		setRutaArchivo(rutaArchivo);
-		setFechaGeneracion(fechaGeneracion);
-	}
-
-	public Reporte_del_negocio(String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, LocalDate fechaGeneracion)
-	{
-		setCodigoReporte(codigoReporte);
-		setHistorialEstadisticaDelNegocioId(historialEstadisticaDelNegocioId);
-		setHistorialIngresoDelNegocioId(historialIngresoDelNegocioId);
-		setUsuarioId(usuarioId);
-		setRutaArchivo(rutaArchivo);
-		setFechaGeneracion(fechaGeneracion);
-	}
-
-	public Reporte_del_negocio(int idReporte, String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, Date fechaGeneracion)
+	public ReporteDelNegocio(int idReporte, String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, LocalDate fechaGeneracion)
 	{
 		this.idReporte = idReporte;
 		setCodigoReporte(codigoReporte);
@@ -93,7 +72,28 @@ public class Reporte_del_negocio
 		setFechaGeneracion(fechaGeneracion);
 	}
 
-	public Reporte_del_negocio(String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, Date fechaGeneracion)
+	public ReporteDelNegocio(String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, LocalDate fechaGeneracion)
+	{
+		setCodigoReporte(codigoReporte);
+		setHistorialEstadisticaDelNegocioId(historialEstadisticaDelNegocioId);
+		setHistorialIngresoDelNegocioId(historialIngresoDelNegocioId);
+		setUsuarioId(usuarioId);
+		setRutaArchivo(rutaArchivo);
+		setFechaGeneracion(fechaGeneracion);
+	}
+
+	public ReporteDelNegocio(int idReporte, String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, Date fechaGeneracion)
+	{
+		this.idReporte = idReporte;
+		setCodigoReporte(codigoReporte);
+		setHistorialEstadisticaDelNegocioId(historialEstadisticaDelNegocioId);
+		setHistorialIngresoDelNegocioId(historialIngresoDelNegocioId);
+		setUsuarioId(usuarioId);
+		setRutaArchivo(rutaArchivo);
+		setFechaGeneracion(fechaGeneracion);
+	}
+
+	public ReporteDelNegocio(String codigoReporte, int historialEstadisticaDelNegocioId, int historialIngresoDelNegocioId, int usuarioId, String rutaArchivo, Date fechaGeneracion)
 	{
 		setCodigoReporte(codigoReporte);
 		setHistorialEstadisticaDelNegocioId(historialEstadisticaDelNegocioId);
@@ -124,6 +124,9 @@ public class Reporte_del_negocio
 		} else if (utilidades.tieneSoloNumeros(codigoReporte))
 		{
 			this.codigoReporte = codigoReporte;
+		} else
+		{
+			throw new IllegalArgumentException("El código del reporte solo puede contener números.");
 		}
 	}
 

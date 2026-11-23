@@ -104,6 +104,9 @@ public class Estadistica_del_negocio
 		} else if (utilidades.tieneSoloNumeros(codigoEstadistica))
 		{
 			this.codigoEstadistica = codigoEstadistica;
+		} else
+		{
+			throw new IllegalArgumentException("El código de la estadística solo puede contener números.");
 		}
 	}
 

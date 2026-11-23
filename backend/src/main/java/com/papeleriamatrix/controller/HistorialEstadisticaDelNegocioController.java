@@ -1,7 +1,7 @@
 package com.papeleriamatrix.controller;
 
 import com.papeleriamatrix.dto.HistorialEstadisticaDelNegocioRequest;
-import com.papeleriamatrix.model.Historial_estadistica_del_negocio;
+import com.papeleriamatrix.dto.HistorialEstadisticaDelNegocioResponse;
 import com.papeleriamatrix.service.HistorialEstadisticaDelNegocioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/historiales-estadisticas-negocio")
 @Tag(name = "Historiales de estadísticas del negocio")
+@SecurityRequirement(name = "claveApi")
 public class HistorialEstadisticaDelNegocioController
 {
 	private final HistorialEstadisticaDelNegocioService historialEstadisticaDelNegocioService;
@@ -33,37 +34,37 @@ public class HistorialEstadisticaDelNegocioController
 
 	@GetMapping
 	@Operation(summary = "Listar historiales de estadísticas del negocio")
-	public List<Historial_estadistica_del_negocio> listar()
+	public List<HistorialEstadisticaDelNegocioResponse> listar()
 	{
-		return historialEstadisticaDelNegocioService.listar();
+		return historialEstadisticaDelNegocioService.listar().stream().map(HistorialEstadisticaDelNegocioResponse::desde).toList();
 	}
 
 	@GetMapping("/{id}")
 	@Operation(summary = "Consultar un historial de estadísticas por su id")
-	public Historial_estadistica_del_negocio obtener(@PathVariable Integer id)
+	public HistorialEstadisticaDelNegocioResponse obtener(@PathVariable Integer id)
 	{
-		return historialEstadisticaDelNegocioService.obtener(id);
+		return HistorialEstadisticaDelNegocioResponse.desde(historialEstadisticaDelNegocioService.obtener(id));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Crear un historial de estadísticas", security = @SecurityRequirement(name = "claveApi"))
-	public Historial_estadistica_del_negocio crear(@Valid @RequestBody HistorialEstadisticaDelNegocioRequest peticion)
+	@Operation(summary = "Crear un historial de estadísticas")
+	public HistorialEstadisticaDelNegocioResponse crear(@Valid @RequestBody HistorialEstadisticaDelNegocioRequest peticion)
 	{
-		return historialEstadisticaDelNegocioService.crear(peticion);
+		return HistorialEstadisticaDelNegocioResponse.desde(historialEstadisticaDelNegocioService.crear(peticion));
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	@Operation(summary = "Actualizar un historial de estadísticas", security = @SecurityRequirement(name = "claveApi"))
-	public Historial_estadistica_del_negocio actualizar(@PathVariable Integer id, @Valid @RequestBody HistorialEstadisticaDelNegocioRequest peticion)
+	@Operation(summary = "Actualizar un historial de estadísticas")
+	public HistorialEstadisticaDelNegocioResponse actualizar(@PathVariable Integer id, @Valid @RequestBody HistorialEstadisticaDelNegocioRequest peticion)
 	{
-		return historialEstadisticaDelNegocioService.actualizar(id, peticion);
+		return HistorialEstadisticaDelNegocioResponse.desde(historialEstadisticaDelNegocioService.actualizar(id, peticion));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@Operation(summary = "Eliminar un historial de estadísticas", security = @SecurityRequirement(name = "claveApi"))
+	@Operation(summary = "Eliminar un historial de estadísticas")
 	public void eliminar(@PathVariable Integer id)
 	{
 		historialEstadisticaDelNegocioService.eliminar(id);

@@ -2,19 +2,21 @@ package com.papeleriamatrix.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public record ReporteDelNegocioRequest(
 	@NotBlank(message = "El código del reporte es obligatorio.")
-	@Size(min = 20, max = 20, message = "El código del reporte debe tener exactamente 20 caracteres.")
+	@Pattern(regexp = "\\d{20}", message = "El código del reporte debe tener exactamente 20 dígitos.")
 	String codigoReporte,
 
-	@Positive(message = "El ID del historial de estadística debe ser mayor que cero.")
+	@PositiveOrZero(message = "El ID del historial de estadísticas no puede ser negativo.")
 	Integer historialEstadisticaDelNegocioId,
 
-	@Positive(message = "El ID del historial de ingreso debe ser mayor que cero.")
+	@PositiveOrZero(message = "El ID del historial de ingresos no puede ser negativo.")
 	Integer historialIngresoDelNegocioId,
 
 	@Positive(message = "El ID del usuario debe ser mayor que cero.")
@@ -28,4 +30,3 @@ public record ReporteDelNegocioRequest(
 	LocalDate fechaGeneracion)
 {
 }
-

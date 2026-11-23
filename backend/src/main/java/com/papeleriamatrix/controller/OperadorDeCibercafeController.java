@@ -1,7 +1,7 @@
 package com.papeleriamatrix.controller;
 
 import com.papeleriamatrix.dto.OperadorDeCibercafeRequest;
-import com.papeleriamatrix.model.Operador_de_cibercafe;
+import com.papeleriamatrix.dto.OperadorResponse;
 import com.papeleriamatrix.service.OperadorDeCibercafeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,40 +31,34 @@ public class OperadorDeCibercafeController
 	}
 
 	@GetMapping
-	@Operation(summary = "Listar operadores de cibercafé")
-	public List<Operador_de_cibercafe> listar()
+	@Operation(summary = "Listar operadores de cibercafé", security = @SecurityRequirement(name = "claveApi"))
+	public List<OperadorResponse> listar()
 	{
-		return operadorDeCibercafeService.listar();
+		return operadorDeCibercafeService.listar().stream()
+			.map(OperadorResponse::desde)
+			.toList();
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Consultar un operador de cibercafé por su id")
-	public Operador_de_cibercafe obtener(@PathVariable Integer id)
+	@Operation(summary = "Consultar un operador de cibercafé por su id", security = @SecurityRequirement(name = "claveApi"))
+	public OperadorResponse obtener(@PathVariable Integer id)
 	{
-		return operadorDeCibercafeService.obtener(id);
+		return OperadorResponse.desde(operadorDeCibercafeService.obtener(id));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Crear un operador de cibercafé", security = @SecurityRequirement(name = "claveApi"))
-	public Operador_de_cibercafe crear(@Valid @RequestBody OperadorDeCibercafeRequest peticion)
+	@Operation(summary = "Contratar un operador de cibercafé", security = @SecurityRequirement(name = "claveApi"))
+	public OperadorResponse crear(@Valid @RequestBody OperadorDeCibercafeRequest peticion)
 	{
-		return operadorDeCibercafeService.crear(peticion);
+		return OperadorResponse.desde(operadorDeCibercafeService.crear(peticion));
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(summary = "Actualizar un operador de cibercafé", security = @SecurityRequirement(name = "claveApi"))
-	public Operador_de_cibercafe actualizar(@PathVariable Integer id, @Valid @RequestBody OperadorDeCibercafeRequest peticion)
+	public OperadorResponse actualizar(@PathVariable Integer id, @Valid @RequestBody OperadorDeCibercafeRequest peticion)
 	{
-		return operadorDeCibercafeService.actualizar(id, peticion);
-	}
-
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@Operation(summary = "Eliminar un operador de cibercafé", security = @SecurityRequirement(name = "claveApi"))
-	public void eliminar(@PathVariable Integer id)
-	{
-		operadorDeCibercafeService.eliminar(id);
+		return OperadorResponse.desde(operadorDeCibercafeService.actualizar(id, peticion));
 	}
 }

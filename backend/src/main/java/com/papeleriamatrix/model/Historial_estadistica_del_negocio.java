@@ -112,6 +112,9 @@ public class Historial_estadistica_del_negocio
 		} else if (utilidades.tieneSoloTexto(motivoEstadistica))
 		{
 			this.motivoEstadistica = motivoEstadistica;
+		} else
+		{
+			throw new IllegalArgumentException("El motivo de la estadística solo puede contener letras y espacios.");
 		}
 	}
 

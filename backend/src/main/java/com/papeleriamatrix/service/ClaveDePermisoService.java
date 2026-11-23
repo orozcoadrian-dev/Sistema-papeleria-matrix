@@ -1,6 +1,7 @@
 package com.papeleriamatrix.service;
 
 import com.papeleriamatrix.common.Utils;
+import com.papeleriamatrix.dto.ClaveDePermisoCambioRequest;
 import com.papeleriamatrix.exception.RecursoDuplicadoException;
 import com.papeleriamatrix.exception.RecursoNoEncontradoException;
 import com.papeleriamatrix.model.Clave_de_permiso;
@@ -64,6 +65,16 @@ public class ClaveDePermisoService
 		{
 			entidad.setClave(passwordEncoder.encode(entidad.getClave()));
 		}
+		entidad.setFechaActualizacion(LocalDate.now());
+		return repositorio.save(entidad);
+	}
+
+	@Transactional
+	public Clave_de_permiso cambiar(Integer id, ClaveDePermisoCambioRequest peticion)
+	{
+		Clave_de_permiso entidad = repositorio.findById(id)
+			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una clave de permiso con el id " + id + "."));
+		entidad.setClave(codificarClave(peticion.nuevaClave()));
 		entidad.setFechaActualizacion(LocalDate.now());
 		return repositorio.save(entidad);
 	}

@@ -1,7 +1,7 @@
 package com.papeleriamatrix.controller;
 
 import com.papeleriamatrix.dto.HistorialIngresoDelNegocioRequest;
-import com.papeleriamatrix.model.Historial_ingreso_del_negocio;
+import com.papeleriamatrix.dto.HistorialIngresoDelNegocioResponse;
 import com.papeleriamatrix.service.HistorialIngresoDelNegocioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/historiales-ingresos-negocio")
 @Tag(name = "Historiales de ingresos del negocio")
+@SecurityRequirement(name = "claveApi")
 public class HistorialIngresoDelNegocioController
 {
 	private final HistorialIngresoDelNegocioService historialIngresoDelNegocioService;
@@ -33,37 +34,37 @@ public class HistorialIngresoDelNegocioController
 
 	@GetMapping
 	@Operation(summary = "Listar historiales de ingresos del negocio")
-	public List<Historial_ingreso_del_negocio> listar()
+	public List<HistorialIngresoDelNegocioResponse> listar()
 	{
-		return historialIngresoDelNegocioService.listar();
+		return historialIngresoDelNegocioService.listar().stream().map(HistorialIngresoDelNegocioResponse::desde).toList();
 	}
 
 	@GetMapping("/{id}")
 	@Operation(summary = "Consultar un historial de ingresos por su id")
-	public Historial_ingreso_del_negocio obtener(@PathVariable Integer id)
+	public HistorialIngresoDelNegocioResponse obtener(@PathVariable Integer id)
 	{
-		return historialIngresoDelNegocioService.obtener(id);
+		return HistorialIngresoDelNegocioResponse.desde(historialIngresoDelNegocioService.obtener(id));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Crear un historial de ingresos", security = @SecurityRequirement(name = "claveApi"))
-	public Historial_ingreso_del_negocio crear(@Valid @RequestBody HistorialIngresoDelNegocioRequest peticion)
+	@Operation(summary = "Crear un historial de ingresos")
+	public HistorialIngresoDelNegocioResponse crear(@Valid @RequestBody HistorialIngresoDelNegocioRequest peticion)
 	{
-		return historialIngresoDelNegocioService.crear(peticion);
+		return HistorialIngresoDelNegocioResponse.desde(historialIngresoDelNegocioService.crear(peticion));
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	@Operation(summary = "Actualizar un historial de ingresos", security = @SecurityRequirement(name = "claveApi"))
-	public Historial_ingreso_del_negocio actualizar(@PathVariable Integer id, @Valid @RequestBody HistorialIngresoDelNegocioRequest peticion)
+	@Operation(summary = "Actualizar un historial de ingresos")
+	public HistorialIngresoDelNegocioResponse actualizar(@PathVariable Integer id, @Valid @RequestBody HistorialIngresoDelNegocioRequest peticion)
 	{
-		return historialIngresoDelNegocioService.actualizar(id, peticion);
+		return HistorialIngresoDelNegocioResponse.desde(historialIngresoDelNegocioService.actualizar(id, peticion));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@Operation(summary = "Eliminar un historial de ingresos", security = @SecurityRequirement(name = "claveApi"))
+	@Operation(summary = "Eliminar un historial de ingresos")
 	public void eliminar(@PathVariable Integer id)
 	{
 		historialIngresoDelNegocioService.eliminar(id);
