@@ -4,6 +4,7 @@ import com.papeleriamatrix.common.Utils;
 import com.papeleriamatrix.exception.RecursoNoEncontradoException;
 import com.papeleriamatrix.model.Usuario;
 import com.papeleriamatrix.repository.UsuarioRepository;
+import com.papeleriamatrix.security.AlmacenDeSesiones;
 import com.papeleriamatrix.dto.UsuarioRequest;
 import com.papeleriamatrix.model.RolUsuario;
 import java.time.LocalDateTime;
@@ -17,11 +18,13 @@ public class UsuarioService
 {
 	private final UsuarioRepository repositorio;
 	private final PasswordEncoder passwordEncoder;
+	private final AlmacenDeSesiones sesiones;
 
-	public UsuarioService(UsuarioRepository repositorio, PasswordEncoder passwordEncoder)
+	public UsuarioService(UsuarioRepository repositorio, PasswordEncoder passwordEncoder, AlmacenDeSesiones sesiones)
 	{
 		this.repositorio = repositorio;
 		this.passwordEncoder = passwordEncoder;
+		this.sesiones = sesiones;
 	}
 
 	@Transactional(readOnly = true)
@@ -60,6 +63,8 @@ public class UsuarioService
 		if (peticion.contrasenia() != null)
 		{
 			usuario.setContrasenia(codificarContrasenia(peticion.contrasenia()));
+			// Con la contraseña nueva hay que volver a entrar en todos los equipos.
+			sesiones.cerrarDelUsuario(id);
 		} else if (!Utils.esHashBCrypt(usuario.getContrasenia()))
 		{
 			usuario.setContrasenia(passwordEncoder.encode(usuario.getContrasenia()));
@@ -74,6 +79,7 @@ public class UsuarioService
 	public void eliminar(Integer id)
 	{
 		repositorio.delete(repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe un usuario con el id " + id + ".")));
+		sesiones.cerrarDelUsuario(id);
 	}
 
 	private String codificarContrasenia(String contrasenia)
