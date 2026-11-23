@@ -72,6 +72,22 @@ public class ProductoPapeleria
 		this.fechaActualizacion = LocalDate.now();
 	}
 
+	/** Resta lo vendido de las existencias. Quien llama ya revisó que alcanza. */
+	public void descontar(int unidades)
+	{
+		if (unidades <= 0 || unidades > cantidad)
+		{
+			throw new IllegalArgumentException("No hay suficientes existencias de " + nombre + ".");
+		}
+		this.cantidad = cantidad - unidades;
+	}
+
+	/** Devuelve a las existencias lo de una venta anulada. */
+	public void reponer(int unidades)
+	{
+		this.cantidad = cantidad + unidades;
+	}
+
 	public Integer getId()
 	{
 		return id;

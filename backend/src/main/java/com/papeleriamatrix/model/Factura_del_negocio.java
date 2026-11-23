@@ -1,5 +1,6 @@
 package com.papeleriamatrix.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.papeleriamatrix.common.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,6 +34,7 @@ public class Factura_del_negocio
 	@Column(name = "Usuario_id", nullable = false)
 	private Integer usuarioId;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Usuario_id", insertable = false, updatable = false)
 	private Operador_de_cibercafe operador;
@@ -163,6 +165,7 @@ public class Factura_del_negocio
 		return usuarioId != null ? usuarioId : 0;
 	}
 
+	@JsonIgnore
 	public Operador_de_cibercafe getOperador()
 	{
 		return operador;
