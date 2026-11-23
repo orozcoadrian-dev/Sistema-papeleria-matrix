@@ -1,6 +1,7 @@
 package com.papeleriamatrix.model;
 
 import com.papeleriamatrix.common.Utils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -45,6 +46,7 @@ public class Usuario
 	private String nombreUsuario = "";
 
 	@Column(name = "Contrasenia", nullable = false, length = 255)
+	@JsonIgnore
 	private String contrasenia = "";
 
 	@Convert(converter = RolUsuarioConverter.class)
@@ -265,19 +267,14 @@ public class Usuario
 
 	public void setContrasenia(String contrasenia) throws IllegalArgumentException
 	{
-		if (contrasenia == null || contrasenia.isBlank() || contrasenia.isEmpty())
+		if (!Utils.esHashBCrypt(contrasenia))
 		{
-			System.out.println("La contraseña no puede estar vacía.");
-		} else if (contrasenia.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud de la contraseña es demasiado corta.");
-		} else if (contrasenia.length() > 255)
-		{
-			throw new IllegalArgumentException("La longitud de la contraseña es demasiado larga.");
+			throw new IllegalArgumentException("La contraseña debe almacenarse con BCrypt.");
 		}
 		this.contrasenia = contrasenia;
 	}
 
+	@JsonIgnore
 	public String getContrasenia() 
 	{
 		return contrasenia;

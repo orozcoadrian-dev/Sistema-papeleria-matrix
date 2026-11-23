@@ -1,5 +1,6 @@
 package com.papeleriamatrix.service;
 
+import com.papeleriamatrix.common.Utils;
 import com.papeleriamatrix.exception.RecursoNoEncontradoException;
 import com.papeleriamatrix.model.Usuario;
 import com.papeleriamatrix.repository.UsuarioRepository;
@@ -9,15 +10,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UsuarioService
 {
 	private final UsuarioRepository repositorio;
+	private final PasswordEncoder passwordEncoder;
 
-	public UsuarioService(UsuarioRepository repositorio)
+	public UsuarioService(UsuarioRepository repositorio, PasswordEncoder passwordEncoder)
 	{
 		this.repositorio = repositorio;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Transactional(readOnly = true)
@@ -37,7 +41,7 @@ public class UsuarioService
 	public Usuario crear(UsuarioRequest peticion)
 	{
 		Usuario usuario = new Usuario(peticion.primerNombre(), peticion.segundoNombre(), peticion.primerApellido(), peticion.segundoApellido(),
-			peticion.numeroDocumento(), peticion.tipoDocumento(), peticion.nombreUsuario(), peticion.contrasenia(),
+			peticion.numeroDocumento(), peticion.tipoDocumento(), peticion.nombreUsuario(), codificarContrasenia(peticion.contrasenia()),
 			RolUsuario.fromString(peticion.rol()), peticion.email(), peticion.telefono(), LocalDateTime.now());
 		return repositorio.save(usuario);
 	}
@@ -53,7 +57,13 @@ public class UsuarioService
 		usuario.setNumeroDocumento(peticion.numeroDocumento());
 		usuario.setTipoDocumento(peticion.tipoDocumento());
 		usuario.setNombreUsuario(peticion.nombreUsuario());
-		usuario.setContrasenia(peticion.contrasenia());
+		if (peticion.contrasenia() != null)
+		{
+			usuario.setContrasenia(codificarContrasenia(peticion.contrasenia()));
+		} else if (!Utils.esHashBCrypt(usuario.getContrasenia()))
+		{
+			usuario.setContrasenia(passwordEncoder.encode(usuario.getContrasenia()));
+		}
 		usuario.setRol(RolUsuario.fromString(peticion.rol()));
 		usuario.setEmail(peticion.email());
 		usuario.setTelefono(peticion.telefono());
@@ -64,5 +74,14 @@ public class UsuarioService
 	public void eliminar(Integer id)
 	{
 		repositorio.delete(repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe un usuario con el id " + id + ".")));
+	}
+
+	private String codificarContrasenia(String contrasenia)
+	{
+		if (contrasenia == null || contrasenia.isBlank() || contrasenia.length() < 10 || contrasenia.length() > 255)
+		{
+			throw new IllegalArgumentException("La contraseña debe tener entre 10 y 255 caracteres.");
+		}
+		return Utils.esHashBCrypt(contrasenia) ? contrasenia : passwordEncoder.encode(contrasenia);
 	}
 }

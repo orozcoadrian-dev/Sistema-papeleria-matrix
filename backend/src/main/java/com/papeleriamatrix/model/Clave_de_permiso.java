@@ -1,5 +1,7 @@
 package com.papeleriamatrix.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.papeleriamatrix.common.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,14 +24,16 @@ public class Clave_de_permiso
 	@Column(name = "Id_clave")
 	private Integer idClave;
 
-	@Column(name = "Usuario_id")
+	@Column(name = "Usuario_id", nullable = false, unique = true)
 	private Integer usuarioId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Usuario_id", insertable = false, updatable = false)
+	@JsonIgnore
 	private Operador_de_cibercafe operadorDeCibercafe;
 
-	@Column(name = "Clave", nullable = false, unique = true, length = 30)
+	@Column(name = "Clave", nullable = false, length = 60)
+	@JsonIgnore
 	private String clave = "";
 
 	@Column(name = "Fecha_creacion", nullable = false)
@@ -103,6 +107,7 @@ public class Clave_de_permiso
 		return usuarioId != null ? usuarioId : 0;
 	}
 
+	@JsonIgnore
 	public Operador_de_cibercafe getOperadorDeCibercafe()
 	{
 		return operadorDeCibercafe;
@@ -119,19 +124,14 @@ public class Clave_de_permiso
 
 	public void setClave(String clave) throws IllegalArgumentException
 	{
-		if (clave == null || clave.isBlank() || clave.isEmpty())
+		if (!Utils.esHashBCrypt(clave))
 		{
-			throw new IllegalArgumentException("La clave no puede ir vacía.");
-		} else if (clave.length() < 10)
-		{
-			throw new IllegalArgumentException("La longitud de la clave es demasiado corta.");
-		} else if (clave.length() > 30)
-		{
-			throw new IllegalArgumentException("La longitud de la clave es demasiado larga.");
-		} 
+			throw new IllegalArgumentException("La clave debe almacenarse con BCrypt.");
+		}
 		this.clave = clave;
 	}
 
+	@JsonIgnore
 	public String getClave()
 	{
 		return clave;

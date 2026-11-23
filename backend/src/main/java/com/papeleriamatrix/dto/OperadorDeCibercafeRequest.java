@@ -35,7 +35,6 @@ public record OperadorDeCibercafeRequest(
 	@Size(min = 8, max = 15, message = "El nombre de usuario debe tener entre 8 y 15 caracteres.")
 	String nombreUsuario,
 
-	@NotBlank(message = "La contraseña es obligatoria.")
 	@Size(min = 10, max = 255, message = "La contraseña debe tener entre 10 y 255 caracteres.")
 	String contrasenia,
 

@@ -1,0 +1,9 @@
+{
+	"java.project.referencedLibraries": [
+		"lib/**/*.jar",
+		"04-desarrollo/Src/Backend/Lib/mysql-connector-j-9.7.0.jar",
+		"04-desarrollo/Src/Backend/Libraries/mysql-connector-j-9.7.0.jar"
+	],
+	"chat.permissions.default": "autopilot",
+	"java.compile.nullAnalysis.mode": "automatic"
+}

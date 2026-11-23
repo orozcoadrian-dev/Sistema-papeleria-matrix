@@ -1,6 +1,11 @@
 package com.papeleriamatrix.common;
 public class Utils extends Object
 {
+	public static boolean esHashBCrypt(String valor)
+	{
+		return valor != null && valor.matches("^\\$2[aby]\\$\\d{2}\\$[./A-Za-z0-9]{53}$");
+	}
+
 	/**
 	 * Método que valida que cualquier String solo tenga números, y no letras.
 	 * @author Orozco Adrián Dev.

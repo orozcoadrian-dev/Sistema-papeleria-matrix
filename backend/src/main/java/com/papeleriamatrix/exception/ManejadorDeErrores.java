@@ -36,6 +36,12 @@ public class ManejadorDeErrores
 		return respuesta(HttpStatus.CONFLICT, "Código repetido", error.getMessage());
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ProblemDetail argumentoInvalido(IllegalArgumentException error)
+	{
+		return respuesta(HttpStatus.BAD_REQUEST, "Datos inválidos", "Revisa los datos enviados.");
+	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ProblemDetail datosInvalidos(MethodArgumentNotValidException error)
 	{
@@ -74,14 +80,14 @@ public class ManejadorDeErrores
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ProblemDetail restriccionDeLaBase(DataIntegrityViolationException error)
 	{
-		registro.warn("Restricción de la base de datos: {}", error.getMostSpecificCause().getMessage());
+		registro.warn("Restricción de la base de datos.");
 		return respuesta(HttpStatus.CONFLICT, "Operación no permitida", "La operación no se puede hacer porque otros datos dependen de este registro.");
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ProblemDetail errorInesperado(Exception error)
 	{
-		registro.error("Error inesperado", error);
+		registro.error("Error inesperado ({})", error.getClass().getSimpleName());
 		return respuesta(HttpStatus.INTERNAL_SERVER_ERROR, "Error del servidor", "Ocurrió un problema. Intenta de nuevo en unos minutos.");
 	}
 
