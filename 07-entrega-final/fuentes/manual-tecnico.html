@@ -154,6 +154,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo</pre>
         <tr><td><code>/api/estadisticas</code></td><td>GET, POST, PUT, DELETE; GET /resumen; POST /calcular</td><td>Estadísticas del negocio por periodo.</td></tr>
         <tr><td><code>/api/historiales-ingresos-negocio</code>, <code>/api/historiales-estadisticas-negocio</code></td><td>GET, POST, PUT, DELETE</td><td>Historial de cada cálculo guardado.</td></tr>
         <tr><td><code>/api/reportes</code></td><td>GET, POST</td><td>Reportes del negocio.</td></tr>
+        <tr><td><code>/api/imagenes</code></td><td>GET; GET, PUT, DELETE /{tipo}/{id}</td><td>Fotos de <code>productos</code>, <code>ropa</code> y <code>servicios</code>. Ver es público; subir y quitar, de la administradora.</td></tr>
     </table>
     <h3>Ejemplo: registrar una venta</h3>
     <pre>POST /api/ventas
@@ -193,6 +194,14 @@ Authorization: Bearer &lt;código de la sesión&gt;
         <li><strong>Pantalla de Cuentas:</strong> muestra las cifras del periodo calculadas con las ventas, el catálogo y los operadores, y «Guardar este corte» llama a <code>/api/ingresos/calcular</code> y <code>/api/estadisticas/calcular</code>.</li>
     </ul>
 
+    <h3>Fotos</h3>
+    <ul>
+        <li>Se guardan como archivos en <code>app.imagenes.carpeta</code> (variable <code>IMAGENES_CARPETA</code>, por defecto <code>imagenes/</code>), una subcarpeta por tipo y el id como nombre. No cambia la base de datos.</li>
+        <li><code>GET /api/imagenes</code> devuelve qué elementos tienen foto y una versión que cambia con cada foto nueva; las páginas la ponen en la dirección (<code>?v=</code>) para no mostrar una foto vieja de la memoria del navegador.</li>
+        <li><code>PUT /api/imagenes/{tipo}/{id}</code> recibe la imagen en el cuerpo. Solo acepta JPEG, PNG o WebP de hasta 2 MB, y el formato se revisa por los primeros bytes, no por lo que diga la petición. El panel achica la foto antes de subirla (JPEG de máximo 1000 px).</li>
+        <li>Al borrar un producto, una prenda o un servicio se borra su foto.</li>
+    </ul>
+
     <h2>10. Base de datos</h2>
     <p>Son 15 tablas: <code>usuario</code>, <code>administrador</code>, <code>operador_de_cibercafe</code> (herencia por tabla unida), <code>clave_de_permiso</code>, <code>servicio</code>, <code>producto_de_papeleria</code>, <code>ropa</code>, <code>factura_del_negocio</code>, <code>detalle_de_factura</code>, <code>informacion_del_negocio</code>, <code>ingreso_del_negocio</code>, <code>historial_ingreso_del_negocio</code>, <code>estadistica_del_negocio</code>, <code>historial_estadistica_del_negocio</code> y <code>reporte_del_negocio</code>. Los scripts están en <code>database/scripts</code> y los diagramas entidad-relación y relacional en <code>02-diagramas</code>.</p>
     <p>En el modo demo Hibernate crea las tablas desde las entidades y carga <code>demo/datos-demo.sql</code> (catálogo, usuarios y ventas de ejemplo) y <code>demo/datos-demo-negocio.sql</code> (módulos del negocio).</p>
@@ -202,6 +211,7 @@ Authorization: Bearer &lt;código de la sesión&gt;
         <tr><th>Archivo</th><th>Contenido</th></tr>
         <tr><td><code>index.html</code>, <code>js/main.js</code></td><td>Página pública: menú, catálogos, buscadores y términos. Si la API no responde, muestra un catálogo de respaldo.</td></tr>
         <tr><td><code>views/login.html</code></td><td>Inicio de sesión; cada rol va a su pantalla.</td></tr>
+        <tr><td><code>js/fotos.js</code></td><td>Lista de fotos, dirección de cada una y achicado de la foto antes de subirla.</td></tr>
         <tr><td><code>js/sesion.js</code></td><td>Sesión en <code>sessionStorage</code>, cabecera <code>Authorization</code>, permisos por rol y cierre por inactividad.</td></tr>
         <tr><td><code>views/panel.html</code>, <code>js/panel.js</code></td><td>Panel de la administradora. Cada sección se describe una vez en <code>SECCIONES</code> (campos, validaciones, tarjetas) y el mismo código sirve para todas.</td></tr>
         <tr><td><code>views/ventas.html</code>, <code>js/ventas.js</code></td><td>Caja de ventas y lo vendido.</td></tr>
@@ -213,7 +223,7 @@ Authorization: Bearer &lt;código de la sesión&gt;
     <h2>12. Pruebas</h2>
     <pre>cd backend
 mvn test</pre>
-    <p>Son 85 pruebas automáticas: controladores con MockMvc y el filtro de acceso incluido (catálogo, productos, servicios, sesión, ventas, usuarios, rutas, CORS), servicios de ingresos y estadísticas con Mockito, validaciones de los modelos, el almacén de sesiones con un reloj simulado, el rol en la base (<code>RolEnLaBaseTest</code>) y casos con varias personas a la vez contra el servidor real (<code>ConsistenciaTest</code>: ventas simultáneas, doble anulación, prenda única, formulario viejo y precio cambiado). En Windows, <code>ConsistenciaTest</code> necesita poder abrir conexiones locales. La colección de Postman (<code>postman/</code>) tiene carpetas de estado, servicios, seguridad, catálogos, sesión y permisos, y ventas. El detalle está en <code>05-pruebas/Informe-de-pruebas-Papeleria-Matrix.pdf</code>.</p>
+    <p>Son 90 pruebas automáticas: controladores con MockMvc y el filtro de acceso incluido (catálogo, productos, servicios, sesión, ventas, usuarios, rutas, CORS), servicios de ingresos y estadísticas con Mockito, validaciones de los modelos, el almacén de sesiones con un reloj simulado, el rol en la base (<code>RolEnLaBaseTest</code>), las fotos (<code>ImagenControllerTest</code>: permisos, formatos, tamaño y borrado) y casos con varias personas a la vez contra el servidor real (<code>ConsistenciaTest</code>: ventas simultáneas, doble anulación, prenda única, formulario viejo y precio cambiado). En Windows, <code>ConsistenciaTest</code> necesita poder abrir conexiones locales. La colección de Postman (<code>postman/</code>) tiene carpetas de estado, servicios, seguridad, catálogos, sesión y permisos, y ventas. El detalle está en <code>05-pruebas/Informe-de-pruebas-Papeleria-Matrix.pdf</code>.</p>
 
     <h2>13. Integración continua y despliegue en Render</h2>
     <ul>
@@ -232,6 +242,7 @@ mvn test</pre>
     <ul>
         <li><strong>Datos en Render:</strong> la API publicada corre en modo demo con H2 en memoria; los datos vuelven a los de ejemplo cada vez que el servicio se reinicia o se duerme. Para guardar datos de forma permanente hay que conectar una base MySQL con el perfil <code>local</code> y las variables <code>DB_*</code>.</li>
         <li><strong>Usuarios de prueba:</strong> sus contraseñas están en el repositorio, así que cualquiera puede entrar a la versión demo. En una instalación real no se cargan.</li>
+        <li><strong>Fotos en Render:</strong> el disco del plan gratuito se borra al reiniciar, así que las fotos subidas se pierden igual que los datos del modo demo. En una instalación real se guardan en la carpeta configurada.</li>
         <li><strong>Plan gratuito:</strong> el servicio se duerme tras un rato sin uso y la primera petición tarda cerca de un minuto.</li>
         <li><strong>Sesiones en memoria:</strong> funcionan con una sola instancia del servidor; para varias habría que guardarlas en una base compartida.</li>
         <li><strong>Precio por línea:</strong> la base no guarda el precio de cada línea de la factura; los totales por tipo usan el precio actual del catálogo.</li>
