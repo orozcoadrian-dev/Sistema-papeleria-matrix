@@ -1,5 +1,6 @@
 package com.papeleriamatrix.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.papeleriamatrix.common.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,8 @@ public class Informacion_del_negocio
 	@Column(name = "Usuario_id", nullable = false)
 	private Integer usuarioId;
 
+	// No se manda en el JSON: es perezosa y fallaría al convertirse. El id ya va en usuarioId.
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Usuario_id", insertable = false, updatable = false)
 	private Administrador administrador;
@@ -122,6 +125,7 @@ public class Informacion_del_negocio
 		return usuarioId != null ? usuarioId : 0;
 	}
 
+	@JsonIgnore
 	public Administrador getAdministrador()
 	{
 		return administrador;
@@ -186,10 +190,9 @@ public class Informacion_del_negocio
 		} else if (informacion.length() > 255)
 		{
 			throw new IllegalArgumentException("La información no puede superar una longitud de 255 caracteres.");
-		} else if (utilidades.tieneSoloTexto(informacion))
-		{
-			this.informacion = informacion;
 		}
+		// Se permiten números y signos: un horario o una dirección los necesitan («de 8 a. m. a 7 p. m.», «Calle 10 # 20-30»).
+		this.informacion = informacion;
 	}
 
 	public String getInformacion()

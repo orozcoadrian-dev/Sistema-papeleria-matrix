@@ -89,11 +89,18 @@ public class IngresoDelNegocioService
 	public IngresoResponse resumir(LocalDate desde, LocalDate hasta)
 	{
 		validarRango(desde, hasta);
-		BigDecimal totalServicios = importe(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.SERVICIO, desde, hasta));
-		BigDecimal totalRopa = importe(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.ROPA, desde, hasta));
+		// Las ventas de la caja mezclan tipos en una factura: lo de cada tipo se suma por línea.
+		String caja = TiposFactura.VENTA_EN_TIENDA;
+		BigDecimal totalServicios = importe(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.SERVICIO, desde, hasta))
+			.add(importe(facturaRepositorio.sumarServiciosVendidosPorLinea(caja, desde, hasta)))
+			.setScale(2, RoundingMode.HALF_UP);
+		BigDecimal totalRopa = importe(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.ROPA, desde, hasta))
+			.add(importe(facturaRepositorio.sumarRopaVendidaPorLinea(caja, desde, hasta)))
+			.setScale(2, RoundingMode.HALF_UP);
 		BigDecimal totalProductos = importe(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.PAPELERIA, desde, hasta))
 			.add(importe(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.PAPELERIA_SIN_TILDE, desde, hasta)))
 			.add(importe(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.VARIEDAD, desde, hasta)))
+			.add(importe(facturaRepositorio.sumarProductosVendidosPorLinea(caja, desde, hasta)))
 			.setScale(2, RoundingMode.HALF_UP);
 		BigDecimal totalGeneral = totalServicios.add(totalRopa).add(totalProductos).setScale(2, RoundingMode.HALF_UP);
 		return new IngresoResponse(null, null, desde, hasta, totalServicios, totalRopa, totalProductos, totalGeneral, "Ingreso ventas");
