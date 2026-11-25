@@ -161,6 +161,29 @@ class VentaControllerTest
 		mvc.perform(get("/api/ventas/" + venta).header("Authorization", administrador)).andExpect(status().isNotFound());
 	}
 
+	private double ingresoDeHoy(String campo) throws Exception
+	{
+		String hoy = java.time.LocalDate.now().toString();
+		String respuesta = mvc.perform(get("/api/ingresos/resumen").param("desde", hoy).param("hasta", hoy).header("Authorization", administrador))
+			.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+		return ((Number) JsonPath.read(respuesta, "$." + campo)).doubleValue();
+	}
+
+	@Test
+	void lasVentasDeLaCajaEntranEnElResumenDeIngresos() throws Exception
+	{
+		int producto = productoNuevo(10, 700);
+		double serviciosAntes = ingresoDeHoy("totalVendidoServicios");
+		double productosAntes = ingresoDeHoy("totalVendidoProductos");
+
+		mvc.perform(post("/api/ventas").header("Authorization", operador).contentType(MediaType.APPLICATION_JSON)
+				.content(venta("{\"tipo\":\"producto\",\"id\":%d,\"cantidad\":2},{\"tipo\":\"servicio\",\"id\":1,\"cantidad\":3}".formatted(producto))))
+			.andExpect(status().isCreated());
+
+		assertEquals(serviciosAntes + 3 * 300, ingresoDeHoy("totalVendidoServicios"), 0.001);
+		assertEquals(productosAntes + 2 * 700, ingresoDeHoy("totalVendidoProductos"), 0.001);
+	}
+
 	@Test
 	void elOperadorSoloVeSusVentasYElAdministradorTodas() throws Exception
 	{

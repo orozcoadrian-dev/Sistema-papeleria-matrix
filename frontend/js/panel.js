@@ -177,7 +177,8 @@ const SECCIONES = {
             accion: () => abrirClave(o)
         }],
         cargarExtra: cargarClavesDePermiso,
-        mensajeAlQuitar409: 'porque ya tiene ventas o una clave de permiso registradas. Quítale primero la clave.'
+        // El sistema no borra operadores: sus ventas quedan a su nombre.
+        sinQuitar: true
     },
 
     informacion: {
@@ -202,8 +203,8 @@ const SECCIONES = {
         campos: [
             { nombre: 'tipoInformacion', etiqueta: '¿Qué dato es?', ejemplo: 'Ej: Horario tienda', min: 10, max: 15, requerido: true, soloLetras: true, ancho: true,
                 sugerencias: () => ['Horario tienda', 'Dirección local', 'Medios de pago', 'Servicio a casa', 'Días festivos'] },
-            { nombre: 'informacion', etiqueta: 'Escribe el dato', ejemplo: 'Ej: Abrimos de lunes a sábado en la mañana y en la tarde', min: 10, max: 255,
-                requerido: true, area: true, soloLetras: true },
+            { nombre: 'informacion', etiqueta: 'Escribe el dato', ejemplo: 'Ej: Lunes a sábado de 8 a. m. a 7 p. m.', min: 10, max: 255,
+                requerido: true, area: true },
             { nombre: 'valorInformacion', etiqueta: 'Puesto en la lista', tipo: 'cantidad', requerido: true, ayuda: 'El 1 sale primero.' }
         ],
         valoresNuevos: (registros) => ({ valorInformacion: registros.length + 1 }),
@@ -212,7 +213,7 @@ const SECCIONES = {
     }
 };
 
-// Por ahora el sistema solo acepta letras y espacios en estos datos (sin números ni signos).
+// El sistema solo acepta letras y espacios en los nombres de personas y en el tipo de dato de la tienda.
 const SOLO_LETRAS = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
 
 // El código lo exige la base de datos, pero a la administradora no le dice nada: se llena solo.
@@ -571,7 +572,9 @@ function crearTarjeta(registro, seccion) {
     for (const extra of seccion.accionesExtra?.(registro) || []) {
         acciones.append(crearBoton(extra.texto, 'boton boton--suave', extra.nombre, extra.accion));
     }
-    acciones.append(crearBoton('🗑️ Quitar', 'boton boton--peligro-suave', `Quitar ${nombreVisible}`, () => pedirQuitar(registro)));
+    if (!seccion.sinQuitar) {
+        acciones.append(crearBoton('🗑️ Quitar', 'boton boton--peligro-suave', `Quitar ${nombreVisible}`, () => pedirQuitar(registro)));
+    }
     tarjeta.append(acciones);
     return tarjeta;
 }

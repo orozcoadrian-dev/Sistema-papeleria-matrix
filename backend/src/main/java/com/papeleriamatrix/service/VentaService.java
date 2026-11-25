@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VentaService
 {
-	private static final String TIPO_FACTURA = "Venta en tienda";
+	public static final String TIPO_FACTURA = "Venta en tienda";
 	private static final DateTimeFormatter FORMATO_CODIGO = DateTimeFormatter.ofPattern("yyMMddHHmmss");
 
 	private final FacturaDelNegocioRepository facturas;
