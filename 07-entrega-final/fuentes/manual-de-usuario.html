@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manual de usuario · Papelería Matrix</title>
+    <link rel="stylesheet" href="estilo-documento.css">
+</head>
+
+<body>
+    <section class="portada">
+        <p class="portada__marca">Papelería Matrix</p>
+        <h1>Manual de usuario</h1>
+        <p class="portada__sub">Cómo usar el sistema: la página para los clientes, el panel de la administradora y la caja de ventas del cibercafé.</p>
+        <div class="portada__datos">
+            <p>Versión 1.0 · 25 de noviembre de 2026</p>
+            <p>Equipo: Osvaldo De Jesús Pacheco Sanabria y Adrián Orozco</p>
+            <p>Dirección del sistema: https://papeleria-matrix-web.onrender.com</p>
+        </div>
+    </section>
+
+    <section class="indice">
+        <h2>Contenido</h2>
+        <ol>
+            <li>Qué es el sistema y quién lo usa</li>
+            <li>La página para los clientes</li>
+            <li>Entrar al sistema y salir</li>
+            <li>El panel de la administradora</li>
+            <li>Servicios, papelería y ropa</li>
+            <li>Operadores y claves de permiso</li>
+            <li>Datos de la tienda</li>
+            <li>Vender en la caja</li>
+            <li>Lo vendido y anular una venta</li>
+            <li>Cuentas del negocio</li>
+            <li>Usar el sistema en el celular</li>
+            <li>Preguntas frecuentes</li>
+        </ol>
+    </section>
+
+    <h2>1. Qué es el sistema y quién lo usa</h2>
+    <p>El sistema de Papelería Matrix tiene tres partes:</p>
+    <ul>
+        <li><strong>La página para los clientes.</strong> Cualquiera la puede abrir. Muestra los servicios del cibercafé, la papelería y la ropa de Pulguero Glam, con sus precios.</li>
+        <li><strong>El panel de la administradora.</strong> Solo entra la dueña del negocio. Desde ahí agrega y cambia productos, servicios, ropa, operadores y los datos de la tienda, y revisa las cuentas.</li>
+        <li><strong>La caja de ventas.</strong> La usan los operadores del cibercafé (y también la administradora) para registrar lo que se vende. Cada venta descuenta las unidades de la papelería.</li>
+    </ul>
+    <table>
+        <tr>
+            <th>Quién</th>
+            <th>Qué puede hacer</th>
+        </tr>
+        <tr>
+            <td>Cliente (sin entrar)</td>
+            <td>Ver el catálogo, buscar y leer los términos.</td>
+        </tr>
+        <tr>
+            <td>Operador del cibercafé</td>
+            <td>Vender en la caja, ver sus propias ventas y cuántas unidades quedan.</td>
+        </tr>
+        <tr>
+            <td>Administradora</td>
+            <td>Todo lo anterior, más el panel completo, ver todas las ventas, anularlas y ver las cuentas.</td>
+        </tr>
+    </table>
+
+    <h2>2. La página para los clientes</h2>
+    <p>Se abre con la dirección del sistema. Arriba está el menú (Inicio, Nosotros, Servicios, Papelería, Pulguero Glam y Contacto), la lupa para buscar en todo el catálogo y el botón <strong>Iniciar sesión</strong>, que es solo para el personal del negocio.</p>
+    <figure>
+        <img src="../capturas/01-pagina-publica.jpg" alt="Página principal de Papelería Matrix">
+        <figcaption>Figura 1. Página para los clientes.</figcaption>
+    </figure>
+    <p>Los productos agotados aparecen marcados. Los precios son los mismos que la administradora pone en el panel: si los cambia allá, cambian aquí.</p>
+    <div class="consejo">La primera visita del día puede tardar hasta un minuto, porque el servidor gratuito se duerme cuando nadie lo usa. La página avisa mientras se despierta.</div>
+
+    <h2>3. Entrar al sistema y salir</h2>
+    <ol>
+        <li>Toca <strong>Iniciar sesión</strong> en la página principal.</li>
+        <li>Escribe tu <strong>usuario</strong> y tu <strong>contraseña</strong>. Con el botón <strong>Ver</strong> puedes revisar lo que escribiste.</li>
+        <li>Toca <strong>Entrar</strong>. La administradora llega a su panel y el operador llega directo a la caja.</li>
+    </ol>
+    <figure>
+        <img src="../capturas/02-iniciar-sesion.jpg" alt="Pantalla de inicio de sesión">
+        <figcaption>Figura 2. Iniciar sesión.</figcaption>
+    </figure>
+    <p>Para salir, toca <strong>Salir</strong> arriba a la derecha, junto a tu nombre. Hazlo siempre que dejes el computador.</p>
+    <h3>Si la sesión se cierra sola</h3>
+    <p>Por seguridad, si pasan <strong>15 minutos sin usar el sistema</strong>, la sesión se cierra sola. Al volver verás este aviso: solo tienes que entrar otra vez. Lo que ya estaba guardado no se pierde.</p>
+    <figure>
+        <img src="../capturas/03-sesion-cerrada.jpg" alt="Aviso de sesión cerrada por inactividad">
+        <figcaption>Figura 3. Aviso cuando la sesión se cerró por inactividad.</figcaption>
+    </figure>
+    <div class="aviso">Si te equivocas de contraseña 5 veces seguidas, el usuario queda bloqueado 5 minutos. Espera ese tiempo y vuelve a intentarlo. Si olvidaste la contraseña, la administradora puede ponerte una nueva desde «Operadores».</div>
+
+    <h2>4. El panel de la administradora</h2>
+    <p>Al entrar, el panel saluda y muestra un mosaico por cada parte del negocio, con cuántos registros hay en cada una. Toca un mosaico para abrir esa sección.</p>
+    <figure>
+        <img src="../capturas/04-panel-inicio.jpg" alt="Panel de la administradora">
+        <figcaption>Figura 4. Inicio del panel.</figcaption>
+    </figure>
+    <ul>
+        <li><strong>Servicios, Papelería y Ropa:</strong> el catálogo.</li>
+        <li><strong>Operadores:</strong> las personas que atienden el cibercafé.</li>
+        <li><strong>Datos de la tienda:</strong> horarios, dirección y medios de pago.</li>
+        <li><strong>Ventas:</strong> abre la caja y lo vendido.</li>
+        <li><strong>Cuentas:</strong> cuánto se vendió, cuánto hay en la tienda y los sueldos.</li>
+    </ul>
+
+    <h2>5. Servicios, papelería y ropa</h2>
+    <p>Las tres secciones funcionan igual. Cada producto aparece en una tarjeta con su precio. En papelería, además, se ve cuántas unidades quedan: en verde si hay suficientes y en rojo cuando quedan menos de 5 o se agotó.</p>
+    <figure>
+        <img src="../capturas/05-papeleria.jpg" alt="Sección de papelería con las unidades de cada producto">
+        <figcaption>Figura 5. Papelería con las unidades que quedan.</figcaption>
+    </figure>
+    <h3>Agregar</h3>
+    <ol>
+        <li>Toca el botón morado <strong>Agregar</strong> (por ejemplo, «Agregar producto»).</li>
+        <li>Llena los recuadros. Los que dicen <em>(opcional)</em> se pueden dejar vacíos.</li>
+        <li>Los precios se escriben sin centavos: <code>1500</code> o <code>1.500</code>.</li>
+        <li>Toca <strong>Guardar</strong>. Aparece «¡Listo! Se guardó…».</li>
+    </ol>
+    <h3>Cambiar</h3>
+    <p>Toca <strong>Cambiar</strong> en la tarjeta. Se abre el mismo formulario con los datos actuales, incluidas las unidades y el precio de compra. Cambia lo que necesites y toca <strong>Guardar</strong>. Para reponer mercancía, cambia el número de «¿Cuántas unidades tienes?».</p>
+    <figure>
+        <img src="../capturas/06-cambiar-producto.jpg" alt="Formulario para cambiar un producto">
+        <figcaption>Figura 6. Cambiar un producto.</figcaption>
+    </figure>
+    <h3>Quitar</h3>
+    <p>Toca <strong>Quitar</strong> y confirma. No se puede quitar algo que ya aparece en una venta: en ese caso el sistema lo avisa.</p>
+    <div class="consejo">Si algo no está bien escrito, el recuadro se pone en rojo y dice qué corregir. El sistema también avisa si el precio de venta es menor que el de compra o si ya existe un producto con el mismo nombre; si está bien así, toca «Guardar» otra vez.</div>
+
+    <h2>6. Operadores y claves de permiso</h2>
+    <p>Aquí están las personas que atienden el cibercafé. Cada una entra con su propio usuario y sus ventas quedan a su nombre.</p>
+    <figure>
+        <img src="../capturas/07-operadores.jpg" alt="Sección de operadores">
+        <figcaption>Figura 7. Operadores.</figcaption>
+    </figure>
+    <ul>
+        <li><strong>Agregar operador:</strong> nombre, documento, el usuario con el que va a entrar (sin espacios ni tildes, por ejemplo <code>daniel.perez</code>), una contraseña de al menos 10 caracteres, sueldo, fecha de inicio y dirección.</li>
+        <li><strong>Cambiar:</strong> para cambiar la contraseña escribe una nueva; si dejas el recuadro vacío, la contraseña no cambia. Al cambiarla, el operador tiene que volver a entrar.</li>
+        <li><strong>Poner clave:</strong> la clave de permiso es una clave aparte de la contraseña, para los permisos especiales del operador. Debe tener entre 10 y 30 caracteres. Por seguridad no se puede ver después de guardarla; solo cambiarla o quitarla.</li>
+    </ul>
+    <div class="aviso">Los operadores no se borran, porque sus ventas quedan registradas a su nombre.</div>
+
+    <h2>7. Datos de la tienda</h2>
+    <p>Sirve para guardar la información del negocio: horario, dirección, medios de pago, servicio a domicilio, etc. Cada dato tiene un nombre corto (entre 10 y 15 letras, por ejemplo «Horario tienda»), el texto y el puesto en el que aparece en la lista.</p>
+    <figure>
+        <img src="../capturas/08-datos-tienda.jpg" alt="Sección de datos de la tienda">
+        <figcaption>Figura 8. Datos de la tienda.</figcaption>
+    </figure>
+
+    <h2 class="salto">8. Vender en la caja</h2>
+    <p>La caja se abre al entrar como operador, o desde el mosaico <strong>Ventas</strong> del panel.</p>
+    <ol>
+        <li>Toca lo que se lleva el cliente. Cada toque suma una unidad. Puedes buscar por nombre o filtrar por Servicios, Papelería o Ropa. Con <strong>Enter</strong> en el buscador se agrega el primer resultado.</li>
+        <li>A la derecha (en el celular, abajo) aparece lo que se lleva, con el total. Usa <strong>+</strong> y <strong>−</strong> para cambiar cantidades, o el bote de basura para quitar algo.</li>
+        <li>Toca <strong>Cobrar</strong>.</li>
+    </ol>
+    <figure>
+        <img src="../capturas/09-caja.jpg" alt="Caja de ventas con productos elegidos">
+        <figcaption>Figura 9. La caja con lo que se lleva el cliente.</figcaption>
+    </figure>
+    <p>El sistema no deja agregar más unidades de las que hay. Si el producto se agotó, su botón aparece apagado.</p>
+    <h3>Cobrar y dar el cambio</h3>
+    <ol>
+        <li>Escribe con cuánto paga el cliente, o toca un billete rápido (Exacto, $ 5.000, $ 10.000…). El sistema dice cuánto hay que devolver.</li>
+        <li>Toca <strong>Listo, registrar venta</strong>.</li>
+    </ol>
+    <figure>
+        <img src="../capturas/10-cobrar.jpg" alt="Ventana de cobro con el cambio">
+        <figcaption>Figura 10. Cobrar y calcular el cambio.</figcaption>
+    </figure>
+    <p>Aparece el recibo con lo vendido, el total, el cambio y el número de factura. Toca <strong>Nueva venta</strong> para atender al siguiente cliente.</p>
+    <figure>
+        <img src="../capturas/11-recibo.jpg" alt="Recibo de la venta registrada">
+        <figcaption>Figura 11. Venta registrada.</figcaption>
+    </figure>
+    <div class="consejo">Si la administradora vende desde su usuario, arriba de la caja elige a nombre de qué operador queda la venta.</div>
+
+    <h2>9. Lo vendido y anular una venta</h2>
+    <p>En la pestaña <strong>Lo vendido</strong> se ve el total, el número de ventas y el promedio de hoy, de los últimos 7 días o de los últimos 30 días. El operador solo ve sus ventas; la administradora ve todas y quién vendió cada una.</p>
+    <figure>
+        <img src="../capturas/12-lo-vendido.jpg" alt="Lista de lo vendido">
+        <figcaption>Figura 12. Lo vendido.</figcaption>
+    </figure>
+    <p>Si una venta se registró por error, la administradora toca <strong>Anular venta</strong> y confirma. La venta se borra y las unidades de papelería vuelven a la tienda. Esto no se puede deshacer.</p>
+
+    <h2>10. Cuentas del negocio</h2>
+    <p>Solo la administradora. Elige el periodo (este mes, mes pasado, últimos 7 días u hoy) y el sistema muestra:</p>
+    <ul>
+        <li><strong>Lo que se vendió:</strong> total, número de ventas, promedio, ganancia en papelería (venta menos lo que costó) y una barra por tipo: servicios, papelería y ropa.</li>
+        <li><strong>La papelería en la tienda:</strong> cuánto costó lo que hay, cuánto se recibiría si se vende todo, lo que se está acabando y lo más vendido.</li>
+        <li><strong>Sueldos:</strong> lo que se paga al mes a los operadores y lo vendido menos sueldos.</li>
+    </ul>
+    <figure>
+        <img src="../capturas/13-cuentas.jpg" alt="Cuentas del negocio">
+        <figcaption>Figura 13. Cuentas del negocio.</figcaption>
+    </figure>
+    <p><strong>Guardar este corte</strong> deja guardados los ingresos y las estadísticas del periodo, con su historial. Los cortes guardados aparecen al final de la página. <strong>Imprimir</strong> saca las cuentas en papel o en PDF, sin botones.</p>
+    <figure>
+        <img src="../capturas/14-cuentas-cortes.jpg" alt="Sueldos y cortes guardados">
+        <figcaption>Figura 14. Sueldos y cortes guardados.</figcaption>
+    </figure>
+
+    <h2>11. Usar el sistema en el celular</h2>
+    <p>Todas las pantallas se acomodan al celular. En la caja, el total y el botón <strong>Cobrar</strong> quedan siempre abajo; toca «ver» para revisar lo que se lleva el cliente.</p>
+    <figure class="angosta">
+        <img src="../capturas/15-caja-celular.jpg" alt="Caja de ventas en el celular">
+        <figcaption>Figura 15. La caja en el celular.</figcaption>
+    </figure>
+
+    <h2>12. Preguntas frecuentes</h2>
+    <table>
+        <tr>
+            <th>Pregunta</th>
+            <th>Respuesta</th>
+        </tr>
+        <tr>
+            <td>Dice «No pudimos conectar con el sistema».</td>
+            <td>Revisa el internet y toca «Intentar de nuevo». Si es la primera vez del día, espera un minuto a que el servidor despierte.</td>
+        </tr>
+        <tr>
+            <td>Me sacó del sistema.</td>
+            <td>Pasaron 15 minutos sin usarlo. Entra otra vez; no se pierde nada de lo guardado.</td>
+        </tr>
+        <tr>
+            <td>No me deja vender más de un producto.</td>
+            <td>No quedan más unidades. La administradora debe actualizar la cantidad en «Papelería».</td>
+        </tr>
+        <tr>
+            <td>Me equivoqué en una venta.</td>
+            <td>La administradora la anula desde «Lo vendido» y se vuelve a registrar bien.</td>
+        </tr>
+        <tr>
+            <td>Un operador olvidó su contraseña.</td>
+            <td>La administradora toca «Cambiar» en su tarjeta y escribe una contraseña nueva.</td>
+        </tr>
+        <tr>
+            <td>No puedo quitar un producto.</td>
+            <td>Ya aparece en ventas. Se puede dejar con 0 unidades para que salga como agotado.</td>
+        </tr>
+    </table>
+</body>
+
+</html>

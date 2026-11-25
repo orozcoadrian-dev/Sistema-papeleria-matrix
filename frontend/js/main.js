@@ -4,7 +4,7 @@
    ÍNDICE:
      1. Utilidades
      2. Menú móvil (hamburguesa)
-     3. Modales (buscador general, registro, términos)
+     3. Modales (buscador general y términos)
      4. Aviso de privacidad y términos — RNF-16
      5. Catálogos conectados a la API (servicios, papelería, ropa) — CU-05, CU-10, CU-40
      6. Buscador general del negocio — CU-57
@@ -128,15 +128,6 @@ document.querySelectorAll('dialog').forEach((dialogo) => {
         }
     });
 });
-
-/* El registro de clientes todavía no existe: el formulario lo dice con claridad en vez de fingir que guardó algo. */
-const formRegistro = document.querySelector('[data-form="register"]');
-if (formRegistro) {
-    formRegistro.addEventListener('submit', (evento) => {
-        evento.preventDefault();
-        document.getElementById('register-mensaje').textContent = 'El registro todavía no está disponible.';
-    });
-}
 
 
 /* =====================================================================
