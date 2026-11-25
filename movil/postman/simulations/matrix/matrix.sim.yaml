@@ -1,0 +1,8 @@
+simulation: matrix
+routing: path
+mocks:
+  - name: matrix-api
+    routeKey: matrix-api
+    origin:
+      - localhost
+    path: postman/mocks/matrix-api

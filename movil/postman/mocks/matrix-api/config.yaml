@@ -1,0 +1,6 @@
+version: 1
+mockSrc: default.js
+name: matrix-api
+description: Simulación local de la API de Papelería Matrix para las pruebas del frontend móvil
+origin: localhost
+interceptRequests: true
