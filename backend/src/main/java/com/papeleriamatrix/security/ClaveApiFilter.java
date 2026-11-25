@@ -33,7 +33,7 @@ public class ClaveApiFilter extends OncePerRequestFilter
 
 	/** Rutas que cualquiera puede consultar, también la página pública. */
 	private static final List<String> CONSULTA_PUBLICA = List.of(
-		"/api/servicios", "/api/productos", "/api/ropa", "/api/informacion-negocio", "/api/estado");
+		"/api/servicios", "/api/productos", "/api/ropa", "/api/informacion-negocio", "/api/estado", "/api/imagenes");
 
 	/** Rutas de consulta que necesitan sesión aunque empiecen como una pública. */
 	private static final List<String> CONSULTA_INTERNA = List.of("/api/productos/interno");

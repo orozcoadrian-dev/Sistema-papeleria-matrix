@@ -77,6 +77,12 @@ public class ManejadorDeErrores
 		return respuesta(HttpStatus.NOT_FOUND, "Ruta no encontrada", "La ruta solicitada no existe en esta API.");
 	}
 
+	@ExceptionHandler(org.springframework.web.HttpMediaTypeNotSupportedException.class)
+	public ProblemDetail formatoNoAdmitido(org.springframework.web.HttpMediaTypeNotSupportedException error)
+	{
+		return respuesta(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Formato no válido", "Esta ruta no acepta ese tipo de contenido.");
+	}
+
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ProblemDetail metodoNoPermitido(HttpRequestMethodNotSupportedException error)
 	{

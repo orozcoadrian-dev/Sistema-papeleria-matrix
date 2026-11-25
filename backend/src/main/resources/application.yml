@@ -25,6 +25,10 @@ app:
   # Clave que se exige en la cabecera X-API-Key para crear, modificar y borrar.
   # En Render se genera sola, con la variable API_KEY definida en render.yaml.
   api-key: ${API_KEY:clave-de-prueba}
+  imagenes:
+    # Carpeta donde se guardan las fotos de productos, ropa y servicios (una subcarpeta por tipo).
+    # En Render el disco gratuito se borra al reiniciar, igual que los datos del modo demo.
+    carpeta: ${IMAGENES_CARPETA:imagenes}
   sesion:
     # Minutos sin usar el sistema después de los cuales la sesión se cierra sola.
     minutos-inactividad: ${SESION_MINUTOS:15}
