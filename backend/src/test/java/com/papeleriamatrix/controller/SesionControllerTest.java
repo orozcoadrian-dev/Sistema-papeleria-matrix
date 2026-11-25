@@ -121,6 +121,12 @@ class SesionControllerTest
 		mvc.perform(get("/api/productos/interno").header("Authorization", entrar(mvc, OPERADOR, CONTRASENIA_OPERADOR)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].cantidad").isNumber())
+			// El operador ve las existencias, pero no a cuánto ni dónde se compró.
+			.andExpect(jsonPath("$[0].precioCompra").value(org.hamcrest.Matchers.nullValue()))
+			.andExpect(jsonPath("$[0].lugarCompra").value(org.hamcrest.Matchers.nullValue()));
+
+		mvc.perform(get("/api/productos/interno").header("Authorization", entrar(mvc, ADMINISTRADOR, CONTRASENIA_ADMINISTRADOR)))
+			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].precioCompra").isNumber());
 	}
 

@@ -83,6 +83,8 @@ const SECCIONES = {
             { nombre: 'descripcion', etiqueta: 'Descripción', ejemplo: 'Marca, color, tamaño…', max: 150, area: true }
         ],
         paraFormulario: (p) => ({ ...p, precioVenta: p.precio }),
+        // Al cambiar, se manda cuántas unidades había al abrir el formulario: si mientras tanto se vendió algo, no se pisa.
+        cuerpoExtra: (registro) => (registro ? { cantidadAnterior: registro.cantidad } : {}),
         // Vender más barato de lo que costó puede ser un error al escribir.
         advertencias: (c) => (c.precioCompra > c.precioVenta
             ? [`Lo vas a vender a ${pesos.format(c.precioVenta)} pero lo compraste a ${pesos.format(c.precioCompra)}: perderías plata.`]
@@ -103,6 +105,8 @@ const SECCIONES = {
         tarjeta: (r) => ({
             nombre: r.nombre || r.tipo,
             precio: r.precio,
+            // Cada prenda es única: cuando se vende, ya no está en la tienda.
+            estado: r.disponible === false ? { texto: 'Vendida', bien: false } : { texto: 'Disponible', bien: true },
             etiquetas: [r.tipo, r.talla && `Talla ${r.talla}`, r.color, r.material],
             descripcion: r.descripcion
         }),
@@ -820,7 +824,7 @@ function leerFormulario(seccion) {
         return null;
     }
     $('formulario-error').textContent = '';
-    return { ...cuerpo, ...seccion.cuerpoExtra?.() };
+    return { ...cuerpo, ...seccion.cuerpoExtra?.(editando) };
 }
 
 /* Cosas que no son errores pero conviene confirmar: un nombre repetido o un precio de venta menor al de compra. */
@@ -885,6 +889,23 @@ function manejarErrorAlGuardar(error) {
         if (primerCampo === 'codigo') $('avanzado').open = true;
         if (primerCampo) $(`campo-${primerCampo}`).focus();
         caja.textContent = 'Revisa los recuadros marcados en rojo.';
+        return;
+    }
+    if (error.estado === 409 && error.titulo === 'Las unidades cambiaron') {
+        // Mientras se editaba se vendieron unidades: se trae el número de ahora y se pide revisarlo.
+        caja.textContent = error.message;
+        const registro = editando;
+        llamar(SECCIONES.productos.rutaLista).then((lista) => {
+            const actual = lista.find((p) => p.id === registro?.id);
+            if (!actual || editando !== registro) return;
+            editando = { ...registro, cantidad: actual.cantidad };
+            const entrada = $('campo-cantidad');
+            entrada.value = miles.format(actual.cantidad);
+            marcarError('cantidad', 'Este es el número de ahora. Revísalo y guarda otra vez.');
+            entrada.focus();
+            datos.productos = lista;
+            dibujarMosaicos();
+        }).catch(() => { /* el mensaje ya explica qué pasó */ });
         return;
     }
     if (error.estado === 409 && error.titulo === 'Código repetido' && SECCIONES[seccionActual].sinCodigo) {

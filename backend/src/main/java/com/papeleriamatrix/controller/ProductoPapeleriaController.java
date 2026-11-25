@@ -38,10 +38,11 @@ public class ProductoPapeleriaController {
 
 	@GetMapping("/interno")
 	@Operation(summary = "Listar los productos con sus existencias y precio de compra",
-		description = "Para el panel interno. Lo pueden ver el administrador y el operador de cibercafé.",
+		description = "Para el panel y la caja. El operador de cibercafé no ve el precio ni el lugar de compra.",
 		security = { @SecurityRequirement(name = "sesion"), @SecurityRequirement(name = "claveApi") })
-	public List<ProductoInternoResponse> listarInterno() {
-		return productoService.listarInterno();
+	public List<ProductoInternoResponse> listarInterno(
+		@io.swagger.v3.oas.annotations.Parameter(hidden = true) @org.springframework.web.bind.annotation.RequestAttribute(com.papeleriamatrix.security.Sesion.ATRIBUTO) com.papeleriamatrix.security.Sesion sesion) {
+		return productoService.listarInterno(!sesion.esOperador());
 	}
 
 	@GetMapping("/{id}")

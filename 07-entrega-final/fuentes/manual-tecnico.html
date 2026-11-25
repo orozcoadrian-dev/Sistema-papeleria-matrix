@@ -123,14 +123,14 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo</pre>
         <li><strong>Inicio de sesión:</strong> <code>POST /api/sesion</code> con <code>nombreUsuario</code> y <code>contrasenia</code>. Devuelve un código aleatorio de 32 bytes que el navegador manda en <code>Authorization: Bearer …</code>. Las sesiones se guardan en memoria (<code>AlmacenDeSesiones</code>): al reiniciar el servidor hay que volver a entrar.</li>
         <li><strong>Cierre por inactividad (RNF-18):</strong> la sesión se cierra tras 15 minutos sin uso; cada petición renueva el tiempo. El frontend también cuenta ese tiempo y lleva al inicio de sesión con un aviso.</li>
         <li><strong>Bloqueo:</strong> después de 5 contraseñas incorrectas seguidas, el usuario queda bloqueado 5 minutos (respuesta 429). El mensaje de error no revela si el usuario existe, y la comparación tarda lo mismo exista o no.</li>
-        <li><strong>Contraseñas:</strong> se guardan con BCrypt y ninguna respuesta las incluye (<code>@JsonIgnore</code>). Al cambiar la contraseña o borrar un usuario se cierran sus sesiones.</li>
+        <li><strong>Contraseñas:</strong> se guardan con BCrypt y ninguna respuesta las incluye (<code>@JsonIgnore</code>). Al cambiar la contraseña (de un usuario, un administrador o un operador) o borrar un usuario se cierran sus sesiones en todos los navegadores.</li>
         <li><strong>Clave de la API:</strong> la cabecera <code>X-API-Key</code> da acceso de administrador para Postman, Swagger y las pruebas. La comparación es de tiempo constante.</li>
     </ul>
     <h3>Permisos por rol (<code>security/ClaveApiFilter.java</code>)</h3>
     <table>
         <tr><th>Quién</th><th>Qué rutas</th></tr>
         <tr><td>Público</td><td>Consultar (GET) <code>/api/servicios</code>, <code>/api/productos</code>, <code>/api/ropa</code>, <code>/api/informacion-negocio</code>, <code>/api/estado</code>; <code>POST /api/sesion</code>.</td></tr>
-        <tr><td>Operador de cibercafé</td><td>Lo público, más <code>GET</code> y <code>POST /api/ventas</code> (solo ve sus ventas) y <code>GET /api/productos/interno</code>.</td></tr>
+        <tr><td>Operador de cibercafé</td><td>Lo público, más <code>GET</code> y <code>POST /api/ventas</code> (solo ve sus ventas) y <code>GET /api/productos/interno</code> sin el precio ni el lugar de compra.</td></tr>
         <tr><td>Administrador</td><td>Todo.</td></tr>
     </table>
     <p>Sin sesión, una ruta protegida responde 401; con un rol sin permiso, 403. Las rutas nuevas quedan, por defecto, solo para el administrador.</p>
@@ -175,7 +175,15 @@ Authorization: Bearer &lt;código de la sesión&gt;
         <li>Guarda la factura con tipo «Venta en tienda» y un código de 15 cifras (fecha y hora más 3 al azar, sin repetir).</li>
         <li>Al anular, devuelve las existencias y borra la factura con sus detalles.</li>
     </ul>
-    <p>La ropa y los servicios no llevan existencias en la base de datos. La base guarda el total de la factura pero no el precio de cada línea: al consultar una venta, cada artículo muestra el precio actual del catálogo.</p>
+    <h3>Varias personas a la vez</h3>
+    <ul>
+        <li><strong>Existencias:</strong> la venta, la anulación y el cambio de un producto bloquean la fila del producto (<code>SELECT … FOR UPDATE</code>) hasta terminar. Si dos ventas piden la última unidad a la vez, una pasa y la otra recibe 409. Las filas se bloquean siempre en el mismo orden para que dos ventas no se esperen en cruz.</li>
+        <li><strong>Formulario con datos viejos:</strong> el panel manda <code>cantidadAnterior</code> al cambiar un producto; si no coincide con las existencias de ese momento (se vendió algo mientras se editaba), responde 409 «Las unidades cambiaron» y no se guarda.</li>
+        <li><strong>Precio cambiado durante la venta:</strong> la caja manda <code>totalEsperado</code>; si no coincide con el total calculado con los precios actuales, responde 409 «Los precios cambiaron» y no se guarda.</li>
+        <li><strong>Anular dos veces:</strong> la factura también se bloquea; la segunda anulación responde 404 y las existencias se devuelven una sola vez.</li>
+        <li><strong>Ropa:</strong> cada prenda es única: se vende de a una, una prenda que ya aparece en una venta responde 409 y la API de ropa devuelve <code>disponible: false</code>. Al anular la venta vuelve a estar disponible.</li>
+    </ul>
+    <p>Los servicios no llevan existencias en la base de datos. La base guarda el total de la factura pero no el precio de cada línea: al consultar una venta, cada artículo muestra el precio actual del catálogo.</p>
 
     <h2>9. Ingresos, estadísticas y reportes</h2>
     <ul>
@@ -205,7 +213,7 @@ Authorization: Bearer &lt;código de la sesión&gt;
     <h2>12. Pruebas</h2>
     <pre>cd backend
 mvn test</pre>
-    <p>Son 78 pruebas automáticas: controladores con MockMvc y el filtro de acceso incluido (catálogo, productos, servicios, sesión, ventas, usuarios, rutas, CORS), servicios de ingresos y estadísticas con Mockito, validaciones de los modelos y el almacén de sesiones con un reloj simulado. La colección de Postman (<code>postman/</code>) tiene carpetas de estado, servicios, seguridad, catálogos, sesión y permisos, y ventas. El detalle está en <code>05-pruebas/Informe-de-pruebas-Papeleria-Matrix.pdf</code>.</p>
+    <p>Son 85 pruebas automáticas: controladores con MockMvc y el filtro de acceso incluido (catálogo, productos, servicios, sesión, ventas, usuarios, rutas, CORS), servicios de ingresos y estadísticas con Mockito, validaciones de los modelos, el almacén de sesiones con un reloj simulado, el rol en la base (<code>RolEnLaBaseTest</code>) y casos con varias personas a la vez contra el servidor real (<code>ConsistenciaTest</code>: ventas simultáneas, doble anulación, prenda única, formulario viejo y precio cambiado). En Windows, <code>ConsistenciaTest</code> necesita poder abrir conexiones locales. La colección de Postman (<code>postman/</code>) tiene carpetas de estado, servicios, seguridad, catálogos, sesión y permisos, y ventas. El detalle está en <code>05-pruebas/Informe-de-pruebas-Papeleria-Matrix.pdf</code>.</p>
 
     <h2>13. Integración continua y despliegue en Render</h2>
     <ul>
@@ -228,6 +236,8 @@ mvn test</pre>
         <li><strong>Sesiones en memoria:</strong> funcionan con una sola instancia del servidor; para varias habría que guardarlas en una base compartida.</li>
         <li><strong>Precio por línea:</strong> la base no guarda el precio de cada línea de la factura; los totales por tipo usan el precio actual del catálogo.</li>
         <li><strong>CORS:</strong> el método PATCH no está entre los permitidos para el navegador; la página usa PUT para cambiar la clave de permiso.</li>
+        <li><strong>Rol en H2:</strong> el rol del usuario se guarda como texto. Si fuera un enum, Hibernate crearía en H2 una restricción CHECK con la «é» que falla en cada conexión nueva del grupo (a los 30 minutos) y el operador ya no podría entrar. La prueba <code>RolEnLaBaseTest</code> lo vigila.</li>
+        <li><strong>Hora:</strong> la imagen Docker usa la zona horaria de Colombia (<code>TZ=America/Bogota</code>); sin eso, las ventas de la noche quedarían con la fecha del día siguiente.</li>
     </ul>
 </body>
 

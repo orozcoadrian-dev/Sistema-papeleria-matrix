@@ -88,7 +88,25 @@
         <tr><td>Rutas nuevas de ingresos publicadas tras el último cambio</td><td class="ok">Presentes en <code>/v3/api-docs</code></td></tr>
     </table>
 
-    <h2>6. Errores encontrados y corregidos</h2>
+    <h2>6. Auditoría de inconsistencias</h2>
+    <p>Se probaron situaciones de uso real con varias personas a la vez, con peticiones en paralelo contra la API. También quedan como pruebas automáticas en <code>ConsistenciaTest</code> y <code>RolEnLaBaseTest</code>.</p>
+    <table>
+        <tr><th>Situación</th><th>Antes</th><th>Ahora</th></tr>
+        <tr><td>El operador entra después de 30 minutos de encendido el servidor</td><td>No podía entrar (409): la restricción del rol con «é» fallaba al renovarse las conexiones</td><td class="ok">Entra siempre</td></tr>
+        <tr><td>Dos operadores venden la última unidad al mismo tiempo</td><td>Pasaban las dos ventas</td><td class="ok">Pasa una; la otra avisa cuántas quedan</td></tr>
+        <tr><td>Diez ventas a la vez de un producto con 5 unidades</td><td>Pasaban las 10 y quedaban 4 unidades</td><td class="ok">Pasan 5, se rechazan 5, quedan 0</td></tr>
+        <tr><td>Dos personas anulan la misma venta a la vez</td><td>Una respondía error del servidor (500)</td><td class="ok">Una anula; la otra recibe «no existe»; las unidades vuelven una vez</td></tr>
+        <tr><td>La administradora guarda un producto con el formulario abierto antes de una venta</td><td>Borraba la venta de las existencias (17 → 20)</td><td class="ok">No guarda y muestra cuántas quedan</td></tr>
+        <tr><td>Cambia un precio mientras el operador está cobrando</td><td>Se registraba un total distinto al cobrado</td><td class="ok">No registra, avisa y actualiza la caja</td></tr>
+        <tr><td>Se cambia la contraseña de un operador desde el panel</td><td>Su sesión abierta seguía sirviendo</td><td class="ok">Se cierra en todos los navegadores</td></tr>
+        <tr><td>Vender la misma prenda (pieza única) varias veces</td><td>Se podía, incluso 5 unidades</td><td class="ok">Se vende una vez; queda «Vendida» hasta que se anule</td></tr>
+        <tr><td>El operador ve a cuánto se compró cada producto</td><td>Lo veía</td><td class="ok">Solo ve unidades y precio de venta</td></tr>
+        <tr><td>Datos de la tienda en la página de clientes</td><td>No aparecían</td><td class="ok">Aparecen en «Horarios de atención»</td></tr>
+        <tr><td>Ventas de la noche en Render (servidor en UTC)</td><td>Quedaban con la fecha del día siguiente</td><td class="ok">Hora de Colombia</td></tr>
+        <tr><td>Mismo usuario en dos navegadores; salir en uno</td><td>El otro sigue abierto (correcto)</td><td class="ok">Sin cambios</td></tr>
+    </table>
+
+    <h2>7. Errores encontrados y corregidos</h2>
     <table>
         <tr><th>Error</th><th>Causa</th><th>Corrección</th></tr>
         <tr><td>El segundo usuario sin correo o sin celular no se podía guardar.</td><td>Se guardaba texto vacío en columnas únicas.</td><td>Se guarda NULL. Prueba <code>dosUsuariosSinEmailNiTelefonoNoChocan</code>.</td></tr>
@@ -98,7 +116,7 @@
         <tr><td>Los ingresos de las ventas de la caja salían en cero.</td><td>Las ventas mezclan tipos en una factura («Venta en tienda»).</td><td>Se suman por línea. Prueba <code>lasVentasDeLaCajaEntranEnElResumenDeIngresos</code>.</td></tr>
     </table>
 
-    <h2>7. Cómo repetir las pruebas</h2>
+    <h2>8. Cómo repetir las pruebas</h2>
     <pre>cd backend
 mvn test                                         (pruebas automáticas)
 mvn spring-boot:run -Dspring-boot.run.profiles=demo   (para las pruebas manuales)</pre>

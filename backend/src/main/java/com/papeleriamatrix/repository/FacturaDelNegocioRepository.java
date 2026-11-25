@@ -2,7 +2,10 @@ package com.papeleriamatrix.repository;
 
 import com.papeleriamatrix.model.Factura_del_negocio;
 import java.util.List;
+import jakarta.persistence.LockModeType;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
@@ -11,6 +14,11 @@ public interface FacturaDelNegocioRepository extends JpaRepository<Factura_del_n
 {
 	boolean existsByCodigoFactura(String codigoFactura);
 	boolean existsByCodigoFacturaAndIdFacturaNot(String codigoFactura, Integer idFactura);
+
+	/** Trae la factura bloqueando su fila: si dos personas anulan la misma venta a la vez, la segunda ya no la encuentra. */
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("SELECT f FROM Factura_del_negocio f WHERE f.idFactura = :id")
+	Optional<Factura_del_negocio> bloquear(@Param("id") Integer id);
 
 	@Query("SELECT COALESCE(SUM(f.monto), 0.0) FROM Factura_del_negocio f WHERE LOWER(f.tipoFactura) = LOWER(:tipoFactura) AND f.fechaGeneracion BETWEEN :desde AND :hasta")
 	Double sumarMontoPorTipoFactura(@Param("tipoFactura") String tipoFactura, @Param("desde") LocalDate desde, @Param("hasta") LocalDate hasta);

@@ -21,4 +21,10 @@ public interface DetalleDeFacturaRepository extends JpaRepository<Detalle_de_fac
 
 	List<Detalle_de_factura> findByFacturaDelNegocioIdIn(Collection<Integer> facturas);
 	List<Detalle_de_factura> findByFacturaDelNegocioId(Integer factura);
+
+	// Cada prenda de Pulguero Glam es única: si ya aparece en una venta, está vendida.
+	boolean existsByRopaId(Integer ropaId);
+
+	@Query("SELECT DISTINCT d.ropaId FROM Detalle_de_factura d WHERE d.ropaId IS NOT NULL")
+	List<Integer> ropaVendida();
 }

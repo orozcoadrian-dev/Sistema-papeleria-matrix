@@ -8,6 +8,7 @@ import com.papeleriamatrix.dto.AdministradorRequest;
 import com.papeleriamatrix.model.RolUsuario;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.papeleriamatrix.security.AlmacenDeSesiones;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,9 +18,11 @@ public class AdministradorService
 {
 	private final AdministradorRepository repositorio;
 	private final PasswordEncoder passwordEncoder;
+	private final AlmacenDeSesiones sesiones;
 
-	public AdministradorService(AdministradorRepository repositorio, PasswordEncoder passwordEncoder)
+	public AdministradorService(AdministradorRepository repositorio, PasswordEncoder passwordEncoder, AlmacenDeSesiones sesiones)
 	{
+		this.sesiones = sesiones;
 		this.repositorio = repositorio;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -60,6 +63,8 @@ public class AdministradorService
 		if (peticion.contrasenia() != null)
 		{
 			entidad.setContrasenia(codificarContrasenia(peticion.contrasenia()));
+			// Con la contraseña nueva hay que volver a entrar en todos los equipos.
+			sesiones.cerrarDelUsuario(id);
 		} else if (!Utils.esHashBCrypt(entidad.getContrasenia()))
 		{
 			entidad.setContrasenia(passwordEncoder.encode(entidad.getContrasenia()));

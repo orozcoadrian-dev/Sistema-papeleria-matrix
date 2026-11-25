@@ -69,7 +69,8 @@ public class VentaService
 	public VentaResponse registrar(VentaRequest peticion, Sesion sesion)
 	{
 		int operadorId = operadorDeLaVenta(peticion, sesion);
-		Map<String, Integer> cantidades = juntarRepetidos(peticion.articulos());
+		// Siempre en el mismo orden (tipo e id) para que dos ventas que bloquean las mismas filas no se esperen en cruz.
+		Map<String, Integer> cantidades = new java.util.TreeMap<>(juntarRepetidos(peticion.articulos()));
 
 		double total = 0;
 		List<Detalle_de_factura> lineas = new ArrayList<>();
@@ -88,7 +89,7 @@ public class VentaService
 			{
 				case "producto" ->
 				{
-					ProductoPapeleria producto = productos.findById(id)
+					ProductoPapeleria producto = productos.bloquear(id)
 						.orElseThrow(() -> new RecursoNoEncontradoException("No existe un producto con el id " + id + "."));
 					if (producto.getCantidad() < cantidad)
 					{
@@ -105,8 +106,18 @@ public class VentaService
 				}
 				case "ropa" ->
 				{
-					Ropa prenda = ropa.findById(id)
+					Ropa prenda = ropa.bloquear(id)
 						.orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda de ropa con el id " + id + "."));
+					String nombrePrenda = prenda.getNombre() != null ? prenda.getNombre() : prenda.getTipoRopa();
+					if (cantidad > 1)
+					{
+						throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Cantidad no válida",
+							"Cada prenda es única: «" + nombrePrenda + "» se vende de a una.");
+					}
+					if (detalles.existsByRopaId(id))
+					{
+						throw new OperacionRechazadaException(HttpStatus.CONFLICT, "Prenda ya vendida", "«" + nombrePrenda + "» ya se vendió.");
+					}
 					linea.setDescripcion(descripcion(prenda.getNombre() != null ? prenda.getNombre() : prenda.getTipoRopa()));
 					linea.setRopaId(id);
 					linea.setCantidadRopa(cantidad);
@@ -132,6 +143,13 @@ public class VentaService
 		if (total <= 0)
 		{
 			throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Venta sin valor", "El total de la venta debe ser mayor que cero.");
+		}
+		if (peticion.totalEsperado() != null && Math.abs(total - peticion.totalEsperado()) >= 0.5)
+		{
+			// Lo que se cobró en la caja no es lo que vale ahora: alguien cambió un precio mientras se atendía.
+			throw new OperacionRechazadaException(HttpStatus.CONFLICT, "Los precios cambiaron",
+				String.format(java.util.Locale.ROOT, "Mientras atendías cambió el precio de algo: el total ahora es $ %,.0f. Revisa la venta y vuelve a cobrar.", total)
+					.replace(',', '.'));
 		}
 
 		LocalDate hoy = ahora.toLocalDate();
@@ -175,13 +193,15 @@ public class VentaService
 	@Transactional
 	public void anular(Integer id)
 	{
-		Factura_del_negocio factura = buscar(id);
+		// Bloqueada: si otra persona la está anulando a la vez, esta espera y luego ya no la encuentra.
+		Factura_del_negocio factura = facturas.bloquear(id)
+			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una venta con el id " + id + "."));
 		List<Detalle_de_factura> suyas = detalles.findByFacturaDelNegocioId(factura.getIdFactura());
 		for (Detalle_de_factura linea : suyas)
 		{
 			if (linea.getProductoPapeleriaId() > 0 && linea.getCantidadProducto() > 0)
 			{
-				productos.findById(linea.getProductoPapeleriaId()).ifPresent(producto -> producto.reponer(linea.getCantidadProducto()));
+				productos.bloquear(linea.getProductoPapeleriaId()).ifPresent(producto -> producto.reponer(linea.getCantidadProducto()));
 			}
 		}
 		detalles.deleteAll(suyas);

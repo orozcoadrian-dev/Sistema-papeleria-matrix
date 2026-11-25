@@ -31,7 +31,12 @@ public record ProductoPapeleriaRequest(
 	String descripcion,
 
 	@Size(max = 40, message = "El lugar de compra no puede superar los 40 caracteres.")
-	String lugarCompra)
+	String lugarCompra,
+
+	// Opcional. Las unidades que había cuando se abrió el formulario: si mientras tanto se vendió algo,
+	// el cambio no se guarda para no borrar esas ventas de las existencias.
+	@PositiveOrZero(message = "La cantidad anterior no puede ser negativa.")
+	Integer cantidadAnterior)
 {
 }
 

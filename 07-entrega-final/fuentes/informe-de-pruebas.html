@@ -27,7 +27,7 @@
     <h2>1. Resumen</h2>
     <table>
         <tr><th>Tipo de prueba</th><th>Resultado</th></tr>
-        <tr><td>Pruebas automáticas del backend (JUnit 5, MockMvc, Mockito)</td><td class="ok">78 de 78 pasan · 0 fallan</td></tr>
+        <tr><td>Pruebas automáticas del backend (JUnit 5, MockMvc, Mockito)</td><td class="ok">85 de 85 pasan · 0 fallan</td></tr>
         <tr><td>Integración continua en GitHub Actions (compilar, probar y construir la imagen Docker)</td><td class="ok">Pasa en main</td></tr>
         <tr><td>Pruebas de las pantallas en el navegador (escritorio y celular)</td><td class="ok">Todas las funciones probadas responden como se espera</td></tr>
         <tr><td>Versión publicada en Render</td><td class="ok">Página, catálogo, inicio de sesión y permisos responden</td></tr>
@@ -45,7 +45,7 @@
     <p>Se ejecutan con <code>mvn test</code> dentro de <code>backend/</code>, y también en cada pull request y cada cambio de <code>main</code> con GitHub Actions. Las pruebas de controladores levantan la aplicación completa en modo demo con el filtro de acceso incluido, así que prueban también los permisos.</p>
     <table>
         <tr><th>Qué se prueba</th><th>Clase</th><th>Pruebas</th><th>Pasan</th></tr>
-        <tr><td>Permisos del navegador (CORS)</td><td><code>CorsConfigTest</code></td><td>4</td><td class="ok">4</td></tr><tr><td>Cálculo de ingresos y estadísticas (API)</td><td><code>CalculosT8ControllerTest</code></td><td>6</td><td class="ok">6</td></tr><tr><td>Catálogo público de productos y ropa</td><td><code>CatalogoControllerTest</code></td><td>5</td><td class="ok">5</td></tr><tr><td>Estado de la API</td><td><code>EstadoControllerTest</code></td><td>2</td><td class="ok">2</td></tr><tr><td>Productos de papelería</td><td><code>ProductoControllerTest</code></td><td>8</td><td class="ok">8</td></tr><tr><td>Rutas inexistentes y raíz</td><td><code>RutasTest</code></td><td>4</td><td class="ok">4</td></tr><tr><td>Servicios del cibercafé</td><td><code>ServicioControllerTest</code></td><td>8</td><td class="ok">8</td></tr><tr><td>Inicio de sesión y permisos por rol</td><td><code>SesionControllerTest</code></td><td>7</td><td class="ok">7</td></tr><tr><td>Usuarios</td><td><code>UsuarioControllerTest</code></td><td>1</td><td class="ok">1</td></tr><tr><td>Ventas, existencias y anulación</td><td><code>VentaControllerTest</code></td><td>8</td><td class="ok">8</td></tr><tr><td>Validaciones de ingresos y estadísticas</td><td><code>ValidacionesT8Test</code></td><td>6</td><td class="ok">6</td></tr><tr><td>Arranque de la aplicación</td><td><code>PapeleriaMatrixApplicationTests</code></td><td>1</td><td class="ok">1</td></tr><tr><td>Cierre de sesión por inactividad</td><td><code>AlmacenDeSesionesTest</code></td><td>4</td><td class="ok">4</td></tr><tr><td>Servicio de estadísticas</td><td><code>EstadisticaDelNegocioServiceTest</code></td><td>7</td><td class="ok">7</td></tr><tr><td>Servicio de ingresos</td><td><code>IngresoDelNegocioServiceTest</code></td><td>7</td><td class="ok">7</td></tr>
+        <tr><td>Permisos del navegador (CORS)</td><td><code>CorsConfigTest</code></td><td>4</td><td class="ok">4</td></tr><tr><td>Cálculo de ingresos y estadísticas (API)</td><td><code>CalculosT8ControllerTest</code></td><td>6</td><td class="ok">6</td></tr><tr><td>Catálogo público de productos y ropa</td><td><code>CatalogoControllerTest</code></td><td>5</td><td class="ok">5</td></tr><tr><td>ConsistenciaTest</td><td><code>ConsistenciaTest</code></td><td>5</td><td class="ok">5</td></tr><tr><td>Estado de la API</td><td><code>EstadoControllerTest</code></td><td>2</td><td class="ok">2</td></tr><tr><td>Productos de papelería</td><td><code>ProductoControllerTest</code></td><td>8</td><td class="ok">8</td></tr><tr><td>Rutas inexistentes y raíz</td><td><code>RutasTest</code></td><td>4</td><td class="ok">4</td></tr><tr><td>Servicios del cibercafé</td><td><code>ServicioControllerTest</code></td><td>8</td><td class="ok">8</td></tr><tr><td>Inicio de sesión y permisos por rol</td><td><code>SesionControllerTest</code></td><td>7</td><td class="ok">7</td></tr><tr><td>Usuarios</td><td><code>UsuarioControllerTest</code></td><td>1</td><td class="ok">1</td></tr><tr><td>Ventas, existencias y anulación</td><td><code>VentaControllerTest</code></td><td>8</td><td class="ok">8</td></tr><tr><td>RolEnLaBaseTest</td><td><code>RolEnLaBaseTest</code></td><td>2</td><td class="ok">2</td></tr><tr><td>Validaciones de ingresos y estadísticas</td><td><code>ValidacionesT8Test</code></td><td>6</td><td class="ok">6</td></tr><tr><td>Arranque de la aplicación</td><td><code>PapeleriaMatrixApplicationTests</code></td><td>1</td><td class="ok">1</td></tr><tr><td>Cierre de sesión por inactividad</td><td><code>AlmacenDeSesionesTest</code></td><td>4</td><td class="ok">4</td></tr><tr><td>Servicio de estadísticas</td><td><code>EstadisticaDelNegocioServiceTest</code></td><td>7</td><td class="ok">7</td></tr><tr><td>Servicio de ingresos</td><td><code>IngresoDelNegocioServiceTest</code></td><td>7</td><td class="ok">7</td></tr>
     </table>
 
     <h3 class="salto">Detalle de cada prueba</h3>
@@ -69,6 +69,12 @@
         <tr><td>Responde error claro para un id que no es número.</td><td><code>respondeErrorClaroParaUnIdQueNoEsNumero</code></td><td class="ok">Pasa</td></tr>
         <tr><td>Responde no encontrado para productos y ropa que no existen.</td><td><code>respondeNoEncontradoParaProductosYRopaQueNoExisten</code></td><td class="ok">Pasa</td></tr>
         <tr><td>Lista la ropa de ejemplo.</td><td><code>listaLaRopaDeEjemplo</code></td><td class="ok">Pasa</td></tr>
+        <tr><th colspan="3">ConsistenciaTest · <code>ConsistenciaTest</code></th></tr>
+        <tr><td>Guardar un producto con unidades viejas no borra las ventas.</td><td><code>guardarUnProductoConUnidadesViejasNoBorraLasVentas</code></td><td class="ok">Pasa</td></tr>
+        <tr><td>Diez ventas a la vez no venden más de lo que hay.</td><td><code>diezVentasALaVezNoVendenMasDeLoQueHay</code></td><td class="ok">Pasa</td></tr>
+        <tr><td>Anular la misma venta dos veces a la vez devuelve las existencias una sola vez.</td><td><code>anularLaMismaVentaDosVecesALaVezDevuelveLasExistenciasUnaSolaVez</code></td><td class="ok">Pasa</td></tr>
+        <tr><td>Si cambio un precio mientras se atendia no se cobra otro total.</td><td><code>siCambioUnPrecioMientrasSeAtendiaNoSeCobraOtroTotal</code></td><td class="ok">Pasa</td></tr>
+        <tr><td>Una prenda se vende una sola vez y vuelve si se anula.</td><td><code>unaPrendaSeVendeUnaSolaVezYVuelveSiSeAnula</code></td><td class="ok">Pasa</td></tr>
         <tr><th colspan="3">Estado de la API · <code>EstadoControllerTest</code></th></tr>
         <tr><td>Devuelve el modo demo cuando está activo.</td><td><code>devuelveElModoDemoCuandoEstaActivo</code></td><td class="ok">Pasa</td></tr>
         <tr><td>Devuelve el modo local cuando no hay perfil activo.</td><td><code>devuelveElModoLocalCuandoNoHayPerfilActivo</code></td><td class="ok">Pasa</td></tr>
@@ -114,6 +120,9 @@
         <tr><td>El mismo artículo repetido se suma en una línea.</td><td><code>elMismoArticuloRepetidoSeSumaEnUnaLinea</code></td><td class="ok">Pasa</td></tr>
         <tr><td>El operador solo ve sus ventas y el administrador todas.</td><td><code>elOperadorSoloVeSusVentasYElAdministradorTodas</code></td><td class="ok">Pasa</td></tr>
         <tr><td>El operador vende y se descuentan las existencias.</td><td><code>elOperadorVendeYSeDescuentanLasExistencias</code></td><td class="ok">Pasa</td></tr>
+        <tr><th colspan="3">RolEnLaBaseTest · <code>RolEnLaBaseTest</code></th></tr>
+        <tr><td>El rol se lee y se guarda como antes.</td><td><code>elRolSeLeeYSeGuardaComoAntes</code></td><td class="ok">Pasa</td></tr>
+        <tr><td>La tabla de usuarios no tiene restriccion sobre el rol.</td><td><code>laTablaDeUsuariosNoTieneRestriccionSobreElRol</code></td><td class="ok">Pasa</td></tr>
         <tr><th colspan="3">Validaciones de ingresos y estadísticas · <code>ValidacionesT8Test</code></th></tr>
         <tr><td>Ingreso rechaza tipo con dígitos.</td><td><code>ingresoRechazaTipoConDigitos</code></td><td class="ok">Pasa</td></tr>
         <tr><td>Ingreso rechaza código no numérico.</td><td><code>ingresoRechazaCodigoNoNumerico</code></td><td class="ok">Pasa</td></tr>
@@ -180,7 +189,25 @@
         <tr><td>Rutas nuevas de ingresos publicadas tras el último cambio</td><td class="ok">Presentes en <code>/v3/api-docs</code></td></tr>
     </table>
 
-    <h2>6. Errores encontrados y corregidos</h2>
+    <h2>6. Auditoría de inconsistencias</h2>
+    <p>Se probaron situaciones de uso real con varias personas a la vez, con peticiones en paralelo contra la API. También quedan como pruebas automáticas en <code>ConsistenciaTest</code> y <code>RolEnLaBaseTest</code>.</p>
+    <table>
+        <tr><th>Situación</th><th>Antes</th><th>Ahora</th></tr>
+        <tr><td>El operador entra después de 30 minutos de encendido el servidor</td><td>No podía entrar (409): la restricción del rol con «é» fallaba al renovarse las conexiones</td><td class="ok">Entra siempre</td></tr>
+        <tr><td>Dos operadores venden la última unidad al mismo tiempo</td><td>Pasaban las dos ventas</td><td class="ok">Pasa una; la otra avisa cuántas quedan</td></tr>
+        <tr><td>Diez ventas a la vez de un producto con 5 unidades</td><td>Pasaban las 10 y quedaban 4 unidades</td><td class="ok">Pasan 5, se rechazan 5, quedan 0</td></tr>
+        <tr><td>Dos personas anulan la misma venta a la vez</td><td>Una respondía error del servidor (500)</td><td class="ok">Una anula; la otra recibe «no existe»; las unidades vuelven una vez</td></tr>
+        <tr><td>La administradora guarda un producto con el formulario abierto antes de una venta</td><td>Borraba la venta de las existencias (17 → 20)</td><td class="ok">No guarda y muestra cuántas quedan</td></tr>
+        <tr><td>Cambia un precio mientras el operador está cobrando</td><td>Se registraba un total distinto al cobrado</td><td class="ok">No registra, avisa y actualiza la caja</td></tr>
+        <tr><td>Se cambia la contraseña de un operador desde el panel</td><td>Su sesión abierta seguía sirviendo</td><td class="ok">Se cierra en todos los navegadores</td></tr>
+        <tr><td>Vender la misma prenda (pieza única) varias veces</td><td>Se podía, incluso 5 unidades</td><td class="ok">Se vende una vez; queda «Vendida» hasta que se anule</td></tr>
+        <tr><td>El operador ve a cuánto se compró cada producto</td><td>Lo veía</td><td class="ok">Solo ve unidades y precio de venta</td></tr>
+        <tr><td>Datos de la tienda en la página de clientes</td><td>No aparecían</td><td class="ok">Aparecen en «Horarios de atención»</td></tr>
+        <tr><td>Ventas de la noche en Render (servidor en UTC)</td><td>Quedaban con la fecha del día siguiente</td><td class="ok">Hora de Colombia</td></tr>
+        <tr><td>Mismo usuario en dos navegadores; salir en uno</td><td>El otro sigue abierto (correcto)</td><td class="ok">Sin cambios</td></tr>
+    </table>
+
+    <h2>7. Errores encontrados y corregidos</h2>
     <table>
         <tr><th>Error</th><th>Causa</th><th>Corrección</th></tr>
         <tr><td>El segundo usuario sin correo o sin celular no se podía guardar.</td><td>Se guardaba texto vacío en columnas únicas.</td><td>Se guarda NULL. Prueba <code>dosUsuariosSinEmailNiTelefonoNoChocan</code>.</td></tr>
@@ -190,7 +217,7 @@
         <tr><td>Los ingresos de las ventas de la caja salían en cero.</td><td>Las ventas mezclan tipos en una factura («Venta en tienda»).</td><td>Se suman por línea. Prueba <code>lasVentasDeLaCajaEntranEnElResumenDeIngresos</code>.</td></tr>
     </table>
 
-    <h2>7. Cómo repetir las pruebas</h2>
+    <h2>8. Cómo repetir las pruebas</h2>
     <pre>cd backend
 mvn test                                         (pruebas automáticas)
 mvn spring-boot:run -Dspring-boot.run.profiles=demo   (para las pruebas manuales)</pre>

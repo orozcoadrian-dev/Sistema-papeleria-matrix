@@ -12,7 +12,9 @@ COPY --from=compilacion /proyecto/backend/target/papeleria-matrix.jar aplicacion
 
 # Render corre la aplicación en modo demo, con una base de datos H2 y datos de ejemplo.
 ENV SPRING_PROFILES_ACTIVE=demo
+# Hora de Colombia: sin esto el servidor usa la hora UTC y una venta de las 7 p. m. queda con la fecha de mañana.
+ENV TZ=America/Bogota
 EXPOSE 8080
 
 # Opciones de memoria y arranque pensadas para el plan gratuito de Render (512 MB y poco procesador).
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=70", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-jar", "aplicacion.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=America/Bogota", "-XX:MaxRAMPercentage=70", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-jar", "aplicacion.jar"]

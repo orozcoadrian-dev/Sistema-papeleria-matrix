@@ -3,7 +3,6 @@ package com.papeleriamatrix.model;
 import com.papeleriamatrix.common.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -49,9 +48,11 @@ public class Usuario
 	@JsonIgnore
 	private String contrasenia = "";
 
-	@Convert(converter = RolUsuarioConverter.class)
-	@Column(name = "Rol", nullable = false)
-	private RolUsuario rol;
+	// Se guarda como texto ("Administrador" u "Operador de cibercafé") y no como enum: con un enum,
+	// Hibernate crea en H2 una restricción CHECK con la «é» que falla cuando el grupo de conexiones
+	// abre una conexión nueva (a los 30 minutos), y el operador ya no puede entrar. En MySQL la columna es ENUM.
+	@Column(name = "Rol", nullable = false, length = 30)
+	private String rol;
 
 	@Column(name = "Email", unique = true, length = 60)
 	private String email;
@@ -282,12 +283,12 @@ public class Usuario
 
 	public void setRol(RolUsuario rol) 
 	{
-		this.rol = rol;
+		this.rol = rol != null ? rol.getRol() : null;
 	}
 
 	public RolUsuario getRol() 
 	{
-		return rol;
+		return rol != null ? RolUsuario.fromString(rol) : null;
 	}
 
 	public void setEmail(String email) throws IllegalArgumentException
