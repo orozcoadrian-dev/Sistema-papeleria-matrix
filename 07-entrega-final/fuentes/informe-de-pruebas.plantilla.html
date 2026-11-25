@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de pruebas · Papelería Matrix</title>
+    <link rel="stylesheet" href="estilo-documento.css">
+    <style>
+        .detalle td:first-child { width: 55%; }
+        .detalle td:last-child { width: 10%; }
+        .detalle code { word-break: break-all; font-size: 8pt; }
+    </style>
+</head>
+
+<body>
+    <section class="portada">
+        <p class="portada__marca">Papelería Matrix</p>
+        <h1>Informe de pruebas</h1>
+        <p class="portada__sub">Pruebas automáticas del backend, pruebas de las pantallas en el navegador y comprobación de la versión publicada.</p>
+        <div class="portada__datos">
+            <p>Fecha de ejecución: 25 de noviembre de 2026</p>
+            <p>Versión probada: rama <code>main</code> con los cambios de la entrega final</p>
+            <p>Equipo: Osvaldo De Jesús Pacheco Sanabria y Adrián Orozco</p>
+        </div>
+    </section>
+
+    <h2>1. Resumen</h2>
+    <table>
+        <tr><th>Tipo de prueba</th><th>Resultado</th></tr>
+        <tr><td>Pruebas automáticas del backend (JUnit 5, MockMvc, Mockito)</td><td class="ok">{{OK}} de {{TOTAL}} pasan · {{FALLAS}} fallan</td></tr>
+        <tr><td>Integración continua en GitHub Actions (compilar, probar y construir la imagen Docker)</td><td class="ok">Pasa en main</td></tr>
+        <tr><td>Pruebas de las pantallas en el navegador (escritorio y celular)</td><td class="ok">Todas las funciones probadas responden como se espera</td></tr>
+        <tr><td>Versión publicada en Render</td><td class="ok">Página, catálogo, inicio de sesión y permisos responden</td></tr>
+    </table>
+
+    <h2>2. Entorno</h2>
+    <ul>
+        <li>Windows 11, JDK 21 (Temurin), Maven 3.10, Spring Boot 4.1 con Hibernate 7.4.</li>
+        <li>Base de datos H2 en memoria con el perfil <code>demo</code> y sus datos de ejemplo.</li>
+        <li>Navegador: Chromium (panel de vista previa), en 1280 × 800 y en 375 × 812 (celular).</li>
+        <li>Publicación: Render, plan gratuito (API en Docker y página como sitio estático).</li>
+    </ul>
+
+    <h2>3. Pruebas automáticas del backend</h2>
+    <p>Se ejecutan con <code>mvn test</code> dentro de <code>backend/</code>, y también en cada pull request y cada cambio de <code>main</code> con GitHub Actions. Las pruebas de controladores levantan la aplicación completa en modo demo con el filtro de acceso incluido, así que prueban también los permisos.</p>
+    <table>
+        <tr><th>Qué se prueba</th><th>Clase</th><th>Pruebas</th><th>Pasan</th></tr>
+        {{RESUMEN}}
+    </table>
+
+    <h3 class="salto">Detalle de cada prueba</h3>
+    <table class="detalle">
+        <tr><th>Qué comprueba</th><th>Método</th><th>Resultado</th></tr>
+        {{DETALLE}}
+    </table>
+
+    <h2 class="salto">4. Pruebas de las pantallas en el navegador</h2>
+    <p>Se hicieron con el backend en modo demo y los usuarios de prueba. Las capturas están en <code>07-entrega-final/capturas</code>.</p>
+    <table>
+        <tr><th>N.º</th><th>Caso</th><th>Pasos</th><th>Resultado esperado</th><th>Obtenido</th></tr>
+        <tr><td>P-01</td><td>Entrar sin sesión al panel</td><td>Abrir <code>views/panel.html</code> sin haber entrado.</td><td>Lleva al inicio de sesión con el aviso «Entra con tu usuario».</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-02</td><td>Contraseña incorrecta</td><td>Entrar como administradora con una contraseña falsa.</td><td>«El usuario o la contraseña no son correctos.»</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-03</td><td>Entrar por rol</td><td>Entrar como administradora y como operador.</td><td>La administradora llega al panel; el operador a la caja.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-04</td><td>El operador no abre el panel</td><td>Con sesión de operador, abrir <code>panel.html</code>.</td><td>Lo devuelve a la caja.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-05</td><td>Cierre por inactividad</td><td>Simular 16 minutos sin uso y recargar.</td><td>Cierra la sesión y avisa que pasaron 15 minutos.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-06</td><td>Existencias en el panel</td><td>Abrir Papelería y cambiar un producto.</td><td>Las tarjetas muestran «Quedan N» y el formulario trae unidades y precio de compra.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-07</td><td>Crear operador</td><td>Agregar un operador con contraseña y luego entrar con él.</td><td>Se guarda y puede entrar con su usuario.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-08</td><td>Cambiar operador sin tocar la contraseña</td><td>Cambiar el sueldo dejando la contraseña vacía.</td><td>Guarda y la contraseña anterior sigue sirviendo.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-09</td><td>Clave de permiso</td><td>Poner una clave a un operador.</td><td>La tarjeta muestra «Tiene clave de permiso».</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-10</td><td>Datos de la tienda con números</td><td>Guardar «Lunes a sábado de 8 a. m. a 7 p. m.».</td><td>Se guarda y aparece en la lista.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-11</td><td>Venta completa</td><td>Agregar 2 impresiones a color, 1 carpeta y 1 sobre; cobrar con $ 5.000.</td><td>Total $ 2.900, cambio $ 2.100, recibo con número de factura.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-12</td><td>No vender más de lo que hay</td><td>Intentar agregar más unidades de las existentes.</td><td>Avisa cuántas quedan y no las agrega.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-13</td><td>Anular venta</td><td>Como administradora, anular una venta de 2 carpetas.</td><td>La venta desaparece y las existencias vuelven (57 → 59).</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-14</td><td>Lo vendido por rol</td><td>Abrir «Lo vendido» como operador y como administradora.</td><td>El operador ve solo las suyas y sin «Anular»; la administradora ve todas.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-15</td><td>Cuentas y corte</td><td>Abrir Cuentas del mes y guardar el corte.</td><td>El total de la pantalla coincide con el calculado por el servidor por tipo ($ 18.800 = 4.000 + 2.800 + 12.000) y el corte aparece en la lista.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-16</td><td>Celular</td><td>Abrir la caja y Cuentas en 375 px de ancho.</td><td>Sin desplazamiento lateral; total y «Cobrar» fijos abajo.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-17</td><td>Página pública</td><td>Abrir la página sin sesión.</td><td>Muestra servicios, papelería y ropa desde la API; ya no tiene botón «Registrarse».</td><td class="ok">Pasa</td></tr>
+    </table>
+
+    <h2>5. Comprobación de la versión publicada</h2>
+    <table>
+        <tr><th>Comprobación</th><th>Resultado</th></tr>
+        <tr><td><code>GET /api/estado</code> en la API de Render</td><td class="ok">«en línea», modo demo</td></tr>
+        <tr><td>La página publicada carga el catálogo desde la API (incluidos los servicios, que no tienen respaldo)</td><td class="ok">Pasa</td></tr>
+        <tr><td>Inicio de sesión con datos inventados desde la página publicada</td><td class="ok">401 «El usuario o la contraseña no son correctos.»</td></tr>
+        <tr><td>Ventas, usuarios e ingresos sin sesión</td><td class="ok">401</td></tr>
+        <tr><td>Petición con cabecera Authorization desde la página (CORS)</td><td class="ok">Permitida</td></tr>
+        <tr><td>Rutas nuevas de ingresos publicadas tras el último cambio</td><td class="ok">Presentes en <code>/v3/api-docs</code></td></tr>
+    </table>
+
+    <h2>6. Errores encontrados y corregidos</h2>
+    <table>
+        <tr><th>Error</th><th>Causa</th><th>Corrección</th></tr>
+        <tr><td>El segundo usuario sin correo o sin celular no se podía guardar.</td><td>Se guardaba texto vacío en columnas únicas.</td><td>Se guarda NULL. Prueba <code>dosUsuariosSinEmailNiTelefonoNoChocan</code>.</td></tr>
+        <tr><td>Listar facturas fallaba al convertir a JSON.</td><td>Relaciones perezosas de Hibernate.</td><td><code>@JsonIgnore</code> en las relaciones.</td></tr>
+        <tr><td>«Datos de la tienda» respondía 500 al listar.</td><td>Relación perezosa con el administrador.</td><td><code>@JsonIgnore</code>; el texto además acepta números.</td></tr>
+        <tr><td>El CI de main fallaba en dos pruebas de ingresos.</td><td>Faltaba simular un tipo de factura y una comprobación esperaba el total en lugar de lo de papelería.</td><td>Pruebas corregidas; ahora comprueban cada tipo.</td></tr>
+        <tr><td>Los ingresos de las ventas de la caja salían en cero.</td><td>Las ventas mezclan tipos en una factura («Venta en tienda»).</td><td>Se suman por línea. Prueba <code>lasVentasDeLaCajaEntranEnElResumenDeIngresos</code>.</td></tr>
+    </table>
+
+    <h2>7. Cómo repetir las pruebas</h2>
+    <pre>cd backend
+mvn test                                         (pruebas automáticas)
+mvn spring-boot:run -Dspring-boot.run.profiles=demo   (para las pruebas manuales)</pre>
+    <p>En Postman: importar <code>postman/papeleria-matrix.postman_collection.json</code> y el entorno Local o Render, y ejecutar la colección completa. Las carpetas 5 y 6 usan los usuarios de prueba del modo demo.</p>
+</body>
+
+</html>

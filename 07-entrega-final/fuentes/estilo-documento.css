@@ -1,0 +1,185 @@
+/* Estilo común de los documentos de entrega. Se imprimen a PDF desde el navegador (A4). */
+@page {
+    size: A4;
+    margin: 18mm 16mm 20mm;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #241433;
+}
+
+.portada {
+    height: 250mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10mm;
+    border-left: 6mm solid #5B12A8;
+    page-break-after: always;
+}
+
+.portada__marca {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #5B12A8;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.portada h1 {
+    margin: 6mm 0 4mm;
+    font-size: 30pt;
+    line-height: 1.15;
+}
+
+.portada__sub {
+    font-size: 13pt;
+    color: #5E5270;
+}
+
+.portada__datos {
+    margin-top: 18mm;
+    font-size: 10.5pt;
+    color: #5E5270;
+}
+
+.portada__datos p {
+    margin: 1mm 0;
+}
+
+h2 {
+    margin: 9mm 0 3mm;
+    padding-bottom: 1.5mm;
+    font-size: 16pt;
+    color: #5B12A8;
+    border-bottom: 0.6mm solid #E4DAF0;
+    page-break-after: avoid;
+}
+
+h3 {
+    margin: 6mm 0 2mm;
+    font-size: 12pt;
+    page-break-after: avoid;
+}
+
+p {
+    margin: 0 0 3mm;
+}
+
+ol,
+ul {
+    margin: 0 0 3mm;
+    padding-left: 6mm;
+}
+
+li {
+    margin-bottom: 1mm;
+}
+
+figure {
+    margin: 4mm 0 5mm;
+    page-break-inside: avoid;
+}
+
+figure img {
+    display: block;
+    width: 100%;
+    border: 0.3mm solid #E4DAF0;
+    border-radius: 2mm;
+}
+
+figure.angosta img {
+    width: 55%;
+    margin: 0 auto;
+}
+
+figcaption {
+    margin-top: 1.5mm;
+    font-size: 9pt;
+    color: #5E5270;
+    text-align: center;
+}
+
+.consejo,
+.aviso {
+    margin: 3mm 0 4mm;
+    padding: 3mm 4mm;
+    border-radius: 2mm;
+    page-break-inside: avoid;
+}
+
+.consejo {
+    background: #FFF4D9;
+}
+
+.aviso {
+    background: #FCE8EC;
+}
+
+table {
+    width: 100%;
+    margin: 2mm 0 5mm;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    page-break-inside: auto;
+}
+
+tr {
+    page-break-inside: avoid;
+}
+
+th,
+td {
+    padding: 1.8mm 2.5mm;
+    border: 0.3mm solid #E4DAF0;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background: #EFE5FB;
+}
+
+code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 9pt;
+    padding: 0.2mm 1mm;
+    border-radius: 1mm;
+    background: #F3EEF9;
+}
+
+pre {
+    margin: 2mm 0 4mm;
+    padding: 3mm 4mm;
+    border-radius: 2mm;
+    background: #F3EEF9;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 8.8pt;
+    white-space: pre-wrap;
+    page-break-inside: avoid;
+}
+
+.indice {
+    page-break-after: always;
+}
+
+.indice ol {
+    font-size: 11pt;
+}
+
+.salto {
+    page-break-before: always;
+}
+
+.ok {
+    color: #1E7F52;
+    font-weight: 700;
+}
