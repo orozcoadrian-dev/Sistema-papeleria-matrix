@@ -22,8 +22,11 @@ public class RopaService
 
 	private final DetalleDeFacturaRepository detalles;
 
-	public RopaService(RopaRepository repositorio, DetalleDeFacturaRepository detalles)
+	private final ImagenService imagenes;
+
+	public RopaService(RopaRepository repositorio, DetalleDeFacturaRepository detalles, ImagenService imagenes)
 	{
+		this.imagenes = imagenes;
 		this.repositorio = repositorio;
 		this.detalles = detalles;
 	}
@@ -70,5 +73,8 @@ public class RopaService
 	public void eliminar(Integer id)
 	{
 		repositorio.delete(repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda con el id " + id + ".")));
+		// Se confirma el borrado en la base antes de quitar la foto: si no se puede borrar (está en ventas), la foto se queda.
+		repositorio.flush();
+		imagenes.quitar("ropa", id);
 	}
 }

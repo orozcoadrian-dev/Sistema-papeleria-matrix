@@ -27,3 +27,7 @@ replay_pid*
 contexto-maestro.docx
 .context-doc-images
 Notes
+
+# Fotos subidas desde el panel cuando el backend corre en el computador
+backend/imagenes/
+imagenes/

@@ -130,6 +130,14 @@
     font-size: 1.4rem;
 }
 
+.articulo__foto {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    background: var(--p-morado-claro);
+}
+
 .articulo__nombre {
     font-weight: 700;
     line-height: 1.3;

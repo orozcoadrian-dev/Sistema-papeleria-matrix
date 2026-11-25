@@ -22,9 +22,12 @@ public class ProductoPapeleriaService
 {
 	private final ProductoPapeleriaRepository repositorio;
 
-	public ProductoPapeleriaService(ProductoPapeleriaRepository repositorio)
+	private final ImagenService imagenes;
+
+	public ProductoPapeleriaService(ProductoPapeleriaRepository repositorio, ImagenService imagenes)
 	{
 		this.repositorio = repositorio;
+		this.imagenes = imagenes;
 	}
 
 	@Transactional(readOnly = true)
@@ -90,5 +93,8 @@ public class ProductoPapeleriaService
 		ProductoPapeleria producto = repositorio.findById(id)
 			.orElseThrow(() -> new RecursoNoEncontradoException("No existe un producto con el id " + id + "."));
 		repositorio.delete(producto);
+		// Se confirma el borrado en la base antes de quitar la foto: si no se puede borrar (está en ventas), la foto se queda.
+		repositorio.flush();
+		imagenes.quitar("productos", id);
 	}
 }

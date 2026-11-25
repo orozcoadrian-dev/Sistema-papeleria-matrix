@@ -227,6 +227,8 @@ function crearTarjeta(datos) {
 }
 
 const catalogos = {};
+// Las fotos que subió la administradora; los catálogos esperan esta lista antes de dibujarse.
+const fotosListas = Fotos.cargar();
 
 /**
  * Conecta un catálogo: su lista, su buscador, su mensaje de estado y su botón de reintento.
@@ -275,6 +277,7 @@ function iniciarCatalogo(opciones) {
 
         try {
             catalogo.elementos = await pedir(opciones.ruta);
+            await fotosListas;
             mensajeBase = '';
         } catch {
             if (opciones.respaldo) {
@@ -310,6 +313,7 @@ iniciarCatalogo({
     camposBusqueda: (s) => [s.nombre, s.categoria, s.descripcion, s.codigo],
     crearTarjeta: (s) => crearTarjeta({
         clase: 'card--servicio',
+        imagen: Fotos.url('servicios', s.id),
         icono: ICONOS_SERVICIO[s.categoria] || '🛠️',
         categoria: s.categoria,
         titulo: s.nombre,
@@ -324,7 +328,8 @@ iniciarCatalogo({
     respaldo: RESPALDO.papeleria,
     camposBusqueda: (p) => [p.nombre, p.descripcion, p.codigo],
     crearTarjeta: (p) => crearTarjeta({
-        imagen: IMAGENES[p.codigo],
+        // La foto que subió la administradora; si no hay, la de la página.
+        imagen: Fotos.url('productos', p.id) || IMAGENES[p.codigo],
         icono: '📚',
         titulo: p.nombre,
         precio: p.precio,
@@ -338,7 +343,7 @@ iniciarCatalogo({
     respaldo: RESPALDO.ropa,
     camposBusqueda: (r) => [r.nombre, r.tipo, r.color, r.material, 'talla ' + r.talla, r.descripcion, r.codigo],
     crearTarjeta: (r) => crearTarjeta({
-        imagen: IMAGENES[r.codigo],
+        imagen: Fotos.url('ropa', r.id) || IMAGENES[r.codigo],
         icono: '👗',
         // El nombre y el color son opcionales en la base: sin ellos la tarjeta no debe mostrar "null".
         titulo: r.nombre || r.tipo,
@@ -375,6 +380,42 @@ async function cargarDatosTienda() {
 }
 
 cargarDatosTienda();
+
+
+/* Si la administradora o un operador ya entró en esta pestaña y vino a ver la página, en vez de
+   «Iniciar sesión» se ofrece volver a su pantalla y cerrar la sesión. Se confirma con el servidor
+   que la sesión sigue abierta; si se cerró, queda «Iniciar sesión». */
+async function pintarAcceso() {
+    const sesion = Sesion.leer();
+    const acceso = document.querySelector('.nav__auth');
+    if (!sesion || !acceso) {
+        return;
+    }
+    try {
+        await Sesion.llamar('/api/sesion');
+    } catch {
+        Sesion.borrar();
+        return;
+    }
+    const esAdministradora = sesion.rol === 'ADMINISTRADOR';
+    const volver = crear('a', 'btn btn--primary', esAdministradora ? 'Volver al panel' : 'Volver a la caja');
+    volver.href = esAdministradora ? 'views/panel.html' : 'views/ventas.html';
+    const salir = crear('button', 'btn btn--ghost', 'Cerrar sesión');
+    salir.type = 'button';
+    salir.addEventListener('click', async () => {
+        salir.disabled = true;
+        try {
+            await Sesion.llamar('/api/sesion', { metodo: 'DELETE' });
+        } catch {
+            // Igual se borra la sesión de esta pestaña.
+        }
+        Sesion.borrar();
+        location.reload();
+    });
+    acceso.replaceChildren(volver, salir);
+}
+
+pintarAcceso();
 
 
 /* =====================================================================

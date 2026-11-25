@@ -19,9 +19,12 @@ public class ServicioService
 {
 	private final ServicioRepository repositorio;
 
-	public ServicioService(ServicioRepository repositorio)
+	private final ImagenService imagenes;
+
+	public ServicioService(ServicioRepository repositorio, ImagenService imagenes)
 	{
 		this.repositorio = repositorio;
+		this.imagenes = imagenes;
 	}
 
 	@Transactional(readOnly = true)
@@ -66,6 +69,9 @@ public class ServicioService
 	public void eliminar(Integer id)
 	{
 		repositorio.delete(buscar(id));
+		// Se confirma el borrado en la base antes de quitar la foto: si no se puede borrar (está en ventas), la foto se queda.
+		repositorio.flush();
+		imagenes.quitar("servicios", id);
 	}
 
 	private Servicio buscar(Integer id)
