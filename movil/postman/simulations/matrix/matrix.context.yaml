@@ -1,0 +1,26 @@
+purpose:
+  stands_in_for: API de Papelería Matrix
+  unblocks: Pruebas de navegador del frontend móvil sin tocar datos reales
+assumptions:
+  - id: contrato-del-codigo
+    status: supported
+    claim: La API entrega sesión con código Bearer, catálogo, ventas y operadores, y responde errores con título y detalle.
+    reason: Se leyeron los controladores, las peticiones, las respuestas y el filtro de permisos del backend de este repositorio.
+    verification: El mismo recorrido principal se ejecutó el 2026-11-25 contra la API real en modo demo.
+    source: backend/src/main/java/com/papeleriamatrix
+    updated_at: '2026-11-25'
+  - id: alcance-del-mock
+    status: unknown
+    claim: La simulación basta para los escenarios del cliente que se prueban.
+    reason: No filtra ventas por fecha, no limita intentos de entrada y sus códigos de sesión son fijos.
+    verification: Las pruebas de navegador pasan contra ella. No demuestra el comportamiento del servidor real.
+    source: postman/mocks/matrix-api/default.js
+    updated_at: '2026-11-25'
+simulation: matrix
+routing: path
+mocks:
+  - name: matrix-api
+    routeKey: matrix-api
+    origin:
+      - localhost
+    path: postman/mocks/matrix-api
