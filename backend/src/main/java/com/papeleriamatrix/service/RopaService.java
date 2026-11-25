@@ -5,6 +5,7 @@ import com.papeleriamatrix.dto.RopaRequest;
 import com.papeleriamatrix.exception.RecursoNoEncontradoException;
 import com.papeleriamatrix.exception.RecursoDuplicadoException;
 import com.papeleriamatrix.model.Ropa;
+import com.papeleriamatrix.repository.DetalleDeFacturaRepository;
 import com.papeleriamatrix.repository.RopaRepository;
 import java.util.List;
 import org.springframework.data.domain.Sort;
@@ -19,22 +20,26 @@ public class RopaService
 {
 	private final RopaRepository repositorio;
 
-	public RopaService(RopaRepository repositorio)
+	private final DetalleDeFacturaRepository detalles;
+
+	public RopaService(RopaRepository repositorio, DetalleDeFacturaRepository detalles)
 	{
 		this.repositorio = repositorio;
+		this.detalles = detalles;
 	}
 
 	@Transactional(readOnly = true)
 	public List<RopaResponse> listar()
 	{
-		return repositorio.findAll(Sort.by("id")).stream().map(RopaResponse::desde).toList();
+		java.util.Set<Integer> vendidas = new java.util.HashSet<>(detalles.ropaVendida());
+		return repositorio.findAll(Sort.by("id")).stream().map(r -> RopaResponse.desde(r, vendidas.contains(r.getId()))).toList();
 	}
 
 	@Transactional(readOnly = true)
 	public RopaResponse obtener(Integer id)
 	{
 		return repositorio.findById(id)
-			.map(RopaResponse::desde)
+			.map(r -> RopaResponse.desde(r, detalles.existsByRopaId(r.getId())))
 			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda con el id " + id + "."));
 	}
 
@@ -58,7 +63,7 @@ public class RopaService
 			throw new RecursoDuplicadoException("Ya existe otra prenda con el código " + peticion.codigo() + ".");
 		}
 		ropa.actualizar(peticion.codigo(), peticion.tipoRopa(), peticion.material(), peticion.talla(), peticion.descripcion(), peticion.nombre(), peticion.precio(), peticion.color());
-		return RopaResponse.desde(repositorio.save(ropa));
+		return RopaResponse.desde(repositorio.save(ropa), detalles.existsByRopaId(id));
 	}
 
 	@Transactional

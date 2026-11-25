@@ -3,7 +3,9 @@ package com.papeleriamatrix.service;
 import com.papeleriamatrix.dto.ProductoInternoResponse;
 import com.papeleriamatrix.dto.ProductoResponse;
 import com.papeleriamatrix.dto.ProductoPapeleriaRequest;
+import com.papeleriamatrix.exception.OperacionRechazadaException;
 import com.papeleriamatrix.exception.RecursoDuplicadoException;
+import org.springframework.http.HttpStatus;
 import com.papeleriamatrix.exception.RecursoNoEncontradoException;
 import com.papeleriamatrix.model.ProductoPapeleria;
 import com.papeleriamatrix.repository.ProductoPapeleriaRepository;
@@ -32,9 +34,12 @@ public class ProductoPapeleriaService
 	}
 
 	@Transactional(readOnly = true)
-	public List<ProductoInternoResponse> listarInterno()
+	public List<ProductoInternoResponse> listarInterno(boolean conCostos)
 	{
-		return repositorio.findAll(Sort.by("id")).stream().map(ProductoInternoResponse::desde).toList();
+		return repositorio.findAll(Sort.by("id")).stream()
+			.map(ProductoInternoResponse::desde)
+			.map(producto -> conCostos ? producto : producto.sinCostos())
+			.toList();
 	}
 
 	@Transactional(readOnly = true)
@@ -61,8 +66,14 @@ public class ProductoPapeleriaService
 	@Transactional
 	public ProductoResponse actualizar(Integer id, ProductoPapeleriaRequest peticion)
 	{
-		ProductoPapeleria producto = repositorio.findById(id)
+		ProductoPapeleria producto = repositorio.bloquear(id)
 			.orElseThrow(() -> new RecursoNoEncontradoException("No existe un producto con el id " + id + "."));
+		if (peticion.cantidadAnterior() != null && !peticion.cantidadAnterior().equals(producto.getCantidad()))
+		{
+			throw new OperacionRechazadaException(HttpStatus.CONFLICT, "Las unidades cambiaron",
+				"Mientras cambiabas este producto se vendieron unidades: ahora quedan " + producto.getCantidad()
+					+ ". Revisa el número de unidades y guarda otra vez.");
+		}
 		if (repositorio.existsByCodigoProductoAndIdNot(peticion.codigo(), id))
 		{
 			throw new RecursoDuplicadoException("Ya existe otro producto con el código " + peticion.codigo() + ".");

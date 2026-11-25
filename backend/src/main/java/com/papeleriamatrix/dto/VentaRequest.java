@@ -6,13 +6,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**
  * Una venta: lo que se lleva el cliente. Cada artículo es un producto de papelería, una prenda de ropa o un servicio.
  * operadorId solo se usa cuando la venta la registra un administrador o se entra con la clave de la API;
- * si entra un operador, la venta queda a su nombre.
+ * si entra un operador, la venta queda a su nombre. totalEsperado es opcional: si viene, debe coincidir con el total.
+ * La ropa se vende de a una prenda, porque cada prenda es única.
  */
 public record VentaRequest(
 	@NotEmpty(message = "Agrega al menos un artículo a la venta.")
@@ -20,7 +22,11 @@ public record VentaRequest(
 	List<@Valid @NotNull(message = "Hay un artículo vacío en la venta.") Articulo> articulos,
 
 	@Positive(message = "El operador debe ser un id mayor que cero.")
-	Integer operadorId)
+	Integer operadorId,
+
+	// Lo que la caja le cobró al cliente. Si un precio cambió mientras se atendía, el total no coincide y la venta no se hace.
+	@PositiveOrZero(message = "El total esperado no puede ser negativo.")
+	Double totalEsperado)
 {
 	public record Articulo(
 		@NotNull(message = "Falta el tipo del artículo.")

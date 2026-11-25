@@ -14,9 +14,11 @@ public record RopaResponse(
 	String color,
 	String material,
 	String descripcion,
-	Double precio)
+	Double precio,
+	boolean disponible)
 {
-	public static RopaResponse desde(Ropa ropa)
+	/** disponible es falso cuando la prenda ya se vendió: cada prenda es única. */
+	public static RopaResponse desde(Ropa ropa, boolean vendida)
 	{
 		return new RopaResponse(
 			ropa.getId(),
@@ -27,6 +29,12 @@ public record RopaResponse(
 			ropa.getColor(),
 			ropa.getMaterial(),
 			ropa.getDescripcion(),
-			ropa.getPrecio());
+			ropa.getPrecio(),
+			!vendida);
+	}
+
+	public static RopaResponse desde(Ropa ropa)
+	{
+		return desde(ropa, false);
 	}
 }
