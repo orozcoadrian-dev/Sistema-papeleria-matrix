@@ -146,7 +146,8 @@ async function cargarCatalogo() {
                 nombre: r.nombre || r.tipo || 'Sin nombre',
                 precio: r.precio,
                 detalle: info.detalle(r),
-                cantidad: tipo === 'producto' ? r.cantidad : null
+                // La papelería tiene existencias; cada prenda es única (1 si está disponible, 0 si ya se vendió).
+                cantidad: tipo === 'producto' ? r.cantidad : tipo === 'ropa' ? (r.disponible === false ? 0 : 1) : null
             }));
         }));
         catalogo = listas.flat();
@@ -281,7 +282,8 @@ function crearArticulo(articulo) {
     if (articulo.cantidad !== null) {
         const existencias = document.createElement('span');
         existencias.className = 'articulo__existencias';
-        if (agotado) existencias.textContent = 'Agotado';
+        if (articulo.tipo === 'ropa') existencias.textContent = agotado ? 'Vendida' : quedan <= 0 ? 'Ya está en la venta' : 'Pieza única';
+        else if (agotado) existencias.textContent = 'Agotado';
         else if (quedan <= 0) existencias.textContent = 'Ya agregaste todas';
         else existencias.textContent = quedan === 1 ? 'Queda 1' : `Quedan ${miles.format(quedan)}`;
         if (agotado || quedan < POCAS_UNIDADES) existencias.classList.add('articulo__existencias--pocas');
@@ -311,6 +313,9 @@ function agregar(articulo, cuantos = 1) {
     const nueva = actual + cuantos;
     if (nueva <= 0) {
         carrito.delete(llave);
+    } else if (articulo.tipo === 'ropa' && nueva > articulo.cantidad) {
+        avisar(articulo.cantidad === 0 ? `«${articulo.nombre}» ya se vendió.` : `Cada prenda es única: «${articulo.nombre}» ya está en la venta.`, 'error');
+        return;
     } else if (articulo.cantidad !== null && nueva > articulo.cantidad) {
         avisar(articulo.cantidad === 1
             ? `Solo queda 1 unidad de «${articulo.nombre}».`
@@ -490,7 +495,9 @@ $('formulario-cobrar').addEventListener('submit', async (evento) => {
     boton.disabled = true;
     boton.textContent = 'Registrando…';
     const cuerpo = {
-        articulos: [...carrito.values()].map(({ articulo, cantidad }) => ({ tipo: articulo.tipo, id: articulo.id, cantidad }))
+        articulos: [...carrito.values()].map(({ articulo, cantidad }) => ({ tipo: articulo.tipo, id: articulo.id, cantidad })),
+        // Lo que se le dijo al cliente: si un precio cambió mientras tanto, el servidor no registra otro total.
+        totalEsperado: totalDelCarrito()
     };
     if (ES_ADMIN) cuerpo.operadorId = Number($('operador').value);
 
@@ -503,8 +510,10 @@ $('formulario-cobrar').addEventListener('submit', async (evento) => {
         cargarCatalogo();   // las existencias cambiaron
     } catch (error) {
         if (error.estado === 409) {
-            // Alguien más vendió lo mismo mientras tanto: se avisa y se actualizan las existencias.
-            $('cobrar-error').textContent = `${error.message} Quita algunas unidades y vuelve a cobrar.`;
+            // Alguien más vendió lo mismo, se vendió la prenda o cambió un precio: se avisa y se recarga el catálogo.
+            const consejo = error.titulo === 'No hay suficientes existencias' ? ' Quita algunas unidades y vuelve a cobrar.'
+                : error.titulo === 'Prenda ya vendida' ? ' Quítala de la venta y vuelve a cobrar.' : '';
+            $('cobrar-error').textContent = `${error.message}${consejo}`;
             cargarCatalogo();
         } else if (error.estado === 404) {
             $('cobrar-error').textContent = 'Algo de la lista ya no existe en el catálogo. Quítalo y vuelve a cobrar.';

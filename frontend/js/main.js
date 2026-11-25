@@ -343,9 +343,38 @@ iniciarCatalogo({
         // El nombre y el color son opcionales en la base: sin ellos la tarjeta no debe mostrar "null".
         titulo: r.nombre || r.tipo,
         texto: ['Talla ' + r.talla, r.color].filter(Boolean).join(' · '),
-        precio: r.precio
+        precio: r.precio,
+        // Cada prenda es única: si ya se vendió, se marca.
+        aviso: r.disponible === false ? 'Vendida' : ''
     })
 });
+
+
+/* Datos de la tienda (CU-15): lo que la administradora escribe en el panel. Si la API no responde
+   o no hay datos, la sección queda oculta y se ven solo los horarios escritos en la página. */
+let datosTienda = [];
+
+async function cargarDatosTienda() {
+    try {
+        const lista = await pedir('/api/informacion-negocio');
+        datosTienda = [...lista].sort((a, b) => (a.valorInformacion ?? 0) - (b.valorInformacion ?? 0));
+    } catch {
+        datosTienda = [];
+    }
+    const contenedor = document.getElementById('datos-tienda-lista');
+    if (!contenedor) {
+        return;
+    }
+    contenedor.replaceChildren();
+    datosTienda.forEach((dato) => {
+        const fila = crear('li', 'quick-info__item');
+        fila.append(crear('span', 'quick-info__day', dato.tipoInformacion), crear('span', 'quick-info__hours', dato.informacion));
+        contenedor.append(fila);
+    });
+    document.getElementById('datos-tienda').hidden = datosTienda.length === 0;
+}
+
+cargarDatosTienda();
 
 
 /* =====================================================================
@@ -359,7 +388,8 @@ const PALABRAS_SIN_VALOR = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'y', 
 function construirIndice() {
     const indice = [];
 
-    document.querySelectorAll('.quick-info__item').forEach((fila) => {
+    // Solo los horarios escritos en la página; los datos de la tienda se agregan aparte.
+    document.querySelectorAll('.quick-info__list:not(.quick-info__list--datos) .quick-info__item').forEach((fila) => {
         indice.push({
             tipo: 'Horario',
             titulo: fila.querySelector('.quick-info__day').textContent,
@@ -367,6 +397,10 @@ function construirIndice() {
             claves: 'horario hora atencion abierto',
             destino: '#horarios'
         });
+    });
+
+    datosTienda.forEach((dato) => {
+        indice.push({ tipo: 'Tienda', titulo: dato.tipoInformacion, detalle: dato.informacion, claves: 'tienda informacion horario direccion', destino: '#horarios' });
     });
 
     document.querySelectorAll('.footer__contact .footer__list-item').forEach((fila) => {

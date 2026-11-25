@@ -454,6 +454,20 @@ h1,h2,h3 {
     font-size: 0.95rem;
 }
 
+.quick-info__tienda {
+    margin-top: 2rem;
+}
+
+.quick-info__subtitle {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.quick-info__list--datos {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
 .quick-info__item--closed .quick-info__hours {
     color: var(--color-gris-lavanda);
 }
