@@ -23,6 +23,9 @@ const TIPOS = {
     ropa: { icono: '👗', titulo: 'Ropa', ruta: '/api/ropa', detalle: (r) => [r.tipo, r.talla && `Talla ${r.talla}`, r.color].filter(Boolean).join(' · ') }
 };
 
+// Cada tipo de la caja y la carpeta de sus fotos en el servidor.
+const CARPETA_DE_FOTOS = { servicio: 'servicios', producto: 'productos', ropa: 'ropa' };
+
 const PERIODOS = {
     hoy: { titulo: 'Hoy', dias: 0 },
     semana: { titulo: 'Últimos 7 días', dias: 6 },
@@ -138,6 +141,7 @@ async function cargarCatalogo() {
         if (!catalogoCargado) $('contador').textContent = 'Estamos despertando el sistema. La primera vez del día puede tardar hasta un minuto ☕';
     }, 4000);
     try {
+        const fotosListas = Fotos.cargar();
         const listas = await Promise.all(Object.entries(TIPOS).map(async ([tipo, info]) => {
             const registros = await Sesion.llamar(info.ruta);
             return registros.map((r) => ({
@@ -152,6 +156,7 @@ async function cargarCatalogo() {
         }));
         catalogo = listas.flat();
         catalogoCargado = true;
+        await fotosListas;
         // Lo que ya estaba en la venta se cruza con las existencias nuevas; lo que se borró del catálogo sale.
         for (const [llave, linea] of carrito) {
             const nuevo = catalogo.find((a) => clave(a.tipo, a.id) === llave);
@@ -257,10 +262,21 @@ function crearArticulo(articulo) {
         boton.classList.add('articulo--agotado');
     }
 
-    const icono = document.createElement('span');
-    icono.className = 'articulo__icono';
-    icono.setAttribute('aria-hidden', 'true');
-    icono.textContent = TIPOS[articulo.tipo].icono;
+    // Con foto, se ve la foto; si no, el dibujo del tipo.
+    const foto = Fotos.url(CARPETA_DE_FOTOS[articulo.tipo], articulo.id);
+    let icono;
+    if (foto) {
+        icono = document.createElement('img');
+        icono.className = 'articulo__foto';
+        icono.src = foto;
+        icono.alt = '';
+        icono.loading = 'lazy';
+    } else {
+        icono = document.createElement('span');
+        icono.className = 'articulo__icono';
+        icono.setAttribute('aria-hidden', 'true');
+        icono.textContent = TIPOS[articulo.tipo].icono;
+    }
 
     const nombre = document.createElement('span');
     nombre.className = 'articulo__nombre';

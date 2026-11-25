@@ -109,7 +109,9 @@ const Sesion = (() => {
     async function llamar(ruta, { metodo = 'GET', cuerpo } = {}) {
         const sesion = leer();
         const cabeceras = { Accept: 'application/json' };
-        if (cuerpo !== undefined) cabeceras['Content-Type'] = 'application/json';
+        // Una foto (Blob) se manda tal cual; lo demás, como JSON.
+        const binario = cuerpo instanceof Blob;
+        if (cuerpo !== undefined) cabeceras['Content-Type'] = binario ? cuerpo.type : 'application/json';
         if (sesion) cabeceras.Authorization = `Bearer ${sesion.codigo}`;
 
         const control = new AbortController();
@@ -119,7 +121,7 @@ const Sesion = (() => {
             respuesta = await fetch(CONFIG.apiUrl + ruta, {
                 method: metodo,
                 headers: cabeceras,
-                body: cuerpo === undefined ? undefined : JSON.stringify(cuerpo),
+                body: cuerpo === undefined ? undefined : binario ? cuerpo : JSON.stringify(cuerpo),
                 signal: control.signal
             });
         } catch {

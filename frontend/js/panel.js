@@ -33,6 +33,7 @@ const SECCIONES = {
         ayuda: 'Lo que ofreces en el cibercafé: impresiones, copias, escáner…',
         buscarPor: 'nombre o tipo',
         ruta: '/api/servicios',
+        fotos: 'servicios',
         prefijoCodigo: 'SER',
         buscarEn: (s) => [s.nombre, s.categoria, s.descripcion],
         tarjeta: (s) => ({
@@ -64,6 +65,7 @@ const SECCIONES = {
         ruta: '/api/productos',
         // La lista interna trae las unidades, el precio de compra y el lugar de compra.
         rutaLista: '/api/productos/interno',
+        fotos: 'productos',
         prefijoCodigo: 'PAP',
         buscarEn: (p) => [p.nombre, p.descripcion, p.lugarCompra, p.cantidad > 0 ? (p.cantidad < POCAS_UNIDADES ? 'pocas quedan' : 'hay disponible') : 'agotado'],
         tarjeta: (p) => ({
@@ -100,6 +102,7 @@ const SECCIONES = {
         ayuda: 'Las prendas de Pulguero Glam.',
         buscarPor: 'nombre, talla o color',
         ruta: '/api/ropa',
+        fotos: 'ropa',
         prefijoCodigo: 'ROP',
         buscarEn: (r) => [r.nombre, r.tipo, `talla ${r.talla}`, r.color, r.material, r.descripcion],
         tarjeta: (r) => ({
@@ -251,6 +254,8 @@ const datos = {};           // registros cargados por sección (undefined = carg
 let seccionActual = 'servicios';
 let editando = null;        // registro que se está cambiando, o null si es nuevo
 let porQuitar = null;       // registro que se va a quitar
+let fotoNueva = null;      // foto elegida en el formulario (ya achicada), lista para subir
+let quitarFoto = false;    // se tocó «Quitar foto» en el formulario
 const fallosDelServidor = new Set(); // secciones cuya lista el servidor no pudo armar (error 500)
 const clavesDePermiso = new Map(); // id del operador → id de su clave de permiso
 let operadorDeLaClave = null;      // operador al que se le pone o cambia la clave
@@ -433,6 +438,8 @@ function cargarTodo() {
         }
     }, 4000);
     Promise.all(claves.map(cargar)).finally(() => clearTimeout(despertando));
+    // Las fotos llegan aparte: cuando están, se vuelven a dibujar las tarjetas.
+    Fotos.cargar().then(dibujarTarjetas);
 }
 
 /* ---------- Tarjetas ---------- */
@@ -538,6 +545,16 @@ function crearTarjeta(registro, seccion) {
     const info = seccion.tarjeta(registro);
     const tarjeta = document.createElement('article');
     tarjeta.className = 'tarjeta';
+
+    const foto = seccion.fotos && Fotos.url(seccion.fotos, idDe(seccion, registro));
+    if (foto) {
+        const imagen = document.createElement('img');
+        imagen.className = 'tarjeta__foto';
+        imagen.src = foto;
+        imagen.alt = '';
+        imagen.loading = 'lazy';
+        tarjeta.append(imagen);
+    }
 
     const nombre = document.createElement('h3');
     nombre.className = 'tarjeta__nombre';
@@ -734,6 +751,9 @@ function abrirFormulario(registro = null) {
     const registros = datos[seccionActual] || [];
     const campos = $('campos');
     campos.replaceChildren(...seccion.campos.map((c) => crearCampo(c, valores[c.nombre], registros, conNota && c.privado)));
+    fotoNueva = null;
+    quitarFoto = false;
+    if (seccion.fotos) campos.prepend(crearCampoFoto(seccion, registro));
 
     $('avanzado').hidden = Boolean(seccion.sinCodigo);
     if (seccion.sinCodigo) {
@@ -857,12 +877,15 @@ async function guardar() {
     boton.disabled = true;
     boton.textContent = 'Guardando…';
     try {
-        if (editando) await llamar(`${seccion.ruta}/${idDe(seccion, editando)}`, { metodo: 'PUT', cuerpo });
-        else await llamar(seccion.ruta, { metodo: 'POST', cuerpo });
+        const guardado = editando
+            ? await llamar(`${seccion.ruta}/${idDe(seccion, editando)}`, { metodo: 'PUT', cuerpo })
+            : await llamar(seccion.ruta, { metodo: 'POST', cuerpo });
 
         formularioCambiado = false;
         $('ventana-formulario').close();
-        avisar(`✓ ¡Listo! Se guardó «${seccion.tarjeta(cuerpo).nombre || seccion.singular}».`);
+        const nombre = seccion.tarjeta(cuerpo).nombre || seccion.singular;
+        const fotoBien = await guardarFoto(seccion, guardado ? idDe(seccion, guardado) : idDe(seccion, editando), nombre);
+        if (fotoBien) avisar(`✓ ¡Listo! Se guardó «${nombre}».`);
         await cargar(seccionActual);
     } catch (error) {
         manejarErrorAlGuardar(error);
@@ -979,6 +1002,123 @@ async function quitar() {
         }
     } finally {
         boton.disabled = false;
+    }
+}
+
+/* ---------- Foto de productos, ropa y servicios ---------- */
+
+function crearCampoFoto(seccion, registro) {
+    const caja = document.createElement('div');
+    caja.className = 'campo campo--ancho foto';
+
+    const etiqueta = document.createElement('span');
+    etiqueta.className = 'campo__etiqueta';
+    etiqueta.textContent = 'Foto ';
+    const opcional = document.createElement('span');
+    opcional.className = 'campo__opcional';
+    opcional.textContent = '(opcional)';
+    etiqueta.append(opcional);
+
+    const fila = document.createElement('div');
+    fila.className = 'foto__fila';
+    const vista = document.createElement('div');
+    vista.className = 'foto__vista';
+    const actual = registro ? Fotos.url(seccion.fotos, idDe(seccion, registro)) : null;
+
+    const botones = document.createElement('div');
+    botones.className = 'foto__botones';
+    const entrada = document.createElement('input');
+    entrada.type = 'file';
+    entrada.accept = 'image/jpeg,image/png,image/webp,image/*';
+    entrada.className = 'oculto';
+    entrada.id = 'campo-foto';
+    const elegir = document.createElement('label');
+    elegir.className = 'boton boton--suave';
+    elegir.htmlFor = 'campo-foto';
+    elegir.tabIndex = 0;
+    const quitar = document.createElement('button');
+    quitar.type = 'button';
+    quitar.className = 'boton boton--peligro-suave';
+    quitar.textContent = 'Quitar foto';
+    const ayuda = document.createElement('p');
+    ayuda.className = 'campo__ayuda';
+    ayuda.textContent = 'Desde el celular puedes tomarla con la cámara. Se achica sola antes de subirla.';
+    const error = document.createElement('p');
+    error.className = 'campo__error';
+    error.hidden = true;
+
+    function mostrar(direccion) {
+        vista.replaceChildren();
+        if (direccion) {
+            const imagen = document.createElement('img');
+            imagen.src = direccion;
+            imagen.alt = 'Foto elegida';
+            vista.append(imagen);
+        } else {
+            const vacio = document.createElement('span');
+            vacio.textContent = '📷';
+            vacio.setAttribute('aria-hidden', 'true');
+            vista.append(vacio);
+        }
+        elegir.textContent = direccion ? '📷 Cambiar foto' : '📷 Elegir foto';
+        quitar.hidden = !direccion;
+    }
+
+    entrada.addEventListener('change', async () => {
+        const archivo = entrada.files[0];
+        entrada.value = '';
+        if (!archivo) return;
+        error.hidden = true;
+        elegir.textContent = 'Preparando…';
+        try {
+            fotoNueva = await Fotos.preparar(archivo);
+            quitarFoto = false;
+            formularioCambiado = true;
+            mostrar(URL.createObjectURL(fotoNueva));
+        } catch (problema) {
+            error.textContent = `${problema.message} Prueba con otra foto (JPG o PNG).`;
+            error.hidden = false;
+            mostrar(fotoNueva ? URL.createObjectURL(fotoNueva) : (quitarFoto ? null : actual));
+        }
+    });
+    elegir.addEventListener('keydown', (evento) => {
+        if (evento.key === 'Enter' || evento.key === ' ') {
+            evento.preventDefault();
+            entrada.click();
+        }
+    });
+    quitar.addEventListener('click', () => {
+        fotoNueva = null;
+        quitarFoto = Boolean(actual);
+        formularioCambiado = true;
+        mostrar(null);
+    });
+
+    botones.append(elegir, quitar);
+    fila.append(vista, botones);
+    caja.append(etiqueta, fila, entrada, ayuda, error);
+    mostrar(actual);
+    return caja;
+}
+
+/* Sube o quita la foto después de guardar los datos. Devuelve false si la foto falló (ya se avisó). */
+async function guardarFoto(seccion, id, nombre) {
+    if (!seccion.fotos || !id || (!fotoNueva && !quitarFoto)) return true;
+    const ruta = `/api/imagenes/${seccion.fotos}/${id}`;
+    try {
+        if (fotoNueva) await llamar(ruta, { metodo: 'PUT', cuerpo: fotoNueva });
+        else await llamar(ruta, { metodo: 'DELETE' });
+        await Fotos.cargar();
+        return true;
+    } catch (error) {
+        if (error.estado !== 401) {
+            const motivo = error.estado === 413 ? 'pesa demasiado' : error.estado === 415 ? 'no es una foto válida' : 'no se pudo subir';
+            avisar(`Se guardó «${nombre}», pero la foto ${motivo}. Ábrelo con «Cambiar» e intenta otra vez.`, 'error');
+        }
+        return false;
+    } finally {
+        fotoNueva = null;
+        quitarFoto = false;
     }
 }
 
