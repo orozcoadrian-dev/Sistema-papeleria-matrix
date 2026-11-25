@@ -78,4 +78,4 @@ assets/               Fuentes, íconos e imágenes
 | Ingresos, estadísticas y reportes | Parcial. Las cuentas se calculan en la pantalla y se guardan como cortes; los historiales y reportes en archivo esperan al backend. |
 | RNF-18: cierre de sesión a los 15 minutos | Hecho, en el servidor y en el navegador. |
 
-El botón "Registrarse" abre un formulario que avisa que el registro no está disponible. La documentación lo menciona, pero RF-41 dice que el sistema solo tiene dos usuarios internos, así que falta decidir si se queda.
+La página no tiene botón de registro: según RF-41 solo entran la administradora y los operadores, y sus cuentas las crea la administradora desde el panel.
