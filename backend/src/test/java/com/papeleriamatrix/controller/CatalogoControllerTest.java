@@ -57,7 +57,9 @@ class CatalogoControllerTest
 	{
 		mvc.perform(get("/api/ropa"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.length()").value(4))
+			// Al menos las 4 de ejemplo: otras pruebas comparten la base de demo y pueden agregar prendas.
+			.andExpect(jsonPath("$.length()", org.hamcrest.Matchers.greaterThanOrEqualTo(4)))
+			.andExpect(jsonPath("$[0].codigo").value("ROP-001"))
 			.andExpect(jsonPath("$[0].tipo").value("Blusa"))
 			.andExpect(jsonPath("$[0].talla").value("M"));
 	}
