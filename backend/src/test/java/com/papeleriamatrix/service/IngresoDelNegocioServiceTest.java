@@ -55,6 +55,7 @@ class IngresoDelNegocioServiceTest
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.SERVICIO, desde, hasta)).thenReturn(10.125);
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.ROPA, desde, hasta)).thenReturn(5.555);
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.PAPELERIA, desde, hasta)).thenReturn(2.345);
+		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.PAPELERIA_SIN_TILDE, desde, hasta)).thenReturn(0.0);
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.VARIEDAD, desde, hasta)).thenReturn(3.335);
 
 		IngresoResponse respuesta = servicio.resumir(desde, hasta);
@@ -84,6 +85,7 @@ class IngresoDelNegocioServiceTest
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.SERVICIO, desde, hasta)).thenReturn(10.0);
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.ROPA, desde, hasta)).thenReturn(20.0);
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.PAPELERIA, desde, hasta)).thenReturn(30.0);
+		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.PAPELERIA_SIN_TILDE, desde, hasta)).thenReturn(0.0);
 		when(facturaRepositorio.sumarMontoPorTipoFactura(TiposFactura.VARIEDAD, desde, hasta)).thenReturn(0.0);
 		when(repositorio.existsByCodigoIngreso(anyString())).thenReturn(true, false);
 		when(repositorio.save(any(Ingreso_del_negocio.class))).thenAnswer(invocacion -> {
@@ -101,7 +103,10 @@ class IngresoDelNegocioServiceTest
 		ArgumentCaptor<Ingreso_del_negocio> ingresoCaptor = ArgumentCaptor.forClass(Ingreso_del_negocio.class);
 		verify(repositorio).save(ingresoCaptor.capture());
 		assertTrue(ingresoCaptor.getValue().getCodigoIngreso().matches("\\d{15}"));
-		assertEquals(60.0, ingresoCaptor.getValue().getTotalVendidoProductos());
+		// Lo guardado por tipo: servicios 10, ropa 20 y papelería 30 (60 es el total general).
+		assertEquals(10.0, ingresoCaptor.getValue().getTotalVendidoServicios());
+		assertEquals(20.0, ingresoCaptor.getValue().getTotalVendidoRopa());
+		assertEquals(30.0, ingresoCaptor.getValue().getTotalVendidoProductos());
 		ArgumentCaptor<Historial_ingreso_del_negocio> historialCaptor = ArgumentCaptor.forClass(Historial_ingreso_del_negocio.class);
 		verify(historialRepositorio).save(historialCaptor.capture());
 		assertEquals(7, historialCaptor.getValue().getIngresoId());

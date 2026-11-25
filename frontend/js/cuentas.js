@@ -1,8 +1,9 @@
 'use strict';
 
 /* Cuentas del negocio: solo la administradora.
-   Las cifras se calculan aquí con las ventas, el catálogo y los operadores, porque el servidor todavía
-   no las calcula. «Guardar este corte» las deja en los ingresos y las estadísticas del negocio.
+   Las cifras de la pantalla se calculan aquí con las ventas, el catálogo y los operadores.
+   «Guardar este corte» le pide al servidor que calcule y guarde los ingresos y las estadísticas del
+   periodo (/api/ingresos/calcular y /api/estadisticas/calcular), con su historial.
    Los datos se insertan con textContent, nunca con innerHTML. */
 
 const SESION = Sesion.exigir(['ADMINISTRADOR']);
@@ -243,19 +244,10 @@ function llenarLista(lista, textos, vacio) {
 
 /* ---------- Cortes guardados ---------- */
 
-/* El código del corte lleva la fecha y la hora (aammddhhmm), así se sabe cuándo se guardó. */
-function fechaDelCodigo(codigo) {
-    const partes = /^(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/.exec(codigo || '');
-    if (!partes) return null;
-    const [, anio, mes, dia, hora, minuto] = partes.map(Number);
-    if (mes < 1 || mes > 12 || dia < 1 || dia > 31) return null;
-    return new Date(2000 + anio, mes - 1, dia, hora, minuto);
-}
-
 async function cargarCortes() {
     const contenedor = $('cortes');
     try {
-        const ingresos = await Sesion.llamar('/api/ingresos-negocio');
+        const ingresos = await Sesion.llamar('/api/ingresos');
         contenedor.replaceChildren();
         if (!ingresos.length) {
             const vacio = document.createElement('p');
@@ -264,7 +256,8 @@ async function cargarCortes() {
             contenedor.append(vacio);
             return;
         }
-        const ordenados = [...ingresos].sort((a, b) => String(b.codigoIngreso).localeCompare(String(a.codigoIngreso)));
+        // El más reciente primero.
+        const ordenados = [...ingresos].sort((a, b) => b.idIngreso - a.idIngreso);
         for (const ingreso of ordenados) contenedor.append(tarjetaDeCorte(ingreso));
     } catch (error) {
         if (error.estado === 401) return;
@@ -282,71 +275,35 @@ function tarjetaDeCorte(ingreso) {
     const vendido = (ingreso.totalVendidoServicios || 0) + (ingreso.totalVendidoProductos || 0) + (ingreso.totalVendidoRopa || 0);
     const titulo = document.createElement('h3');
     titulo.className = 'tarjeta__nombre';
-    const fecha = fechaDelCodigo(ingreso.codigoIngreso);
-    titulo.textContent = fecha
-        ? `${ingreso.tipoIngreso} · ${fecha.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}`
-        : ingreso.tipoIngreso;
+    titulo.textContent = `Corte n.º ${ingreso.idIngreso}`;
     const total = document.createElement('p');
     total.className = 'tarjeta__precio';
     total.textContent = `${pesos.format(vendido)} vendido`;
     const detalle = document.createElement('p');
     detalle.className = 'tarjeta__descripcion';
+    const codigo = document.createElement('p');
+    codigo.className = 'venta__codigo';
+    codigo.textContent = `${ingreso.tipoIngreso} · código ${ingreso.codigoIngreso}`;
     detalle.textContent = `Servicios ${pesos.format(ingreso.totalVendidoServicios || 0)} · Papelería ${pesos.format(ingreso.totalVendidoProductos || 0)} · `
-        + `Ropa ${pesos.format(ingreso.totalVendidoRopa || 0)} · Sueldos ${pesos.format(ingreso.totalSalarioOperadores || 0)}`;
-    tarjeta.append(titulo, total, detalle);
+        + `Ropa ${pesos.format(ingreso.totalVendidoRopa || 0)}`;
+    tarjeta.append(titulo, total, detalle, codigo);
     return tarjeta;
 }
 
-/* Guarda lo calculado en los ingresos y las estadísticas del negocio. */
+/* El servidor calcula y guarda los ingresos y las estadísticas del periodo, cada uno con su historial. */
 async function guardarCorte() {
     if (!cifras) return;
     const boton = $('boton-guardar-corte');
     boton.disabled = true;
     boton.textContent = 'Guardando…';
-    const ahora = new Date();
-    const dos = (n) => String(n).padStart(2, '0');
-    const sello = `${dos(ahora.getFullYear() % 100)}${dos(ahora.getMonth() + 1)}${dos(ahora.getDate())}${dos(ahora.getHours())}${dos(ahora.getMinutes())}`;
-    const tipo = PERIODOS[periodo].tipo;
+    const rango = { desde: iso(cifras.inicio), hasta: iso(cifras.fin) };
     try {
-        await Sesion.llamar('/api/ingresos-negocio', {
-            metodo: 'POST',
-            cuerpo: {
-                codigoIngreso: sello,
-                tipoIngreso: tipo,
-                totalSalarioOperadores: cifras.sueldos,
-                totalVendidoRopa: cifras.porTipo.ropa,
-                inversionTotalPapeleria: cifras.inversionPapeleria,
-                totalVendidoServicios: cifras.porTipo.servicio,
-                totalVendidoProductos: cifras.porTipo.producto,
-                totalRecaudoEsperadoPapeleria: cifras.recaudoEsperado
-            }
-        });
-        await Sesion.llamar('/api/estadisticas-negocio', {
-            metodo: 'POST',
-            cuerpo: {
-                // 15 cifras: la fecha y hora (10), los segundos (2) y 3 al azar.
-                codigoEstadistica: `${sello}${dos(ahora.getSeconds())}${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
-                tipoEstadistica: tipo,
-                numeroInformacionEliminada: 0,
-                serviciosEliminados: 0,
-                numeroInformacionAgregada: 0,
-                numeroServiciosOfrecidos: cifras.unidades.servicio,
-                numeroProductosVendidos: cifras.unidades.producto,
-                operadoresCibercafeDespedidos: 0,
-                ropaActualCatalogo: cifras.ropaEnCatalogo,
-                numeroProductosPapeleria: cifras.productosEnCatalogo,
-                ropaRemovidaCatalogo: 0,
-                productosRemovidos: 0,
-                numeroRopaVendida: cifras.unidades.ropa,
-                numeroServicios: cifras.serviciosEnCatalogo,
-                numeroFacturasGeneradas: cifras.facturas
-            }
-        });
+        await Sesion.llamar('/api/ingresos/calcular', { metodo: 'POST', cuerpo: rango });
+        await Sesion.llamar('/api/estadisticas/calcular', { metodo: 'POST', cuerpo: rango });
         avisar('✓ Se guardó el corte.');
         cargarCortes();
     } catch (error) {
-        if (error.estado === 409) avisar('Ya guardaste un corte en este mismo minuto. Espera un momento.', 'error');
-        else if (error.estado !== 401) avisar('No se pudo guardar el corte. Intenta otra vez; si sigue pasando, avísale a Osvaldo.', 'error');
+        if (error.estado !== 401) avisar('No se pudo guardar el corte. Intenta otra vez; si sigue pasando, avísale a Osvaldo.', 'error');
     } finally {
         boton.disabled = false;
         boton.textContent = '💾 Guardar este corte';
