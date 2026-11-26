@@ -1,7 +1,7 @@
 import type { TipoDeArticulo } from '../../../domain/constants/articulos';
 import type { Articulo } from '../../../domain/model/Articulo';
 import type { Operador, Venta } from '../../../domain/model/Venta';
-import type { CobrarCommand, EntrarCommand, GuardarArticuloCommand } from '../../dto/commands/commands';
+import type { AnularVentaCommand, CambiarVentaCommand, CobrarCommand, EntrarCommand, GuardarArticuloCommand } from '../../dto/commands/commands';
 import type { Periodo, ResumenDeVentas, UsuarioActual } from '../../dto/responses/responses';
 
 export interface AuthUseCases {
@@ -21,6 +21,7 @@ export interface CatalogUseCases {
 export interface SaleUseCases {
   cobrar(command: CobrarCommand): Promise<Venta>;
   resumen(periodo: Periodo): Promise<ResumenDeVentas>;
-  anular(id: number): Promise<void>;
+  modificar(command: CambiarVentaCommand): Promise<Venta>;
+  anular(command: AnularVentaCommand): Promise<void>;
   operadores(): Promise<Operador[]>;
 }

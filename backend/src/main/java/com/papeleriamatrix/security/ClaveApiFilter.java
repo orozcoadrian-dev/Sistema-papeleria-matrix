@@ -19,7 +19,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
  *
  * <ul>
  * <li>Público, sin entrar: consultar servicios, productos, ropa, la información del negocio y el estado, e iniciar sesión.</li>
- * <li>Operador de cibercafé: lo público, registrar y consultar sus ventas, y ver las existencias de los productos.</li>
+ * <li>Operador de cibercafé: lo público, sus ventas (para cambiarlas o anularlas se pide además la clave de permiso)
+ * y las existencias de los productos.</li>
  * <li>Administrador: todo.</li>
  * </ul>
  *
@@ -115,9 +116,10 @@ public class ClaveApiFilter extends OncePerRequestFilter
 		}
 		if (sesion.esOperador())
 		{
-			boolean registraOConsultaVentas = esRuta(ruta, RUTA_VENTAS) && (METODOS_DE_CONSULTA.contains(metodo) || "POST".equals(metodo));
+			// Qué ventas puede tocar y si tiene la clave de permiso lo revisa el servicio de ventas.
+			boolean trabajaConVentas = esRuta(ruta, RUTA_VENTAS);
 			boolean consultaExistencias = METODOS_DE_CONSULTA.contains(metodo) && CONSULTA_INTERNA.stream().anyMatch(base -> esRuta(ruta, base));
-			return registraOConsultaVentas || consultaExistencias;
+			return trabajaConVentas || consultaExistencias;
 		}
 		return false;
 	}

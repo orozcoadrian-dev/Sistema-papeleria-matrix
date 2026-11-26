@@ -145,7 +145,7 @@ class VentaControllerTest
 	}
 
 	@Test
-	void soloElAdministradorAnulaYSeDevuelvenLasExistencias() throws Exception
+	void sinClaveElOperadorNoAnulaYElAdministradorSi() throws Exception
 	{
 		int producto = productoNuevo(5, 2000);
 		String respuesta = mvc.perform(post("/api/ventas").header("Authorization", operador).contentType(MediaType.APPLICATION_JSON)

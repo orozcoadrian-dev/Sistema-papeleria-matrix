@@ -17,6 +17,7 @@ import com.papeleriamatrix.repository.ProductoPapeleriaRepository;
 import com.papeleriamatrix.repository.RopaRepository;
 import com.papeleriamatrix.repository.ServicioRepository;
 import com.papeleriamatrix.repository.UsuarioRepository;
+import com.papeleriamatrix.security.PermisoDeVentas;
 import com.papeleriamatrix.security.Sesion;
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -27,6 +28,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
@@ -37,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Registra las ventas. Una venta es una factura del negocio con un detalle por cada artículo.
  * Al vender un producto de papelería se descuentan sus existencias; si no alcanzan, la venta no se hace.
  * La ropa y los servicios no llevan existencias en la base de datos.
+ * Una venta se puede cambiar o anular; el operador necesita para eso su clave de permiso.
  */
 @Service
 public class VentaService
@@ -51,10 +55,12 @@ public class VentaService
 	private final ServicioRepository servicios;
 	private final UsuarioRepository usuarios;
 	private final OperadorDeCibercafeRepository operadores;
+	private final PermisoDeVentas permisos;
 	private final SecureRandom azar = new SecureRandom();
 
 	public VentaService(FacturaDelNegocioRepository facturas, DetalleDeFacturaRepository detalles, ProductoPapeleriaRepository productos,
-		RopaRepository ropa, ServicioRepository servicios, UsuarioRepository usuarios, OperadorDeCibercafeRepository operadores)
+		RopaRepository ropa, ServicioRepository servicios, UsuarioRepository usuarios, OperadorDeCibercafeRepository operadores,
+		PermisoDeVentas permisos)
 	{
 		this.facturas = facturas;
 		this.detalles = detalles;
@@ -63,6 +69,7 @@ public class VentaService
 		this.servicios = servicios;
 		this.usuarios = usuarios;
 		this.operadores = operadores;
+		this.permisos = permisos;
 	}
 
 	@Transactional
@@ -70,11 +77,163 @@ public class VentaService
 	{
 		int operadorId = operadorDeLaVenta(peticion, sesion);
 		// Siempre en el mismo orden (tipo e id) para que dos ventas que bloquean las mismas filas no se esperen en cruz.
-		Map<String, Integer> cantidades = new java.util.TreeMap<>(juntarRepetidos(peticion.articulos()));
+		Map<String, Integer> cantidades = new TreeMap<>(juntarRepetidos(peticion.articulos()));
 
+		LocalDateTime ahora = LocalDateTime.now();
+		Armado armado = prepararLineas(cantidades, ahora);
+		revisarTotal(armado.total(), peticion.totalEsperado());
+		List<Detalle_de_factura> lineas = armado.lineas();
+
+		LocalDate hoy = ahora.toLocalDate();
+		Factura_del_negocio factura = facturas.save(new Factura_del_negocio(codigoNuevo(), TIPO_FACTURA, operadorId, armado.total(), hoy, null));
+		for (Detalle_de_factura linea : lineas)
+		{
+			linea.setFacturaDelNegocioId(factura.getIdFactura());
+		}
+		detalles.saveAll(lineas);
+		return armar(List.of(factura)).getFirst();
+	}
+
+	@Transactional(readOnly = true)
+	public List<VentaResponse> listar(Sesion sesion, LocalDate desde, LocalDate hasta)
+	{
+		LocalDate fin = hasta != null ? hasta : LocalDate.now();
+		LocalDate inicio = desde != null ? desde : fin.minusDays(30);
+		if (inicio.isAfter(fin))
+		{
+			throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Fechas no válidas", "La fecha de inicio no puede ser posterior a la fecha final.");
+		}
+		List<Factura_del_negocio> encontradas = sesion.esOperador()
+			? facturas.findByUsuarioIdAndFechaGeneracionBetweenOrderByIdFacturaDesc(sesion.idUsuario(), inicio, fin)
+			: facturas.findByFechaGeneracionBetweenOrderByIdFacturaDesc(inicio, fin);
+		return armar(encontradas);
+	}
+
+	@Transactional(readOnly = true)
+	public VentaResponse obtener(Integer id, Sesion sesion)
+	{
+		Factura_del_negocio factura = buscar(id);
+		if (sesion.esOperador() && factura.getUsuarioId() != sesion.idUsuario())
+		{
+			// Para el operador, las ventas de otros no existen.
+			throw new RecursoNoEncontradoException("No existe una venta con el id " + id + ".");
+		}
+		return armar(List.of(factura)).getFirst();
+	}
+
+	/**
+	 * Cambia lo que se llevó el cliente: devuelve las existencias de antes, descuenta las nuevas y vuelve a
+	 * calcular el total con los precios de hoy. La factura conserva su número, su fecha y su operador.
+	 * Si algo falla, la venta queda como estaba.
+	 */
+	@Transactional
+	public VentaResponse modificar(Integer id, VentaRequest peticion, Sesion sesion, String clavePermiso)
+	{
+		Factura_del_negocio factura = paraCambiar(id, sesion, clavePermiso);
+		if (!TIPO_FACTURA.equalsIgnoreCase(factura.getTipoFactura()))
+		{
+			throw new OperacionRechazadaException(HttpStatus.CONFLICT, "No es una venta de la caja",
+				"Solo se pueden cambiar las ventas hechas en la caja.");
+		}
+		List<Detalle_de_factura> anteriores = detalles.findByFacturaDelNegocioId(factura.getIdFactura());
+		Map<String, Integer> cantidades = new TreeMap<>(juntarRepetidos(peticion.articulos()));
+
+		bloquear(anteriores, cantidades.keySet());
+		devolverExistencias(anteriores);
+		detalles.deleteAll(anteriores);
+		// Las prendas que tenía esta venta quedan libres antes de revisar si se pueden vender.
+		detalles.flush();
+
+		LocalDateTime ahora = LocalDateTime.now();
+		LocalDateTime fechaDeLaVenta = anteriores.isEmpty() ? ahora : anteriores.getFirst().getFechaGeneracion();
+		Armado armado = prepararLineas(cantidades, fechaDeLaVenta);
+		revisarTotal(armado.total(), peticion.totalEsperado());
+
+		factura.setMonto(armado.total());
+		factura.setFechaActualizacion(ahora.toLocalDate());
+		for (Detalle_de_factura linea : armado.lineas())
+		{
+			linea.setFacturaDelNegocioId(factura.getIdFactura());
+			linea.setFechaActualizacion(ahora);
+		}
+		detalles.saveAll(armado.lineas());
+		return armar(List.of(factura)).getFirst();
+	}
+
+	/** Anula la venta: devuelve las existencias de los productos y borra la factura con sus detalles. */
+	@Transactional
+	public void anular(Integer id, Sesion sesion, String clavePermiso)
+	{
+		Factura_del_negocio factura = paraCambiar(id, sesion, clavePermiso);
+		List<Detalle_de_factura> suyas = detalles.findByFacturaDelNegocioId(factura.getIdFactura());
+		devolverExistencias(suyas);
+		detalles.deleteAll(suyas);
+		facturas.delete(factura);
+	}
+
+	/** Busca la venta que se va a cambiar y comprueba que esta persona pueda hacerlo. */
+	private Factura_del_negocio paraCambiar(Integer id, Sesion sesion, String clavePermiso)
+	{
+		// Bloqueada: si otra persona la está cambiando a la vez, esta espera.
+		Factura_del_negocio factura = facturas.bloquear(id)
+			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una venta con el id " + id + "."));
+		if (sesion.esOperador() && factura.getUsuarioId() != sesion.idUsuario())
+		{
+			throw new RecursoNoEncontradoException("No existe una venta con el id " + id + ".");
+		}
+		permisos.exigir(sesion, clavePermiso);
+		return factura;
+	}
+
+	/** Bloquea los artículos de antes y los nuevos en el mismo orden que usa una venta nueva. */
+	private void bloquear(List<Detalle_de_factura> anteriores, Set<String> nuevos)
+	{
+		Set<String> todos = new TreeSet<>(nuevos);
+		for (Detalle_de_factura linea : anteriores)
+		{
+			if (linea.getProductoPapeleriaId() > 0)
+			{
+				todos.add("producto:" + linea.getProductoPapeleriaId());
+			}
+			if (linea.getRopaId() > 0)
+			{
+				todos.add("ropa:" + linea.getRopaId());
+			}
+		}
+		for (String clave : todos)
+		{
+			String[] partes = clave.split(":");
+			if (partes[0].equals("producto"))
+			{
+				productos.bloquear(Integer.parseInt(partes[1]));
+			}
+			else if (partes[0].equals("ropa"))
+			{
+				ropa.bloquear(Integer.parseInt(partes[1]));
+			}
+		}
+	}
+
+	private void devolverExistencias(List<Detalle_de_factura> lineas)
+	{
+		for (Detalle_de_factura linea : lineas)
+		{
+			if (linea.getProductoPapeleriaId() > 0 && linea.getCantidadProducto() > 0)
+			{
+				productos.bloquear(linea.getProductoPapeleriaId()).ifPresent(producto -> producto.reponer(linea.getCantidadProducto()));
+			}
+		}
+	}
+
+	private record Armado(List<Detalle_de_factura> lineas, double total)
+	{
+	}
+
+	/** Revisa cada artículo, descuenta las existencias y arma las líneas de la factura. */
+	private Armado prepararLineas(Map<String, Integer> cantidades, LocalDateTime fecha)
+	{
 		double total = 0;
 		List<Detalle_de_factura> lineas = new ArrayList<>();
-		LocalDateTime ahora = LocalDateTime.now();
 
 		for (Map.Entry<String, Integer> entrada : cantidades.entrySet())
 		{
@@ -84,7 +243,7 @@ public class VentaService
 			int cantidad = entrada.getValue();
 
 			Detalle_de_factura linea = new Detalle_de_factura();
-			linea.setFechaGeneracion(ahora);
+			linea.setFechaGeneracion(fecha);
 			switch (tipo)
 			{
 				case "producto" ->
@@ -140,72 +299,22 @@ public class VentaService
 			lineas.add(linea);
 		}
 
+		return new Armado(lineas, total);
+	}
+
+	private static void revisarTotal(double total, Double totalEsperado)
+	{
 		if (total <= 0)
 		{
 			throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Venta sin valor", "El total de la venta debe ser mayor que cero.");
 		}
-		if (peticion.totalEsperado() != null && Math.abs(total - peticion.totalEsperado()) >= 0.5)
+		if (totalEsperado != null && Math.abs(total - totalEsperado) >= 0.5)
 		{
 			// Lo que se cobró en la caja no es lo que vale ahora: alguien cambió un precio mientras se atendía.
 			throw new OperacionRechazadaException(HttpStatus.CONFLICT, "Los precios cambiaron",
 				String.format(java.util.Locale.ROOT, "Mientras atendías cambió el precio de algo: el total ahora es $ %,.0f. Revisa la venta y vuelve a cobrar.", total)
 					.replace(',', '.'));
 		}
-
-		LocalDate hoy = ahora.toLocalDate();
-		Factura_del_negocio factura = facturas.save(new Factura_del_negocio(codigoNuevo(), TIPO_FACTURA, operadorId, total, hoy, null));
-		for (Detalle_de_factura linea : lineas)
-		{
-			linea.setFacturaDelNegocioId(factura.getIdFactura());
-		}
-		detalles.saveAll(lineas);
-		return armar(List.of(factura)).getFirst();
-	}
-
-	@Transactional(readOnly = true)
-	public List<VentaResponse> listar(Sesion sesion, LocalDate desde, LocalDate hasta)
-	{
-		LocalDate fin = hasta != null ? hasta : LocalDate.now();
-		LocalDate inicio = desde != null ? desde : fin.minusDays(30);
-		if (inicio.isAfter(fin))
-		{
-			throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Fechas no válidas", "La fecha de inicio no puede ser posterior a la fecha final.");
-		}
-		List<Factura_del_negocio> encontradas = sesion.esOperador()
-			? facturas.findByUsuarioIdAndFechaGeneracionBetweenOrderByIdFacturaDesc(sesion.idUsuario(), inicio, fin)
-			: facturas.findByFechaGeneracionBetweenOrderByIdFacturaDesc(inicio, fin);
-		return armar(encontradas);
-	}
-
-	@Transactional(readOnly = true)
-	public VentaResponse obtener(Integer id, Sesion sesion)
-	{
-		Factura_del_negocio factura = buscar(id);
-		if (sesion.esOperador() && factura.getUsuarioId() != sesion.idUsuario())
-		{
-			// Para el operador, las ventas de otros no existen.
-			throw new RecursoNoEncontradoException("No existe una venta con el id " + id + ".");
-		}
-		return armar(List.of(factura)).getFirst();
-	}
-
-	/** Anula la venta: devuelve las existencias de los productos y borra la factura con sus detalles. */
-	@Transactional
-	public void anular(Integer id)
-	{
-		// Bloqueada: si otra persona la está anulando a la vez, esta espera y luego ya no la encuentra.
-		Factura_del_negocio factura = facturas.bloquear(id)
-			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una venta con el id " + id + "."));
-		List<Detalle_de_factura> suyas = detalles.findByFacturaDelNegocioId(factura.getIdFactura());
-		for (Detalle_de_factura linea : suyas)
-		{
-			if (linea.getProductoPapeleriaId() > 0 && linea.getCantidadProducto() > 0)
-			{
-				productos.bloquear(linea.getProductoPapeleriaId()).ifPresent(producto -> producto.reponer(linea.getCantidadProducto()));
-			}
-		}
-		detalles.deleteAll(suyas);
-		facturas.delete(factura);
 	}
 
 	private Factura_del_negocio buscar(Integer id)

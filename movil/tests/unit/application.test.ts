@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { HttpClient } from '../../src/adapters/http/HttpClient';
+import { SaleHttpAdapter } from '../../src/adapters/http/SaleHttpAdapter';
 import { aArticuloRequest, aSesion } from '../../src/adapters/mapper/ApiMapper';
 import { BrowserSessionStore } from '../../src/adapters/storage/BrowserSessionStore';
 import { AuthService } from '../../src/application/services/AuthService';
@@ -107,7 +108,10 @@ describe('ventas y catálogo', () => {
   const lapiz = { tipo: 'producto' as const, id: 3, nombre: 'Lápiz', precio: 1200, detalle: '', existencias: 9, datos: {} };
 
   function ventasFalsas() {
-    return { registrar: vi.fn(async () => ({}) as never), listar: vi.fn(async () => []), anular: vi.fn(), operadores: vi.fn() } satisfies SaleGateway;
+    return {
+      registrar: vi.fn(async () => ({}) as never), listar: vi.fn(async () => []), modificar: vi.fn(async () => ({}) as never),
+      anular: vi.fn(), operadores: vi.fn(),
+    } satisfies SaleGateway;
   }
 
   it('la administradora debe elegir operador y se envía el total esperado', async () => {
@@ -127,6 +131,30 @@ describe('ventas y catálogo', () => {
     const gateway = ventasFalsas();
     await new SaleService(gateway, store).cobrar({ carrito: Carrito.vacio().cambiar(lapiz, 1), operadorId: 9 });
     expect(gateway.registrar).toHaveBeenCalledWith({ articulos: [{ tipo: 'producto', id: 3, cantidad: 1 }], totalEsperado: 1200 });
+  });
+
+  it('el operador necesita su clave para cambiar o anular; la administradora no', async () => {
+    const store = new BrowserSessionStore(memoria());
+    store.guardar({ ...sesion, rol: 'OPERADOR_DE_CIBERCAFE' });
+    const gateway = ventasFalsas();
+    const ventas = new SaleService(gateway, store);
+    const carrito = Carrito.vacio().cambiar(lapiz, 1);
+    await expect(ventas.anular({ id: 4 })).rejects.toThrow('clave de permiso');
+    await expect(ventas.modificar({ id: 4, carrito, clavePermiso: '   ' })).rejects.toThrow('clave de permiso');
+    await ventas.modificar({ id: 4, carrito, clavePermiso: 'mi-clave' });
+    expect(gateway.modificar).toHaveBeenCalledWith(4, { articulos: [{ tipo: 'producto', id: 3, cantidad: 1 }], totalEsperado: 1200 }, 'mi-clave');
+
+    store.guardar(sesion);
+    await ventas.anular({ id: 4, clavePermiso: 'sobra' });
+    expect(gateway.anular).toHaveBeenCalledWith(4, undefined);
+  });
+
+  it('envía la clave codificada en su cabecera', async () => {
+    const pedir = vi.fn(async () => respuesta(204));
+    await new SaleHttpAdapter(new HttpClient('/api', new BrowserSessionStore(memoria()), pedir)).anular(4, 'Cañón 2026');
+    expect(pedir).toHaveBeenCalledWith('/api/ventas/4', expect.objectContaining({
+      method: 'DELETE', headers: expect.objectContaining({ 'X-Clave-Permiso': 'Ca%C3%B1%C3%B3n%202026' }),
+    }));
   });
 
   it('pide las fechas del periodo', async () => {

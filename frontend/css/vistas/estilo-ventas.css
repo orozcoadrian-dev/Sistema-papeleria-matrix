@@ -507,3 +507,19 @@
         animation: none;
     }
 }
+
+/* Aviso mientras se cambia una venta ya registrada */
+.aviso-cambio {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border: 2px solid var(--color-dorado-principal);
+    border-radius: 1rem;
+    background: #fff4cf;
+    color: var(--color-negro);
+    font-weight: 700;
+}

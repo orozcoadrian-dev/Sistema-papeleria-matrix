@@ -45,7 +45,7 @@ test('el operador cobra con cambio y solo consulta el catálogo', async ({ page 
 
   await ir(page, 'Vendido');
   await expect(page.getByText('2 × Carpeta blanca')).toBeVisible();
-  await expect(page.getByRole('button', { name: /Anular/ })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /Anular la venta/ })).toHaveCount(1);
 
   await ir(page, 'Catálogo');
   await expect(page.getByText('Carpeta blanca')).toBeVisible();
@@ -93,6 +93,59 @@ test('la administradora vende a nombre de un operador y anula la venta', async (
   await page.getByRole('button', { name: /Anular la venta/ }).click();
   await page.getByRole('button', { name: 'Sí, anular' }).click();
   await expect(page.getByText('No hay ventas en estos días')).toBeVisible();
+});
+
+async function venderDosCarpetas(page: Page) {
+  await ir(page, 'Vender');
+  await page.getByRole('button', { name: /Carpeta blanca/ }).click();
+  await page.getByRole('button', { name: /Carpeta blanca/ }).click();
+  await page.getByRole('button', { name: /Cobrar/ }).click();
+  await page.getByRole('button', { name: 'Listo, registrar venta' }).click();
+  await page.getByRole('button', { name: 'Nueva venta' }).click();
+  await ir(page, 'Vendido');
+}
+
+test('el operador cambia su venta con la clave de permiso', async ({ page }) => {
+  await comoCaja(page);
+  await venderDosCarpetas(page);
+  await page.getByRole('button', { name: /Cambiar la venta/ }).click();
+  await expect(page.getByRole('heading', { name: 'Cambiar venta' })).toBeVisible();
+  await page.getByRole('button', { name: /Guardar \$/ }).click();
+  await page.getByRole('button', { name: 'Uno menos de Carpeta blanca' }).click();
+  await expect(page.getByText(/Devuelve/)).toContainText('400');
+
+  await page.getByLabel('Tu clave de permiso').fill('otra-clave');
+  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+  await expect(page.getByRole('alert')).toContainText('no es correcta');
+  await page.getByLabel('Tu clave de permiso').fill('Clave-Prueba-123');
+  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+
+  await expect(page.getByText('Se guardaron los cambios')).toBeVisible();
+  await expect(page.getByText('1 × Carpeta blanca')).toBeVisible();
+  await ir(page, 'Vender');
+  await expect(page.getByRole('button', { name: /Carpeta blanca/ })).toContainText('Quedan 2');
+});
+
+test('el operador anula con su clave y la administradora cambia sin clave', async ({ page }) => {
+  await comoCaja(page);
+  await venderDosCarpetas(page);
+  await page.getByRole('button', { name: /Anular la venta/ }).click();
+  await page.getByRole('button', { name: 'Sí, anular' }).click();
+  await expect(page.getByRole('alert')).toContainText('Escribe tu clave');
+  await page.getByLabel('Tu clave de permiso').fill('Clave-Prueba-123');
+  await page.getByRole('button', { name: 'Sí, anular' }).click();
+  await expect(page.getByText('No hay ventas en estos días')).toBeVisible();
+
+  await venderDosCarpetas(page);
+  await page.getByRole('button', { name: 'Salir' }).click();
+  await comoAdmin(page);
+  await ir(page, 'Vendido');
+  await page.getByRole('button', { name: /Cambiar la venta/ }).click();
+  await page.getByRole('button', { name: /Guardar \$/ }).click();
+  await expect(page.getByLabel('Tu clave de permiso')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Uno más de Carpeta blanca' }).click();
+  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+  await expect(page.getByText('3 × Carpeta blanca')).toBeVisible();
 });
 
 test('un 403 conserva la sesión y un 401 la cierra', async ({ page, request }) => {

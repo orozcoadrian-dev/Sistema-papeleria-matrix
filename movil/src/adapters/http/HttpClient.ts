@@ -5,6 +5,7 @@ import type { ProblemaResponse } from '../dto/responses/responses';
 export interface Opciones {
   metodo?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   cuerpo?: unknown;
+  cabeceras?: Record<string, string>;
 }
 
 export class HttpClient {
@@ -23,11 +24,12 @@ export class HttpClient {
     this.alVencer = aviso;
   }
 
-  async enviar<T>(ruta: string, { metodo = 'GET', cuerpo }: Opciones = {}): Promise<T> {
+  async enviar<T>(ruta: string, { metodo = 'GET', cuerpo, cabeceras }: Opciones = {}): Promise<T> {
     const sesion = this.store.leer();
     const headers: Record<string, string> = { Accept: 'application/json' };
     if (cuerpo !== undefined) headers['Content-Type'] = 'application/json';
     if (sesion) headers.Authorization = `Bearer ${sesion.codigo}`;
+    Object.assign(headers, cabeceras);
 
     const control = new AbortController();
     const temporizador = setTimeout(() => control.abort(), this.esperaMaxima);

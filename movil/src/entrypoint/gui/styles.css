@@ -208,3 +208,7 @@ h1 { letter-spacing: -.015em; }
   .esqueleto { animation: brillo 1.4s linear infinite; }
   @keyframes brillo { from { background-position: 100% 0; } to { background-position: -50% 0; } }
 }
+
+/* Cambiar y anular ventas */
+.aviso-cambio { display: flex; flex-direction: column; gap: .6rem; padding: .85rem 1rem; border: 2px solid var(--dorado); border-radius: 1rem; background: #fff4cf; font-weight: 700; }
+.venta__acciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .5rem; }

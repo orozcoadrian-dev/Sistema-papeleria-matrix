@@ -2,7 +2,7 @@
 
 Estudiante: Osvaldo De Jesus Pacheco Sanabria. Profesor: John Carlos Arrieta Arrieta. Fecha: 25 de noviembre de 2026.
 
-Hice la versión móvil de mi proyecto de aula, Papelería Matrix, con Vue 3 y TypeScript, siguiendo la organización de las 14 guías, y generé su APK para Android. Pasan 26 pruebas unitarias, 7 pruebas de navegador y la compilación, y recorrí la aplicación contra la API real en modo demo. Todavía no probé el APK en un teléfono.
+Hice la versión móvil de mi proyecto de aula, Papelería Matrix, con Vue 3 y TypeScript, siguiendo la organización de las 14 guías, y generé su APK para Android. Pasan 30 pruebas unitarias, 9 pruebas de navegador y la compilación, y recorrí la aplicación contra la API real en modo demo. Todavía no probé el APK en un teléfono.
 
 ## Dónde está todo
 
@@ -24,9 +24,9 @@ Todo pasó el 25 de noviembre. El APK se compiló en GitHub y lo demás en mi co
 
 | Comprobación | Resultado | Estado |
 |--------------|-----------|--------|
-| Pruebas unitarias con Vitest | 26 de 26 | Hecho |
+| Pruebas unitarias con Vitest | 30 de 30 | Hecho |
 | Tipos y compilación (`npm run build`) | Sin errores | Hecho |
-| Pruebas de navegador con Playwright en tamaño de teléfono | 7 de 7 | Hecho |
+| Pruebas de navegador con Playwright en tamaño de teléfono | 9 de 9 | Hecho |
 | Recorrido contra la API real en modo demo | Completo, con 24 capturas | Hecho |
 | APK de Android | Generado, 10 MB | Hecho |
 
@@ -108,6 +108,10 @@ La administradora hace las cuatro operaciones sobre servicios, papelería y ropa
 
 ![Confirmar la eliminación](evidencias/19-confirmar-eliminar.png)
 
+En «Lo vendido» una venta se puede cambiar o anular. El operador escribe su clave de permiso; la administradora no la necesita. Al cambiarla se cobra con los precios del momento.
+
+![Cambiar una venta](evidencias/25-cambiar-venta.png)
+
 El operador ve el catálogo sin botones para cambiarlo.
 
 ![Catálogo del operador](evidencias/09-catalogo-operador.png)
@@ -130,6 +134,8 @@ Las unitarias están en `tests/unit/` y las de navegador en `tests/e2e/matrix.sp
 | El operador cobra con cambio y solo consulta el catálogo | Hecho |
 | La administradora crea, edita y elimina un artículo | Hecho |
 | La administradora vende a nombre de un operador y anula la venta | Hecho |
+| El operador cambia su venta con la clave de permiso | Hecho |
+| El operador anula con su clave y la administradora cambia sin clave | Hecho |
 | Un 403 conserva la sesión y un 401 la cierra | Hecho |
 | La sesión sigue al recargar y salir la borra | Hecho |
 | Ninguna pantalla se sale del ancho del teléfono | Hecho |

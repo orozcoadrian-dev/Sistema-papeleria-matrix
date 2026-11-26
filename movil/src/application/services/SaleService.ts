@@ -1,8 +1,9 @@
 import { ErrorDeDominio } from '../../domain/exceptions/errors';
-import type { Operador, Venta } from '../../domain/model/Venta';
+import type { Carrito } from '../../domain/model/Carrito';
+import type { CambioDeVenta, Operador, Venta } from '../../domain/model/Venta';
 import type { SaleGateway } from '../../domain/ports/out/SaleGateway';
 import type { SessionStore } from '../../domain/ports/out/SessionStore';
-import type { CobrarCommand } from '../dto/commands/commands';
+import type { AnularVentaCommand, CambiarVentaCommand, CobrarCommand } from '../dto/commands/commands';
 import type { Periodo, ResumenDeVentas } from '../dto/responses/responses';
 import type { SaleUseCases } from '../ports/in/use-cases';
 
@@ -29,9 +30,7 @@ export class SaleService implements SaleUseCases {
     const esAdministrador = this.store.leer()?.rol === 'ADMINISTRADOR';
     if (esAdministrador && !operadorId) throw new ErrorDeDominio('Elige a nombre de qué operador queda la venta.');
     return this.gateway.registrar({
-      articulos: carrito.lineas.map(({ articulo, cantidad }) => ({ tipo: articulo.tipo, id: articulo.id, cantidad })),
-      // Lo que se le dijo al cliente: si un precio cambió mientras tanto, el servidor no registra otro total.
-      totalEsperado: carrito.total,
+      ...this.contenidoDe(carrito),
       ...(esAdministrador ? { operadorId } : {}),
     });
   }
@@ -43,8 +42,28 @@ export class SaleService implements SaleUseCases {
     return { ventas, total, cantidad: ventas.length, promedio: ventas.length ? Math.round(total / ventas.length) : 0 };
   }
 
-  anular(id: number): Promise<void> {
-    return this.gateway.anular(id);
+  async modificar({ id, carrito, clavePermiso }: CambiarVentaCommand): Promise<Venta> {
+    if (carrito.unidades === 0) throw new ErrorDeDominio('No queda nada en la venta. Si el cliente no se lleva nada, anúlala.');
+    return this.gateway.modificar(id, this.contenidoDe(carrito), this.permiso(clavePermiso));
+  }
+
+  async anular({ id, clavePermiso }: AnularVentaCommand): Promise<void> {
+    return this.gateway.anular(id, this.permiso(clavePermiso));
+  }
+
+  private contenidoDe(carrito: Carrito): CambioDeVenta {
+    return {
+      articulos: carrito.lineas.map(({ articulo, cantidad }) => ({ tipo: articulo.tipo, id: articulo.id, cantidad })),
+      // Lo que se le dijo al cliente: si un precio cambió mientras tanto, el servidor no registra otro total.
+      totalEsperado: carrito.total,
+    };
+  }
+
+  /** El operador necesita su clave de permiso; la administradora no. */
+  private permiso(clave?: string): string | undefined {
+    if (this.store.leer()?.rol !== 'OPERADOR_DE_CIBERCAFE') return undefined;
+    if (!clave?.trim()) throw new ErrorDeDominio('Escribe tu clave de permiso.');
+    return clave;
   }
 
   operadores(): Promise<Operador[]> {

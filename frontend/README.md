@@ -8,7 +8,7 @@ Página pública y pantallas internas hechas con HTML, CSS y JavaScript, sin lib
 |----------|-------------|----------|
 | `views/login.html` | Todos | Inicio de sesión con usuario y contraseña. Cada rol va a su pantalla. |
 | `views/panel.html` | Administradora | Servicios, papelería (con existencias y precio de compra), ropa, operadores (con su clave de permiso) y datos de la tienda. Lleva a ventas y cuentas. |
-| `views/ventas.html` | Administradora y operador | Caja: elegir artículos, cobrar con cálculo del cambio y ver lo vendido. Solo la administradora anula ventas y ve las de todos. |
+| `views/ventas.html` | Administradora y operador | Caja: elegir artículos, cobrar con cálculo del cambio, ver lo vendido, cambiar ventas y anularlas. El operador solo las suyas y con su clave de permiso; la administradora ve las de todos. |
 | `views/cuentas.html` | Administradora | Lo vendido por tipo, ganancia en papelería, inventario, sueldos y lo más vendido. Guarda cortes en ingresos y estadísticas, e imprime. |
 
 La sesión se guarda en la pestaña (`sessionStorage`) y se cierra tras 15 minutos sin uso. En el modo demo los usuarios de prueba están al final de `backend/src/main/resources/demo/datos-demo.sql`.
@@ -73,6 +73,7 @@ assets/               Fuentes, íconos e imágenes
 | RF-38: inicio de sesión | Hecho. Usuario y contraseña, con roles de administradora y operador. |
 | Panel de la administradora: servicios, productos y ropa | Hecho. |
 | Ventas y facturas, con descuento de existencias | Hecho. |
+| RF-25, 26, 31, 32, 35 y 36: cambiar y anular ventas | Hecho. Se cambian artículos y cantidades. El operador usa su clave de permiso. |
 | Panel: operadores y claves de permiso | Hecho. |
 | Panel: información del negocio | Hecho en la pantalla. El servidor falla al listarla (ver el PR). |
 | Ingresos, estadísticas y reportes | Parcial. Las cuentas se calculan en la pantalla y se guardan como cortes; los historiales y reportes en archivo esperan al backend. |

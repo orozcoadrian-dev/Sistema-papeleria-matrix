@@ -1,7 +1,8 @@
 'use strict';
 
 /* Pantalla de ventas. El operador del cibercafé toca lo que se lleva el cliente, revisa el total y cobra.
-   La administradora también entra aquí: puede vender a nombre de un operador, ver todas las ventas y anularlas.
+   La administradora también entra aquí: puede vender a nombre de un operador y ver todas las ventas.
+   Una venta registrada se puede cambiar o anular; el operador necesita para eso su clave de permiso.
    Las existencias las cuida el servidor: si no alcanzan, la venta no se hace y se dice cuántas quedan.
    Los datos se insertan con textContent, nunca con innerHTML. */
 
@@ -42,6 +43,7 @@ let periodo = 'hoy';
 let ventas = undefined;      // undefined = cargando, null = sin conexión
 let porAnular = null;
 let operadores = [];
+let editando = null;         // la venta registrada que se está cambiando
 
 /* ---------- Utilidades ---------- */
 
@@ -113,7 +115,7 @@ function elegirPestana(cual) {
     $('vista-vender').hidden = !vender;
     $('vista-vendido').hidden = vender;
     $('saludo-sub').textContent = vender
-        ? 'Toca lo que se lleva el cliente y después «Cobrar».'
+        ? `Toca lo que se lleva el cliente y después «${editando ? 'Guardar cambios' : 'Cobrar'}».`
         : 'Revisa cuánto se ha vendido.';
     try { sessionStorage.setItem(PESTANA_ALMACEN, cual); } catch { /* solo es una comodidad */ }
     $('barra-cobro').hidden = !vender || carrito.size === 0;
@@ -145,6 +147,8 @@ async function cargarCatalogo() {
         const listas = await Promise.all(Object.entries(TIPOS).map(async ([tipo, info]) => {
             const registros = await Sesion.llamar(info.ruta);
             return registros.map((r) => ({
+                // Lo que hay en la tienda según el servidor; «cantidad» suma lo de la venta que se esté cambiando.
+                enTienda: tipo === 'producto' ? r.cantidad : tipo === 'ropa' ? (r.disponible === false ? 0 : 1) : null,
                 tipo,
                 id: r.id,
                 nombre: r.nombre || r.tipo || 'Sin nombre',
@@ -156,6 +160,7 @@ async function cargarCatalogo() {
         }));
         catalogo = listas.flat();
         catalogoCargado = true;
+        ajustarExistencias();
         await fotosListas;
         // Lo que ya estaba en la venta se cruza con las existencias nuevas; lo que se borró del catálogo sale.
         for (const [llave, linea] of carrito) {
@@ -404,11 +409,15 @@ function dibujarCarrito() {
 
     const vacio = carrito.size === 0;
     $('carrito-vacio').hidden = !vacio;
-    $('boton-vaciar').hidden = vacio;
+    $('carrito-vacio').textContent = editando
+        ? 'No queda nada. Si el cliente no se lleva nada, anula la venta en «Lo vendido».'
+        : 'Todavía no hay nada. Toca un producto o servicio para agregarlo.';
+    $('boton-vaciar').hidden = vacio || Boolean(editando);
     $('boton-cobrar').disabled = vacio;
     const total = totalDelCarrito();
     $('carrito-total').textContent = pesos.format(total);
-    $('boton-cobrar').textContent = vacio ? 'Cobrar' : `Cobrar ${pesos.format(total)}`;
+    const accion = editando ? 'Guardar cambios' : 'Cobrar';
+    $('boton-cobrar').textContent = vacio ? accion : `${accion} ${pesos.format(total)}`;
 
     const unidades = [...carrito.values()].reduce((suma, linea) => suma + linea.cantidad, 0);
     $('barra-cobro').hidden = vacio || $('vista-vender').hidden;
@@ -432,21 +441,28 @@ $('boton-vaciar').addEventListener('click', () => {
 
 function abrirCobro() {
     if (carrito.size === 0) return;
-    if (ES_ADMIN && !$('operador').value) {
+    if (!editando && ES_ADMIN && !$('operador').value) {
         avisar('Elige arriba a nombre de qué operador queda la venta.', 'error');
         $('operador').focus();
         return;
     }
     const total = totalDelCarrito();
     const unidades = [...carrito.values()].reduce((suma, linea) => suma + linea.cantidad, 0);
+    const cambiando = Boolean(editando);
+    $('cobrar-icono').textContent = cambiando ? '✏️' : '💵';
+    $('cobrar-verbo').textContent = cambiando ? 'Queda en' : 'Cobrar';
     $('cobrar-total').textContent = pesos.format(total);
-    $('cobrar-detalle').textContent = unidades === 1 ? '1 artículo.' : `${unidades} artículos.`;
+    $('cobrar-detalle').textContent = cambiando ? diferencia(editando.total, total) : unidades === 1 ? '1 artículo.' : `${unidades} artículos.`;
+    $('caja-pago').hidden = cambiando;
+    $('caja-permiso').hidden = !cambiando || ES_ADMIN;
+    $('clave-permiso').value = '';
+    $('boton-confirmar-cobro').textContent = cambiando ? 'Guardar cambios' : 'Listo, registrar venta';
     $('pago').value = '';
     $('cambio').textContent = '';
     $('cobrar-error').textContent = '';
     dibujarPagosRapidos(total);
     $('ventana-cobrar').showModal();
-    $('pago').focus();
+    (!cambiando ? $('pago') : ES_ADMIN ? $('boton-confirmar-cobro') : $('clave-permiso')).focus();
 }
 
 /* Billetes comunes para no tener que escribir: el total exacto y los billetes que alcanzan a pagarlo. */
@@ -497,8 +513,21 @@ $('pago').addEventListener('blur', () => {
 });
 $('boton-cobrar').addEventListener('click', abrirCobro);
 
+/* Lo que se escribió en la caja, como lo pide el servidor. */
+function cuerpoDeLaVenta() {
+    return {
+        articulos: [...carrito.values()].map(({ articulo, cantidad }) => ({ tipo: articulo.tipo, id: articulo.id, cantidad })),
+        // Lo que se le dijo al cliente: si un precio cambió mientras tanto, el servidor no registra otro total.
+        totalEsperado: totalDelCarrito()
+    };
+}
+
 $('formulario-cobrar').addEventListener('submit', async (evento) => {
     evento.preventDefault();
+    if (editando) {
+        guardarCambios();
+        return;
+    }
     const pagoTexto = $('pago').value.trim();
     const pago = pagoTexto ? leerEntero(pagoTexto) : NaN;
     if (pagoTexto && Number.isFinite(pago) && pago < totalDelCarrito()) {
@@ -510,11 +539,7 @@ $('formulario-cobrar').addEventListener('submit', async (evento) => {
     const boton = $('boton-confirmar-cobro');
     boton.disabled = true;
     boton.textContent = 'Registrando…';
-    const cuerpo = {
-        articulos: [...carrito.values()].map(({ articulo, cantidad }) => ({ tipo: articulo.tipo, id: articulo.id, cantidad })),
-        // Lo que se le dijo al cliente: si un precio cambió mientras tanto, el servidor no registra otro total.
-        totalEsperado: totalDelCarrito()
-    };
+    const cuerpo = cuerpoDeLaVenta();
     if (ES_ADMIN) cuerpo.operadorId = Number($('operador').value);
 
     try {
@@ -583,6 +608,110 @@ $('ventana-recibo').addEventListener('close', () => {
     $('buscar').focus();
 });
 
+/* ---------- Cambiar una venta registrada ---------- */
+
+function unidadesEnLaVentaQueSeCambia(articulo) {
+    if (!editando) return 0;
+    return editando.articulos
+        .filter((linea) => linea.tipo === articulo.tipo && linea.id === articulo.id)
+        .reduce((suma, linea) => suma + linea.cantidad, 0);
+}
+
+/* Al cambiar una venta, lo que ella ya tenía vuelve a estar disponible para ella. */
+function ajustarExistencias() {
+    for (const articulo of catalogo || []) {
+        if (articulo.enTienda === null) continue;
+        const suma = articulo.enTienda + unidadesEnLaVentaQueSeCambia(articulo);
+        articulo.cantidad = articulo.tipo === 'ropa' ? Math.min(suma, 1) : suma;
+    }
+}
+
+function diferencia(antes, ahora) {
+    const texto = `Antes eran ${pesos.format(antes)}. `;
+    if (ahora > antes) return `${texto}Cobra ${pesos.format(ahora - antes)} más.`;
+    if (ahora < antes) return `${texto}Devuelve ${pesos.format(antes - ahora)}.`;
+    return `${texto}El total no cambia.`;
+}
+
+function dibujarModo() {
+    $('aviso-cambio').hidden = !editando;
+    if (editando) $('aviso-cambio-texto').textContent = `Estás cambiando la factura n.º ${editando.codigo}, de ${pesos.format(editando.total)}.`;
+    $('caja-operador').hidden = !ES_ADMIN || Boolean(editando);
+    $('barra-cobro-boton').textContent = editando ? 'Guardar' : 'Cobrar';
+}
+
+async function empezarCambio(venta) {
+    if (!editando && carrito.size > 0 && !window.confirm('Hay una venta sin cobrar. ¿La quitamos para cambiar esta?')) return;
+    editando = venta;
+    carrito.clear();
+    dibujarModo();
+    elegirPestana('vender');
+    await cargarCatalogo(); // con las existencias al día
+    if (editando !== venta || !catalogo) return;
+    let faltan = 0;
+    for (const linea of venta.articulos) {
+        const articulo = catalogo.find((a) => a.tipo === linea.tipo && a.id === linea.id);
+        if (articulo) carrito.set(clave(articulo.tipo, articulo.id), { articulo, cantidad: linea.cantidad });
+        else faltan++;
+    }
+    if (faltan) avisar('Algo de esa venta ya no está en el catálogo y no aparece en la lista.', 'error');
+    dibujarCarrito();
+    dibujarCatalogo();
+}
+
+function terminarCambio() {
+    editando = null;
+    carrito.clear();
+    ajustarExistencias();
+    dibujarModo();
+    dibujarCarrito();
+    dibujarCatalogo();
+}
+
+/* La clave viaja codificada para que admita tildes y eñes. */
+function cabeceraDePermiso(permiso) {
+    return ES_ADMIN ? {} : { 'X-Clave-Permiso': encodeURIComponent(permiso) };
+}
+
+async function guardarCambios() {
+    const venta = editando;
+    const permiso = $('clave-permiso').value;
+    if (!ES_ADMIN && !permiso.trim()) {
+        $('cobrar-error').textContent = 'Escribe tu clave de permiso.';
+        $('clave-permiso').focus();
+        return;
+    }
+
+    const boton = $('boton-confirmar-cobro');
+    boton.disabled = true;
+    boton.textContent = 'Guardando…';
+    $('cobrar-error').textContent = '';
+    try {
+        await Sesion.llamar(`/api/ventas/${venta.id}`, { metodo: 'PUT', cuerpo: cuerpoDeLaVenta(), cabeceras: cabeceraDePermiso(permiso) });
+        $('ventana-cobrar').close();
+        terminarCambio();
+        ventas = undefined;
+        elegirPestana('vendido');
+        cargarCatalogo();
+        avisar(`✓ Se guardaron los cambios de la factura n.º ${venta.codigo}.`);
+    } catch (error) {
+        if ([400, 403, 404, 409, 429].includes(error.estado) && error.message) {
+            $('cobrar-error').textContent = error.message;
+            if (error.estado === 404 || error.estado === 409) cargarCatalogo();
+        } else if (error.estado !== 401) {
+            $('cobrar-error').textContent = mensajeGeneral(error);
+        }
+    } finally {
+        boton.disabled = false;
+        boton.textContent = 'Guardar cambios';
+    }
+}
+
+$('boton-dejar-venta').addEventListener('click', () => {
+    terminarCambio();
+    elegirPestana('vendido');
+});
+
 /* ---------- Operadores (solo la administradora) ---------- */
 
 async function cargarOperadores() {
@@ -640,7 +769,8 @@ function dibujarVentas() {
     contenedor.replaceChildren();
     resumen.replaceChildren();
     $('vendido-estado').hidden = true;
-    $('vendido-ayuda').textContent = ES_ADMIN ? 'Todas las ventas del negocio.' : 'Solo aparecen las ventas que registraste tú.';
+    $('vendido-ayuda').textContent = ES_ADMIN ? 'Todas las ventas del negocio.'
+        : 'Solo aparecen las ventas que registraste tú. Para cambiar o anular una necesitas tu clave de permiso.';
 
     if (ventas === undefined) {
         contenedor.setAttribute('aria-busy', 'true');
@@ -736,40 +866,59 @@ function crearVenta(venta) {
         quien.textContent = `Vendió: ${venta.operador}`;
         etiquetas.append(quien);
         tarjeta.append(etiquetas);
-
-        const acciones = document.createElement('div');
-        acciones.className = 'tarjeta__acciones';
-        const anular = document.createElement('button');
-        anular.type = 'button';
-        anular.className = 'boton boton--peligro-suave';
-        anular.textContent = '↩️ Anular venta';
-        anular.setAttribute('aria-label', `Anular la venta de ${pesos.format(venta.total)}, factura ${venta.codigo}`);
-        anular.addEventListener('click', () => pedirAnular(venta));
-        acciones.append(anular);
-        tarjeta.append(acciones);
     }
+
+    const acciones = document.createElement('div');
+    acciones.className = 'tarjeta__acciones';
+    const crearAccion = (texto, clase, descripcion, accion) => {
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.className = `boton ${clase}`;
+        boton.textContent = texto;
+        boton.setAttribute('aria-label', `${descripcion} de ${pesos.format(venta.total)}, factura ${venta.codigo}`);
+        boton.addEventListener('click', () => accion(venta));
+        acciones.append(boton);
+    };
+    if (venta.tipo === 'Venta en tienda') crearAccion('✏️ Cambiar venta', 'boton--suave', 'Cambiar la venta', empezarCambio);
+    crearAccion('↩️ Anular venta', 'boton--peligro-suave', 'Anular la venta', pedirAnular);
+    tarjeta.append(acciones);
     return tarjeta;
 }
 
 function pedirAnular(venta) {
     porAnular = venta;
     $('anular-titulo').textContent = `¿Anular la venta de ${pesos.format(venta.total)}?`;
+    $('anular-clave-caja').hidden = ES_ADMIN;
+    $('anular-clave').value = '';
+    $('anular-error').textContent = '';
     $('ventana-anular').showModal();
-    $('ventana-anular').querySelector('[data-cerrar]').focus();
+    (ES_ADMIN ? $('ventana-anular').querySelector('[data-cerrar]') : $('anular-clave')).focus();
 }
 
 $('boton-confirmar-anular').addEventListener('click', async () => {
     const venta = porAnular;
     if (!venta) return;
+    const permiso = $('anular-clave').value;
+    if (!ES_ADMIN && !permiso.trim()) {
+        $('anular-error').textContent = 'Escribe tu clave de permiso.';
+        $('anular-clave').focus();
+        return;
+    }
     const boton = $('boton-confirmar-anular');
     boton.disabled = true;
     try {
-        await Sesion.llamar(`/api/ventas/${venta.id}`, { metodo: 'DELETE' });
+        await Sesion.llamar(`/api/ventas/${venta.id}`, { metodo: 'DELETE', cabeceras: cabeceraDePermiso(permiso) });
         $('ventana-anular').close();
+        if (editando?.id === venta.id) terminarCambio();
         avisar(`✓ Se anuló la venta de ${pesos.format(venta.total)}.`);
         cargarVentas();
         cargarCatalogo();
     } catch (error) {
+        // Si falló el permiso, la ventana sigue abierta para escribir la clave otra vez.
+        if (error.estado === 403 || error.estado === 429) {
+            $('anular-error').textContent = error.message;
+            return;
+        }
         $('ventana-anular').close();
         if (error.estado === 404) {
             avisar('Esa venta ya estaba anulada.');
@@ -779,7 +928,6 @@ $('boton-confirmar-anular').addEventListener('click', async () => {
         }
     } finally {
         boton.disabled = false;
-        porAnular = null;
     }
 });
 
