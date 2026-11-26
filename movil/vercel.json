@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "has": [{ "type": "header", "key": "origin", "value": { "eq": "https://matrix-movil.vercel.app" } }],
+      "dest": "https://papeleria-matrix-api.onrender.com/api/$1",
+      "headers": { "x-vercel-enable-rewrite-caching": "0", "Cache-Control": "no-store" },
+      "transforms": [{ "type": "request.headers", "op": "delete", "target": { "key": "origin" } }]
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "https://papeleria-matrix-api.onrender.com/api/$1",
+      "headers": { "x-vercel-enable-rewrite-caching": "0", "Cache-Control": "no-store" }
+    },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}

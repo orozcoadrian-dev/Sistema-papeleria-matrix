@@ -1,3 +1,4 @@
+import { Printer, PencilRuler, Shirt } from 'lucide-vue-next';
 import { inject, reactive, shallowRef, type InjectionKey } from 'vue';
 import type { Aplicacion } from '../../bootstrap/container';
 import type { TipoDeArticulo } from '../../domain/constants/articulos';
@@ -41,4 +42,4 @@ export function mensajeDe(error: unknown): string {
 const formatoPesos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 export const pesos = (valor: number): string => formatoPesos.format(valor);
 
-export const ICONO_DEL_TIPO: Record<TipoDeArticulo, string> = { servicio: '🖨️', producto: '✏️', ropa: '👗' };
+export const ICONO_DEL_TIPO: Record<TipoDeArticulo, typeof Printer> = { servicio: Printer, producto: PencilRuler, ropa: Shirt };

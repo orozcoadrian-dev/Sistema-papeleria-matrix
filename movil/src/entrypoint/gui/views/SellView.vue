@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CircleCheck, Minus, Plus, SearchX, ShoppingCart, Trash2, WifiOff } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { POCAS_UNIDADES } from '../../../domain/constants/articulos';
 import { ErrorDeApi } from '../../../domain/exceptions/errors';
@@ -99,12 +100,15 @@ async function registrar() {
 
   <ArticleFilter v-model:busqueda="busqueda" v-model:filtro="filtro" />
 
-  <p v-if="cargando" class="estado" role="status">Cargando artículos…</p>
+  <div v-if="cargando" class="mosaico" role="status" aria-label="Cargando artículos">
+    <div v-for="n in 6" :key="n" class="esqueleto esqueleto--articulo" />
+  </div>
   <div v-else-if="error" class="tarjeta estado">
-    <p>📡 {{ error }}</p>
+    <WifiOff :size="32" aria-hidden="true" />
+    <p>{{ error }}</p>
     <button type="button" class="boton boton--suave" @click="cargar">Intentar de nuevo</button>
   </div>
-  <p v-else-if="!visibles.length" class="estado">🔍 No encontramos artículos.</p>
+  <div v-else-if="!visibles.length" class="estado"><SearchX :size="32" aria-hidden="true" /><p>No encontramos artículos.</p></div>
 
   <div v-else class="mosaico">
     <button
@@ -112,9 +116,9 @@ async function registrar() {
       :class="{ 'articulo--elegido': carrito.cantidadDe(articulo) }" :disabled="articulo.existencias === 0"
       @click="cambiar(articulo, 1)"
     >
-      <span class="articulo__icono" aria-hidden="true">{{ ICONO_DEL_TIPO[articulo.tipo] }}</span>
+      <span class="sello" :class="`sello--${articulo.tipo}`" aria-hidden="true"><component :is="ICONO_DEL_TIPO[articulo.tipo]" :size="22" /></span>
       <span class="articulo__nombre">{{ articulo.nombre }}</span>
-      <strong>{{ pesos(articulo.precio) }}</strong>
+      <strong class="articulo__precio">{{ pesos(articulo.precio) }}</strong>
       <small v-if="articulo.detalle">{{ articulo.detalle }}</small>
       <small v-if="existencias(articulo)" :class="{ pocas: (articulo.existencias ?? 0) - carrito.cantidadDe(articulo) < POCAS_UNIDADES }">{{ existencias(articulo) }}</small>
       <b v-if="carrito.cantidadDe(articulo)" class="articulo__insignia">×{{ carrito.cantidadDe(articulo) }}</b>
@@ -123,7 +127,7 @@ async function registrar() {
 
   <div v-if="carrito.unidades" class="barra-cobro">
     <button type="button" class="boton boton--dorado" @click="abrirCobro">
-      <span>{{ carrito.unidades === 1 ? '1 artículo' : `${carrito.unidades} artículos` }}</span>
+      <span><ShoppingCart :size="20" aria-hidden="true" /> {{ carrito.unidades === 1 ? '1 artículo' : `${carrito.unidades} artículos` }}</span>
       <strong>Cobrar {{ pesos(carrito.total) }}</strong>
     </button>
   </div>
@@ -133,9 +137,9 @@ async function registrar() {
       <li v-for="linea in carrito.lineas" :key="claveDe(linea.articulo)">
         <div><b>{{ linea.articulo.nombre }}</b><small>{{ pesos(linea.articulo.precio) }} c/u</small></div>
         <div class="cantidad">
-          <button type="button" :aria-label="`Uno menos de ${linea.articulo.nombre}`" @click="cambiar(linea.articulo, -1)">{{ linea.cantidad === 1 ? '🗑️' : '−' }}</button>
+          <button type="button" :aria-label="`Uno menos de ${linea.articulo.nombre}`" @click="cambiar(linea.articulo, -1)"><component :is="linea.cantidad === 1 ? Trash2 : Minus" :size="18" aria-hidden="true" /></button>
           <span>{{ linea.cantidad }}</span>
-          <button type="button" :aria-label="`Uno más de ${linea.articulo.nombre}`" @click="cambiar(linea.articulo, 1)">+</button>
+          <button type="button" :aria-label="`Uno más de ${linea.articulo.nombre}`" @click="cambiar(linea.articulo, 1)"><Plus :size="18" aria-hidden="true" /></button>
         </div>
         <strong>{{ pesos(linea.articulo.precio * linea.cantidad) }}</strong>
       </li>
@@ -162,7 +166,8 @@ async function registrar() {
     </form>
   </BottomSheet>
 
-  <BottomSheet v-if="recibo" titulo="✅ Venta registrada" @cerrar="recibo = undefined">
+  <BottomSheet v-if="recibo" titulo="Venta registrada" @cerrar="recibo = undefined">
+    <CircleCheck class="exito" :size="56" aria-hidden="true" />
     <ul class="recibo">
       <li v-for="(linea, indice) in recibo.venta.articulos" :key="indice"><span>{{ linea.cantidad }} × {{ linea.nombre }}</span></li>
     </ul>

@@ -2,7 +2,7 @@
 
 Estudiante: Osvaldo De Jesus Pacheco Sanabria. Profesor: John Carlos Arrieta Arrieta. Fecha: 25 de noviembre de 2026.
 
-Hice la versión móvil de mi proyecto de aula, Papelería Matrix, con Vue 3 y TypeScript, siguiendo la organización de las 14 guías. Pasan 23 pruebas unitarias, 7 pruebas de navegador y la compilación, y recorrí la aplicación contra la API real en modo demo. No la publiqué en internet ni la probé en un teléfono físico.
+Hice la versión móvil de mi proyecto de aula, Papelería Matrix, con Vue 3 y TypeScript, siguiendo la organización de las 14 guías, y generé su APK para Android. Pasan 26 pruebas unitarias, 7 pruebas de navegador y la compilación, y recorrí la aplicación contra la API real en modo demo. Todavía no probé el APK en un teléfono.
 
 ## Dónde está todo
 
@@ -13,19 +13,22 @@ Hice la versión móvil de mi proyecto de aula, Papelería Matrix, con Vue 3 y T
 | Pruebas | `movil/tests/` | Hecho |
 | Simulación de la API | `movil/postman/` | Hecho |
 | Capturas | `movil/docs/evidencias/` | Hecho |
+| APK de Android | GitHub, pestaña Actions, proceso «APK móvil» | Hecho |
+| App publicada para iPhone y navegador | `https://matrix-movil.vercel.app` | Hecho |
 
 La versión web (`frontend/`) y el servidor (`backend/`) quedaron igual.
 
 ## Resultado de las pruebas
 
-Todo pasó el 25 de noviembre en mi computador.
+Todo pasó el 25 de noviembre. El APK se compiló en GitHub y lo demás en mi computador.
 
 | Comprobación | Resultado | Estado |
 |--------------|-----------|--------|
-| Pruebas unitarias con Vitest | 23 de 23 | Hecho |
+| Pruebas unitarias con Vitest | 26 de 26 | Hecho |
 | Tipos y compilación (`npm run build`) | Sin errores | Hecho |
 | Pruebas de navegador con Playwright en tamaño de teléfono | 7 de 7 | Hecho |
 | Recorrido contra la API real en modo demo | Completo, con 24 capturas | Hecho |
+| APK de Android | Generado, 10 MB | Hecho |
 
 ## Guía 01. Arrancar la aplicación
 
@@ -113,6 +116,8 @@ El operador ve el catálogo sin botones para cambiarlo.
 
 `styles.css` define en `:root` los colores de la marca. El menú inferior y las listas usan Flexbox y Grid. Los botones miden al menos 44 píxeles para tocarlos con el dedo. La barra y el menú respetan los bordes del teléfono con `safe-area-inset`. Una prueba comprueba que ninguna pantalla se salga a lo ancho.
 
+Cada tipo de artículo tiene su icono y su color. Mientras llegan los datos se muestran bloques de carga, y las animaciones se apagan si el teléfono pide menos movimiento.
+
 ![Vender desde el teléfono](evidencias/05-vender.png)
 
 ## Guía 12. Pruebas
@@ -149,9 +154,9 @@ Estas son peticiones reales del recorrido contra el backend.
 | `POST /api/sesion` | 200 |
 | `POST /api/ventas` | 201 |
 | `POST /api/productos` | 201 |
-| `PUT /api/productos/7` | 200 |
-| `DELETE /api/productos/7` | 204 |
-| `DELETE /api/ventas/3` | 204 |
+| `PUT /api/productos/{id}` | 200 |
+| `DELETE /api/productos/{id}` | 204 |
+| `DELETE /api/ventas/{id}` | 204 |
 | `DELETE /api/sesion` | 204 |
 
 ![Recibo de la venta](evidencias/07-recibo.png)
@@ -184,13 +189,43 @@ Estas son peticiones reales del recorrido contra el backend.
 | `tests/unit/`, `tests/e2e/`, `tests/evidencias/recorrido.mjs` | Pruebas y capturas |
 | `postman/mocks/`, `postman/simulations/` | Simulación de la API |
 | `public/` | Logo y fuentes de la marca |
+| `capacitor.config.ts`, `.env.apk` | Nombre de la aplicación y API que usa el APK |
+| `src/adapters/http/pedirNativo.ts`, `src/entrypoint/native.ts` | Red de Android, botón Atrás y barras del sistema |
+| `android/` | Proyecto de Android creado con Capacitor, con el icono del negocio |
+| `.github/workflows/apk-movil.yml` | Genera el APK en GitHub |
 
 `node_modules/`, `dist/`, `test-results/` y los registros los generan las herramientas y no se suben. `package-lock.json` sí se sube.
 
+## El APK para Android
+
+Usé Capacitor, que empaqueta la misma aplicación de Vue dentro de una aplicación de Android. No hay una segunda versión del código.
+
+| Paso | Qué hace |
+|------|----------|
+| `npm run build:apk` | Compila Vue con la dirección de la API publicada y copia el resultado a `android/` |
+| `./gradlew assembleDebug` | Arma el APK. Lo ejecuta GitHub, porque en mi computador faltan herramientas de Android |
+
+Dentro del APK las peticiones las hace Android, porque el servidor rechaza con 403 las peticiones que llegan de un origen de navegador que no conoce. `pedirNativo.ts` ocupa el lugar de `fetch` y `HttpClient` no cambia, que es la inyección de dependencias de la guía 07.
+
+El botón Atrás cierra la ventana abierta, vuelve de pantalla o minimiza la aplicación.
+
+Es un APK firmado con la clave de desarrollo. Sirve para instalarlo directamente, no para publicarlo en una tienda.
+
+## La app en iPhone
+
+Un iPhone no instala APK. Para usarla allí publiqué la versión web en Vercel y se agrega a la pantalla de inicio desde Safari. Queda con el logo y se abre a pantalla completa. Es gratis y no necesita un computador Mac.
+
+| Archivo | Qué hace |
+|---------|----------|
+| `index.html` y `public/manifest.webmanifest` | Nombre, icono y pantalla completa |
+| `vercel.json` | Pasa las peticiones de `/api` al servidor y devuelve `index.html` en las demás rutas |
+
+El servidor rechaza los orígenes que no conoce. Por eso `vercel.json` quita la cabecera de origen solo cuando la petición viene de esta misma app. Las de otras páginas siguen siendo rechazadas.
+
 ## Lo que quedó fuera
 
-- [ ] Publicar la app móvil en internet. Falta agregar su dirección en la configuración del servidor.
-- [ ] Probarla en un teléfono físico.
-- [ ] Instalarla como aplicación o generar un APK. Las guías no lo piden.
+- [ ] Probar el APK en un teléfono físico.
+- [ ] Publicarla en una tienda. Requiere firmas propias de Google y de Apple.
+- [ ] Usar datos reales. El servidor publicado está en modo demo y sus datos se reinician.
 - [ ] Operadores, claves, datos de la tienda y cuentas. Siguen en la versión web.
 - [ ] Paginación desde el servidor. Requiere cambiar el backend.
