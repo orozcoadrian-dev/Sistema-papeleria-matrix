@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net">
   <diagram id="despliegue" name="Diagrama de despliegue">
-    <mxGraphModel dx="3577" dy="1890" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1650" pageHeight="820" math="0" shadow="0">
+    <mxGraphModel dx="3473" dy="1832" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1650" pageHeight="820" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -62,13 +62,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="c19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fontSize=12;fontFamily=Poppins;fillColor=#f5f5f5;strokeColor=#666666;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Recorrido de comunicación&lt;/b&gt;&lt;br&gt;1. El usuario accede desde su dispositivo.&lt;br&gt;2. El navegador carga el frontend (index.html, Css, Main.js, Assets).&lt;br&gt;3. Main.js envía solicitudes HTTP a la API REST (rutas protegidas con claveApi).&lt;br&gt;4. El backend ejecuta lógica de negocio, permisos y validaciones.&lt;br&gt;5. Repositorios/DAO consultan MySQL por JDBC.&lt;br&gt;6. MySQL responde a la operación.&lt;br&gt;7. El backend devuelve la respuesta HTTP al frontend.&lt;br&gt;8. El usuario visualiza el resultado." vertex="1">
-          <mxGeometry height="290" width="520" x="40" y="480" as="geometry" />
+          <mxGeometry height="150" width="520" x="40" y="480" as="geometry" />
         </mxCell>
         <mxCell id="c20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fontSize=12;fontFamily=Poppins;fillColor=#ffffff;strokeColor=#666666;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Leyenda&lt;/b&gt;&lt;br&gt;• Cubo «device»: nodo físico.&lt;br&gt;• Cubo «executionEnvironment»: entorno de ejecución, anidado en su dispositivo.&lt;br&gt;• Nota «artifact»: artefacto de software; su anidamiento dentro de un nodo indica su &lt;b&gt;despliegue&lt;/b&gt; en él.&lt;br&gt;• Línea continua con flechas: &lt;b&gt;ruta de comunicación&lt;/b&gt; con su protocolo.&lt;br&gt;• Línea punteada «use»: dependencia." vertex="1">
-          <mxGeometry height="290" width="420" x="580" y="480" as="geometry" />
-        </mxCell>
-        <mxCell id="c21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;fontSize=12;fontFamily=Poppins;fillColor=#f5f5f5;strokeColor=#666666;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fontColor=#333333;" value="&lt;b&gt;Supuestos e inconsistencias detectadas&lt;/b&gt;&lt;br&gt;• React no se dibuja: el frontend definido es HTML5/CSS3/JS vanilla.&lt;br&gt;• Spring Boot aparece en los controllers (T1–T8); el contexto maestro habla de JDBC puro. Se muestra Spring Boot + Repositorios/DAO (por unificar).&lt;br&gt;• Servidor físico (local u hosting) no definido: un solo «Equipo servidor»; XAMPP es orientativo.&lt;br&gt;• HTTP vs HTTPS no confirmado: se rotula HTTP. Quién sirve index.html no está definido.&lt;br&gt;• El frontend aún no consume la API (arquitectura objetivo).&lt;br&gt;• PDF y correo de facturas: sin servicio definido, no se dibujan. IA: futura, fuera de alcance." vertex="1">
-          <mxGeometry height="290" width="550" x="1020" y="480" as="geometry" />
+          <mxGeometry height="110" width="1000" x="580" y="480" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
