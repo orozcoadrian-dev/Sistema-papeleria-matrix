@@ -16,9 +16,10 @@ export interface Aplicacion {
 }
 
 /** Único lugar donde se eligen las implementaciones concretas. */
-export function crearAplicacion(base: string, storage: Storage): Aplicacion {
+export function crearAplicacion(base: string, storage: Storage, pedir?: typeof fetch): Aplicacion {
   const store = new BrowserSessionStore(storage);
-  const http = new HttpClient(base, store);
+  // Sin «pedir» se usa el fetch del navegador; la aplicación instalada entrega el de Android.
+  const http = new HttpClient(base, store, pedir);
   return {
     auth: new AuthService(new AuthHttpAdapter(http), store),
     catalogo: new CatalogService(new CatalogHttpAdapter(http)),

@@ -1,0 +1,64 @@
+name: APK móvil
+
+# Genera el APK de la aplicación móvil. No corre en main para no retrasar el despliegue del servidor,
+# que en Render espera a que terminen las comprobaciones.
+on:
+  push:
+    branches-ignore: [main]
+    paths:
+      - "movil/**"
+      - "!movil/docs/**"
+      - "!movil/README.md"
+      - ".github/workflows/apk-movil.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: apk-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    name: Generar el APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: movil
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: movil/package-lock.json
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Pruebas unitarias
+        run: npm test
+
+      - name: Compilar la aplicación Vue y copiarla a Android
+        run: npm run build:apk
+
+      - name: Compilar el APK
+        working-directory: movil/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk PapeleriaMatrix.apk
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: PapeleriaMatrix-apk
+          path: movil/android/PapeleriaMatrix.apk
+          if-no-files-found: error

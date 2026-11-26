@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Eye, EyeOff, LockKeyhole, UserRound } from 'lucide-vue-next';
 import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ErrorDeApi, ErrorDeDominio, type ErroresPorCampo } from '../../../domain/exceptions/errors';
@@ -31,7 +32,7 @@ async function entrar() {
   mensaje.value = '';
   entrando.value = true;
   const despertando = setTimeout(() => {
-    mensaje.value = 'Estamos despertando el sistema. La primera vez del día puede tardar hasta un minuto ☕';
+    mensaje.value = 'Estamos despertando el sistema. La primera vez del día puede tardar hasta un minuto.';
   }, 4000);
   try {
     await auth.entrar({ ...formulario });
@@ -50,20 +51,29 @@ async function entrar() {
 
 <template>
   <section class="entrada">
-    <img src="/logo.ico" alt="" width="72" height="72" class="entrada__logo" />
-    <h1>Papelería <span>Matrix</span></h1>
-    <p>Entra con tu usuario para usar el sistema.</p>
+    <div class="entrada__marca">
+      <img src="/logo.png" alt="" width="104" height="104" />
+      <h1>Papelería <span>Matrix</span></h1>
+      <p>Ventas e inventario en tu teléfono</p>
+    </div>
     <p v-if="avisoDeEntrada" class="nota">{{ avisoDeEntrada }}</p>
 
-    <form class="tarjeta formulario" novalidate @submit.prevent="entrar">
+    <form class="tarjeta formulario entrada__panel" novalidate @submit.prevent="entrar">
+      <h2>Iniciar sesión</h2>
       <label for="usuario">Usuario</label>
-      <input id="usuario" v-model="formulario.usuario" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" :aria-invalid="!!errores.usuario" />
+      <div class="con-icono">
+        <UserRound :size="20" aria-hidden="true" />
+        <input id="usuario" v-model="formulario.usuario" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" :aria-invalid="!!errores.usuario" />
+      </div>
       <small v-if="errores.usuario" class="error">{{ errores.usuario }}</small>
 
       <label for="contrasenia">Contraseña</label>
-      <div class="clave">
+      <div class="con-icono">
+        <LockKeyhole :size="20" aria-hidden="true" />
         <input id="contrasenia" v-model="formulario.contrasenia" :type="verClave ? 'text' : 'password'" autocomplete="current-password" maxlength="255" :aria-invalid="!!errores.contrasenia" />
-        <button type="button" class="boton boton--suave" :aria-pressed="verClave" @click="verClave = !verClave">{{ verClave ? 'Ocultar' : 'Ver' }}</button>
+        <button type="button" class="boton-icono" :aria-label="verClave ? 'Ocultar clave' : 'Ver clave'" :aria-pressed="verClave" @click="verClave = !verClave">
+          <component :is="verClave ? EyeOff : Eye" :size="20" aria-hidden="true" />
+        </button>
       </div>
       <small v-if="errores.contrasenia" class="error">{{ errores.contrasenia }}</small>
 

@@ -4,3 +4,6 @@ dist/
 test-results/
 playwright-report/
 *.log
+
+# La raíz del repositorio ignora los .jar; Gradle necesita este para compilar en GitHub.
+!android/gradle/wrapper/gradle-wrapper.jar
