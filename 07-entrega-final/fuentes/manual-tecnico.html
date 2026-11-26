@@ -13,7 +13,7 @@
         <h1>Manual técnico</h1>
         <p class="portada__sub">Arquitectura, instalación, configuración, seguridad, API REST, base de datos, pruebas y despliegue del sistema.</p>
         <div class="portada__datos">
-            <p>Versión 1.0 · 25 de noviembre de 2026</p>
+            <p>Versión 2.0 · 26 de noviembre de 2026</p>
             <p>Equipo: Osvaldo De Jesús Pacheco Sanabria y Adrián Orozco</p>
             <p>Repositorio: github.com/orozcoadrian-dev/Sistema-papeleria-matrix</p>
         </div>
@@ -30,30 +30,32 @@
             <li>Seguridad: sesión, roles y contraseñas</li>
             <li>API REST</li>
             <li>Ventas, facturas y existencias</li>
-            <li>Ingresos, estadísticas y reportes</li>
+            <li>Ingresos, estadísticas, reportes y correo</li>
             <li>Base de datos</li>
-            <li>Frontend</li>
+            <li>Frontend y aplicación móvil</li>
             <li>Pruebas</li>
-            <li>Integración continua y despliegue en Render</li>
+            <li>Integración continua y despliegue</li>
             <li>Mantenimiento y problemas conocidos</li>
         </ol>
     </section>
 
     <h2>1. Arquitectura y tecnologías</h2>
-    <p>El sistema tiene dos piezas que se comunican por HTTP con JSON:</p>
+    <p>El sistema tiene tres piezas. La página y la aplicación móvil se comunican con el backend por HTTP con JSON:</p>
     <ul>
         <li><strong>Backend:</strong> API REST en Java 21 con Spring Boot 4.1 (Spring Web, Spring Data JPA con Hibernate 7, Bean Validation, Actuator, springdoc OpenAPI). Contraseñas con BCrypt (spring-security-crypto). Organizada en capas: controller → service → repository → model, con DTO de entrada y salida.</li>
         <li><strong>Frontend:</strong> páginas estáticas en HTML, CSS y JavaScript sin librerías. La página pública consulta el catálogo; las pantallas internas (panel, caja y cuentas) usan la sesión.</li>
+        <li><strong>Aplicación móvil (<code>movil/</code>):</strong> Vue 3 y TypeScript con Vite, organizada por puertos y adaptadores (dominio, aplicación, adaptadores y pantallas). Se publica como aplicación web instalable y también se empaqueta como APK con Capacitor.</li>
     </ul>
     <table>
         <tr><th>Capa</th><th>Tecnología</th></tr>
         <tr><td>Lenguaje y plataforma</td><td>Java 21 (Temurin), Maven 3.9</td></tr>
         <tr><td>Marco de trabajo</td><td>Spring Boot 4.1, Hibernate 7.4</td></tr>
-        <tr><td>Base de datos</td><td>MySQL 8 (modo local, XAMPP) o H2 en memoria (modo demo)</td></tr>
+        <tr><td>Base de datos</td><td>MariaDB de XAMPP o MySQL 8 (modo local), o H2 en memoria (modo demo)</td></tr>
         <tr><td>Documentación de la API</td><td>Swagger UI en <code>/swagger-ui.html</code></td></tr>
-        <tr><td>Pruebas</td><td>JUnit 5, MockMvc, Mockito; colección de Postman</td></tr>
+        <tr><td>Aplicación móvil</td><td>Node 22, Vue 3, TypeScript, Vite, Capacitor</td></tr>
+        <tr><td>Pruebas</td><td>JUnit 5, MockMvc, Mockito, Vitest, Playwright; colección de Postman</td></tr>
         <tr><td>Integración continua</td><td>GitHub Actions</td></tr>
-        <tr><td>Publicación</td><td>Render: servicio Docker (API) y sitio estático (página)</td></tr>
+        <tr><td>Publicación</td><td>Render: servicio Docker (API) y sitio estático (página). Vercel: aplicación móvil.</td></tr>
     </table>
 
     <h2>2. Estructura del repositorio</h2>
@@ -72,16 +74,18 @@
     demo/                  Datos de ejemplo del modo demo
   src/test/                Pruebas automáticas
 frontend/                Página pública y pantallas internas
-database/scripts/        Scripts SQL: base, tablas y llaves foráneas
+database/scripts/        Scripts SQL: base, tablas, llaves foráneas y actualizaciones
+movil/                   Aplicación para el teléfono (Vue y TypeScript)
 postman/                 Colección y entornos de Postman
 Dockerfile, render.yaml  Imagen y publicación en Render
-.github/workflows/ci.yml Integración continua
+.github/workflows/       Integración continua (ci.yml) y APK (apk-movil.yml)
 01- a 08-                Requisitos, diagramas, diseño y documentación</pre>
 
     <h2>3. Requisitos para trabajar en el proyecto</h2>
     <ul>
         <li>JDK 21 y Maven 3.9 o superior.</li>
-        <li>Para el modo local: MySQL 8 (por ejemplo, con XAMPP).</li>
+        <li>Para el modo local: MariaDB (XAMPP) o MySQL 8.</li>
+        <li>Para la aplicación móvil: Node 22.</li>
         <li>Un servidor de archivos estáticos para el frontend: <code>jwebserver</code> (viene con el JDK), la extensión Live Server de VS Code o <code>python -m http.server</code>.</li>
         <li>Opcional: Postman y Docker.</li>
     </ul>
@@ -91,14 +95,20 @@ Dockerfile, render.yaml  Imagen y publicación en Render
     <p>Usa H2 en memoria y carga los datos de ejemplo. Todo se pierde al apagarlo.</p>
     <pre>cd backend
 mvn spring-boot:run -Dspring-boot.run.profiles=demo</pre>
-    <h3>Modo local (MySQL)</h3>
+    <h3>Modo local (MariaDB o MySQL)</h3>
     <ol>
         <li>Encender MySQL y ejecutar, en orden, los scripts de <code>database/scripts</code>: <code>01-crear-base-de-datos</code>, <code>02-crear-tablas-base-de-datos</code> y <code>03-crear-relaciones-fk</code>.</li>
+        <li>Si la base ya existía antes de esta versión, ejecutar una sola vez <code>04-actualizaciones/01-casos-de-uso.sql</code>: agrega las columnas nuevas sin borrar datos.</li>
         <li>Arrancar el backend sin perfil (por defecto es <code>local</code>): <code>mvn spring-boot:run</code>. Hibernate valida que las entidades coincidan con las tablas.</li>
     </ol>
     <h3>Frontend</h3>
     <pre>jwebserver -d frontend -p 5500</pre>
     <p>Abrir <code>http://localhost:5500</code>. La dirección de la API está en <code>frontend/js/config.js</code>: en el computador usa <code>http://localhost:8080</code> y publicada usa <code>https://papeleria-matrix-api.onrender.com</code>.</p>
+    <h3>Aplicación móvil</h3>
+    <pre>cd movil
+npm install
+npm run dev</pre>
+    <p>Abre en <code>http://localhost:5173</code> y pasa las peticiones de <code>/api</code> al backend. El detalle está en <code>movil/README.md</code>.</p>
     <h3>Usuarios de prueba (solo modo demo)</h3>
     <table>
         <tr><th>Rol</th><th>Usuario</th><th>Contraseña</th></tr>
@@ -116,6 +126,9 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo</pre>
         <tr><td><code>API_KEY</code></td><td><code>clave-de-prueba</code></td><td>Clave de la cabecera <code>X-API-Key</code> (acceso de administrador para Postman y pruebas). En Render se genera sola.</td></tr>
         <tr><td><code>CORS_ORIGENES</code></td><td>localhost:5500 y 127.0.0.1:5500</td><td>Direcciones desde las que el navegador puede consultar la API, separadas por comas.</td></tr>
         <tr><td><code>SESION_MINUTOS</code></td><td>15</td><td>Minutos sin uso tras los cuales se cierra la sesión.</td></tr>
+        <tr><td><code>DB_DIALECTO</code></td><td>MariaDB</td><td>Solo modo local. Con MySQL: <code>org.hibernate.dialect.MySQLDialect</code>.</td></tr>
+        <tr><td><code>CORREO_CLAVE</code>, <code>CORREO_REMITENTE</code></td><td>vacías</td><td>Cuenta de Brevo que envía los registros de venta. Opcionales.</td></tr>
+        <tr><td><code>IMAGENES_CARPETA</code></td><td><code>imagenes</code></td><td>Carpeta de las fotos.</td></tr>
     </table>
 
     <h2>6. Seguridad: sesión, roles y contraseñas</h2>
@@ -124,13 +137,15 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo</pre>
         <li><strong>Cierre por inactividad (RNF-18):</strong> la sesión se cierra tras 15 minutos sin uso; cada petición renueva el tiempo. El frontend también cuenta ese tiempo y lleva al inicio de sesión con un aviso.</li>
         <li><strong>Bloqueo:</strong> después de 5 contraseñas incorrectas seguidas, el usuario queda bloqueado 5 minutos (respuesta 429). El mensaje de error no revela si el usuario existe, y la comparación tarda lo mismo exista o no.</li>
         <li><strong>Contraseñas:</strong> se guardan con BCrypt y ninguna respuesta las incluye (<code>@JsonIgnore</code>). Al cambiar la contraseña (de un usuario, un administrador o un operador) o borrar un usuario se cierran sus sesiones en todos los navegadores.</li>
+        <li><strong>Estado del usuario:</strong> <code>Activo</code>, <code>Suspendido</code> o <code>Despedido</code>. Después de comprobar la contraseña, quien no está activo recibe 403 «Usuario no disponible». Al cambiar el estado se cierran sus sesiones.</li>
+        <li><strong>Clave de permiso:</strong> para cambiar o anular una venta, el operador la envía en la cabecera <code>X-Clave-Permiso</code>, codificada como en una dirección web. Falta o no coincide: 403. Tras cinco intentos fallidos: 429 durante cinco minutos (<code>PermisoDeVentas</code>).</li>
         <li><strong>Clave de la API:</strong> la cabecera <code>X-API-Key</code> da acceso de administrador para Postman, Swagger y las pruebas. La comparación es de tiempo constante.</li>
     </ul>
     <h3>Permisos por rol (<code>security/ClaveApiFilter.java</code>)</h3>
     <table>
         <tr><th>Quién</th><th>Qué rutas</th></tr>
         <tr><td>Público</td><td>Consultar (GET) <code>/api/servicios</code>, <code>/api/productos</code>, <code>/api/ropa</code>, <code>/api/informacion-negocio</code>, <code>/api/estado</code>; <code>POST /api/sesion</code>.</td></tr>
-        <tr><td>Operador de cibercafé</td><td>Lo público, más <code>GET</code> y <code>POST /api/ventas</code> (solo ve sus ventas) y <code>GET /api/productos/interno</code> sin el precio ni el lugar de compra.</td></tr>
+        <tr><td>Operador de cibercafé</td><td>Lo público, más <code>/api/ventas</code> (solo sus ventas; cambiar y anular con la clave de permiso), <code>GET /api/productos/interno</code> sin el precio ni el lugar de compra y <code>PUT /api/productos/{id}/existencias</code>.</td></tr>
         <tr><td>Administrador</td><td>Todo.</td></tr>
     </table>
     <p>Sin sesión, una ruta protegida responde 401; con un rol sin permiso, 403. Las rutas nuevas quedan, por defecto, solo para el administrador.</p>
@@ -141,19 +156,20 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo</pre>
         <tr><th>Ruta</th><th>Métodos</th><th>Descripción</th></tr>
         <tr><td><code>/api/estado</code></td><td>GET</td><td>Estado y modo de la API.</td></tr>
         <tr><td><code>/api/sesion</code></td><td>POST, GET, DELETE</td><td>Entrar, consultar la sesión y salir.</td></tr>
-        <tr><td><code>/api/servicios</code>, <code>/api/ropa</code></td><td>GET, POST, PUT, DELETE</td><td>Catálogo de servicios y de ropa.</td></tr>
-        <tr><td><code>/api/productos</code></td><td>GET, POST, PUT, DELETE</td><td>Papelería. La lista pública no incluye datos internos.</td></tr>
+        <tr><td><code>/api/servicios</code>, <code>/api/ropa</code></td><td>GET, POST, PUT, DELETE; PUT /{id}/destacado</td><td>Catálogo de servicios y de ropa. DELETE retira sin borrar y acepta <code>?motivo=</code>.</td></tr>
+        <tr><td><code>/api/productos</code></td><td>GET, POST, PUT, DELETE; PUT /{id}/destacado y /{id}/existencias</td><td>Papelería. La lista pública no incluye datos internos.</td></tr>
         <tr><td><code>/api/productos/interno</code></td><td>GET</td><td>Papelería con existencias, precio y lugar de compra.</td></tr>
-        <tr><td><code>/api/ventas</code></td><td>POST, GET, GET /{id}, DELETE /{id}</td><td>Registrar, listar (<code>?desde&amp;hasta</code>), consultar y anular ventas.</td></tr>
+        <tr><td><code>/api/ventas</code></td><td>POST, GET; GET, PUT, DELETE /{id}; POST /{id}/correo</td><td>Registrar, listar (<code>?desde&amp;hasta&amp;incluirAnuladas</code>), consultar, cambiar, anular y enviar por correo.</td></tr>
         <tr><td><code>/api/facturas-negocio</code>, <code>/api/detalles-factura</code></td><td>GET, POST, PUT, DELETE</td><td>Acceso directo a facturas y detalles (administrador).</td></tr>
         <tr><td><code>/api/usuarios</code>, <code>/api/administradores</code></td><td>GET, POST, PUT, DELETE</td><td>Usuarios del sistema.</td></tr>
-        <tr><td><code>/api/operadores-cibercafe</code></td><td>GET, POST, PUT</td><td>Operadores. No se borran: sus ventas quedan a su nombre.</td></tr>
+        <tr><td><code>/api/operadores-cibercafe</code></td><td>GET, POST, PUT, DELETE; PUT /{id}/estado</td><td>Operadores. DELETE los deja como despedidos, sin borrarlos.</td></tr>
         <tr><td><code>/api/claves-permiso</code></td><td>GET, POST, PUT, PATCH /{id}/cambiar, DELETE</td><td>Clave de permiso de cada operador (cifrada).</td></tr>
-        <tr><td><code>/api/informacion-negocio</code></td><td>GET, POST, PUT, DELETE</td><td>Datos de la tienda.</td></tr>
+        <tr><td><code>/api/informacion-negocio</code></td><td>GET, POST, PUT, DELETE</td><td>Datos de la tienda. DELETE retira sin borrar.</td></tr>
         <tr><td><code>/api/ingresos</code></td><td>GET, POST, PUT, DELETE; GET /resumen; POST /calcular</td><td>Ingresos del negocio. <code>/calcular</code> calcula y guarda el periodo con su historial.</td></tr>
         <tr><td><code>/api/estadisticas</code></td><td>GET, POST, PUT, DELETE; GET /resumen; POST /calcular</td><td>Estadísticas del negocio por periodo.</td></tr>
         <tr><td><code>/api/historiales-ingresos-negocio</code>, <code>/api/historiales-estadisticas-negocio</code></td><td>GET, POST, PUT, DELETE</td><td>Historial de cada cálculo guardado.</td></tr>
-        <tr><td><code>/api/reportes</code></td><td>GET, POST</td><td>Reportes del negocio.</td></tr>
+        <tr><td><code>/api/reportes</code></td><td>GET, POST; GET, DELETE /{id}</td><td>Reportes del negocio.</td></tr>
+        <tr><td><code>/api/contadores</code></td><td>GET</td><td>Cuántos registros hay, incluidos los retirados y anulados.</td></tr>
         <tr><td><code>/api/imagenes</code></td><td>GET; GET, PUT, DELETE /{tipo}/{id}</td><td>Fotos de <code>productos</code>, <code>ropa</code> y <code>servicios</code>. Ver es público; subir y quitar, de la administradora.</td></tr>
     </table>
     <h3>Ejemplo: registrar una venta</h3>
@@ -174,24 +190,33 @@ Authorization: Bearer &lt;código de la sesión&gt;
         <li>Junta los artículos repetidos en una línea y calcula el total con los precios del catálogo.</li>
         <li>Descuenta las existencias de la papelería en la misma transacción; si una no alcanza, no se guarda nada (409).</li>
         <li>Guarda la factura con tipo «Venta en tienda» y un código de 15 cifras (fecha y hora más 3 al azar, sin repetir).</li>
-        <li>Al anular, devuelve las existencias y borra la factura con sus detalles.</li>
+        <li>Al cambiar (<code>PUT</code>), devuelve las existencias, arma otra vez las líneas y las descuenta en una sola transacción. La factura conserva número, fecha y operador, y se calcula con los precios actuales.</li>
+        <li>Al anular, devuelve las existencias y marca la factura (<code>Anulada</code>, <code>Fecha_anulacion</code>). No cuenta en listados, ingresos ni estadísticas.</li>
+        <li>Lo retirado del catálogo ya no se puede vender (409), salvo lo que la venta que se cambia ya tenía.</li>
     </ul>
     <h3>Varias personas a la vez</h3>
     <ul>
         <li><strong>Existencias:</strong> la venta, la anulación y el cambio de un producto bloquean la fila del producto (<code>SELECT … FOR UPDATE</code>) hasta terminar. Si dos ventas piden la última unidad a la vez, una pasa y la otra recibe 409. Las filas se bloquean siempre en el mismo orden para que dos ventas no se esperen en cruz.</li>
         <li><strong>Formulario con datos viejos:</strong> el panel manda <code>cantidadAnterior</code> al cambiar un producto; si no coincide con las existencias de ese momento (se vendió algo mientras se editaba), responde 409 «Las unidades cambiaron» y no se guarda.</li>
         <li><strong>Precio cambiado durante la venta:</strong> la caja manda <code>totalEsperado</code>; si no coincide con el total calculado con los precios actuales, responde 409 «Los precios cambiaron» y no se guarda.</li>
-        <li><strong>Anular dos veces:</strong> la factura también se bloquea; la segunda anulación responde 404 y las existencias se devuelven una sola vez.</li>
-        <li><strong>Ropa:</strong> cada prenda es única: se vende de a una, una prenda que ya aparece en una venta responde 409 y la API de ropa devuelve <code>disponible: false</code>. Al anular la venta vuelve a estar disponible.</li>
+        <li><strong>Anular dos veces:</strong> la factura también se bloquea; la segunda anulación responde 409 y las existencias se devuelven una sola vez.</li>
+        <li><strong>Ropa:</strong> cada prenda es única: se vende de a una, una prenda que aparece en una venta sin anular responde 409 y la API de ropa devuelve <code>disponible: false</code>. Al anular la venta vuelve a estar disponible.</li>
     </ul>
+    <h3>Retirar sin borrar y destacar</h3>
+    <p>Servicios, productos, prendas e información del negocio tienen <code>Activo</code> y <code>Motivo_retiro</code>: al retirarlos dejan de listarse, pero las ventas anteriores los siguen nombrando. Su código no se reutiliza. <code>Destacado</code> marca lo que la página muestra mientras no se busca.</p>
     <p>Los servicios no llevan existencias en la base de datos. La base guarda el total de la factura pero no el precio de cada línea: al consultar una venta, cada artículo muestra el precio actual del catálogo.</p>
 
-    <h2>9. Ingresos, estadísticas y reportes</h2>
+    <h2>9. Ingresos, estadísticas, reportes y correo</h2>
     <ul>
         <li><strong>Ingresos (<code>IngresoDelNegocioService</code>):</strong> suma lo vendido por tipo en un periodo. Las facturas con tipo «servicio», «ropa» o «papelería» suman su monto; las ventas de la caja («Venta en tienda») mezclan tipos, así que se suman por línea (cantidad por precio del catálogo).</li>
-        <li><strong>Estadísticas (<code>EstadisticaDelNegocioService</code>):</strong> número de facturas, unidades vendidas por tipo y valor promedio por venta.</li>
+        <li><strong>Estadísticas (<code>EstadisticaDelNegocioService</code>):</strong> número de facturas, unidades vendidas por tipo y valor promedio por venta. Al guardarlas incluyen cuánto hay registrado y retirado (<code>ContadoresService</code>).</li>
         <li><strong>Historiales:</strong> cada cálculo guardado con <code>/calcular</code> deja un historial con el rango de fechas escrito en palabras.</li>
         <li><strong>Pantalla de Cuentas:</strong> muestra las cifras del periodo calculadas con las ventas, el catálogo y los operadores, y «Guardar este corte» llama a <code>/api/ingresos/calcular</code> y <code>/api/estadisticas/calcular</code>.</li>
+    </ul>
+
+    <ul>
+        <li><strong>Reportes:</strong> el servidor guarda el registro del reporte (código de 20 cifras, historiales enlazados, nombre del archivo y fecha). El PDF lo arma el navegador (<code>js/pdf.js</code>) con esos datos. Un historial con reporte no se puede eliminar antes que el reporte (409).</li>
+        <li><strong>Correo:</strong> <code>POST /api/ventas/{id}/correo</code> usa la API web de Brevo, porque el plan gratuito de Render no permite SMTP. Sin configurar responde 503 y la página ofrece abrir el correo de la persona con el mensaje escrito. Los datos del cliente no se guardan.</li>
     </ul>
 
     <h3>Fotos</h3>
@@ -199,14 +224,21 @@ Authorization: Bearer &lt;código de la sesión&gt;
         <li>Se guardan como archivos en <code>app.imagenes.carpeta</code> (variable <code>IMAGENES_CARPETA</code>, por defecto <code>imagenes/</code>), una subcarpeta por tipo y el id como nombre. No cambia la base de datos.</li>
         <li><code>GET /api/imagenes</code> devuelve qué elementos tienen foto y una versión que cambia con cada foto nueva; las páginas la ponen en la dirección (<code>?v=</code>) para no mostrar una foto vieja de la memoria del navegador.</li>
         <li><code>PUT /api/imagenes/{tipo}/{id}</code> recibe la imagen en el cuerpo. Solo acepta JPEG, PNG o WebP de hasta 2 MB, y el formato se revisa por los primeros bytes, no por lo que diga la petición. El panel achica la foto antes de subirla (JPEG de máximo 1000 px).</li>
-        <li>Al borrar un producto, una prenda o un servicio se borra su foto.</li>
+        <li>Al retirar un producto, una prenda o un servicio se borra su foto.</li>
     </ul>
 
     <h2>10. Base de datos</h2>
     <p>Son 15 tablas: <code>usuario</code>, <code>administrador</code>, <code>operador_de_cibercafe</code> (herencia por tabla unida), <code>clave_de_permiso</code>, <code>servicio</code>, <code>producto_de_papeleria</code>, <code>ropa</code>, <code>factura_del_negocio</code>, <code>detalle_de_factura</code>, <code>informacion_del_negocio</code>, <code>ingreso_del_negocio</code>, <code>historial_ingreso_del_negocio</code>, <code>estadistica_del_negocio</code>, <code>historial_estadistica_del_negocio</code> y <code>reporte_del_negocio</code>. Los scripts están en <code>database/scripts</code> y los diagramas entidad-relación y relacional en <code>02-diagramas</code>.</p>
+    <table>
+        <tr><th>Tabla</th><th>Columnas agregadas en la versión 2.0</th></tr>
+        <tr><td><code>usuario</code></td><td><code>Estado</code></td></tr>
+        <tr><td><code>servicio</code>, <code>producto_de_papeleria</code>, <code>ropa</code></td><td><code>Activo</code>, <code>Motivo_retiro</code>, <code>Destacado</code></td></tr>
+        <tr><td><code>informacion_del_negocio</code></td><td><code>Activo</code>, <code>Motivo_retiro</code></td></tr>
+        <tr><td><code>factura_del_negocio</code></td><td><code>Anulada</code>, <code>Fecha_anulacion</code></td></tr>
+    </table>
     <p>En el modo demo Hibernate crea las tablas desde las entidades y carga <code>demo/datos-demo.sql</code> (catálogo, usuarios y ventas de ejemplo) y <code>demo/datos-demo-negocio.sql</code> (módulos del negocio).</p>
 
-    <h2>11. Frontend</h2>
+    <h2>11. Frontend y aplicación móvil</h2>
     <table>
         <tr><th>Archivo</th><th>Contenido</th></tr>
         <tr><td><code>index.html</code>, <code>js/main.js</code></td><td>Página pública: menú, catálogos, buscadores y términos. Si la API no responde, muestra un catálogo de respaldo.</td></tr>
@@ -214,20 +246,35 @@ Authorization: Bearer &lt;código de la sesión&gt;
         <tr><td><code>js/fotos.js</code></td><td>Lista de fotos, dirección de cada una y achicado de la foto antes de subirla.</td></tr>
         <tr><td><code>js/sesion.js</code></td><td>Sesión en <code>sessionStorage</code>, cabecera <code>Authorization</code>, permisos por rol y cierre por inactividad.</td></tr>
         <tr><td><code>views/panel.html</code>, <code>js/panel.js</code></td><td>Panel de la administradora. Cada sección se describe una vez en <code>SECCIONES</code> (campos, validaciones, tarjetas) y el mismo código sirve para todas.</td></tr>
-        <tr><td><code>views/ventas.html</code>, <code>js/ventas.js</code></td><td>Caja de ventas y lo vendido.</td></tr>
-        <tr><td><code>views/cuentas.html</code>, <code>js/cuentas.js</code></td><td>Cuentas del negocio, cortes e impresión.</td></tr>
+        <tr><td><code>views/ventas.html</code>, <code>js/ventas.js</code></td><td>Caja, datos del cliente, lo vendido (cambiar, anular, PDF y correo) y existencias.</td></tr>
+        <tr><td><code>js/pdf.js</code></td><td>Genera y descarga los PDF de ventas y reportes sin librerías.</td></tr>
+        <tr><td><code>views/cuentas.html</code>, <code>js/cuentas.js</code></td><td>Cuentas, contadores, historiales, reportes e impresión.</td></tr>
         <tr><td><code>css/</code></td><td>Variables de la marca, estilos de cada vista y diseño adaptable al celular.</td></tr>
     </table>
     <p>Todos los datos se insertan con <code>textContent</code>, nunca con <code>innerHTML</code>, para que ningún texto guardado ejecute código.</p>
+    <p>La aplicación móvil cubre entrar, vender, lo vendido (cambiar y anular) y el catálogo. Destacados, PDF, correo, existencias, historiales y reportes están en la página.</p>
 
     <h2>12. Pruebas</h2>
     <pre>cd backend
 mvn test</pre>
-    <p>Son 90 pruebas automáticas: controladores con MockMvc y el filtro de acceso incluido (catálogo, productos, servicios, sesión, ventas, usuarios, rutas, CORS), servicios de ingresos y estadísticas con Mockito, validaciones de los modelos, el almacén de sesiones con un reloj simulado, el rol en la base (<code>RolEnLaBaseTest</code>), las fotos (<code>ImagenControllerTest</code>: permisos, formatos, tamaño y borrado) y casos con varias personas a la vez contra el servidor real (<code>ConsistenciaTest</code>: ventas simultáneas, doble anulación, prenda única, formulario viejo y precio cambiado). En Windows, <code>ConsistenciaTest</code> necesita poder abrir conexiones locales. La colección de Postman (<code>postman/</code>) tiene carpetas de estado, servicios, seguridad, catálogos, sesión y permisos, y ventas. El detalle está en <code>05-pruebas/Informe-de-pruebas-Papeleria-Matrix.pdf</code>.</p>
+    <pre>cd movil
+npm test
+npm run test:e2e</pre>
+    <table>
+        <tr><th>Qué</th><th>Cuántas</th></tr>
+        <tr><td>Backend: controladores con MockMvc y el filtro de acceso, servicios con Mockito, validaciones, sesiones, fotos y casos con varias personas a la vez (<code>ConsistenciaTest</code>)</td><td>110 pruebas</td></tr>
+        <tr><td>Aplicación móvil: reglas, casos de uso y conexión (Vitest)</td><td>30 pruebas</td></tr>
+        <tr><td>Aplicación móvil: recorridos en un navegador con tamaño de teléfono (Playwright)</td><td>9 pruebas</td></tr>
+        <tr><td>Colección de Postman (<code>postman/</code>)</td><td>47 peticiones, 85 comprobaciones</td></tr>
+        <tr><td>Pantallas de la página en el navegador (<code>07-entrega-final/fuentes/probar-pantallas.mjs</code>)</td><td>33 casos</td></tr>
+    </table>
+    <p>En Windows, las pruebas que levantan el servidor necesitan poder abrir conexiones locales. El detalle está en <code>05-pruebas/Informe-de-pruebas-Papeleria-Matrix.pdf</code>.</p>
 
-    <h2>13. Integración continua y despliegue en Render</h2>
+    <h2>13. Integración continua y despliegue</h2>
     <ul>
         <li><strong>GitHub Actions (<code>.github/workflows/ci.yml</code>):</strong> en cada pull request a <code>main</code> y en cada cambio de <code>main</code> compila y prueba el backend, y construye la imagen Docker.</li>
+        <li><strong>APK (<code>.github/workflows/apk-movil.yml</code>):</strong> en las ramas que cambian <code>movil/</code> prueba la aplicación y genera el APK; en <code>main</code> se lanza a mano.</li>
+        <li><strong>Vercel:</strong> la aplicación móvil está en <code>https://matrix-movil.vercel.app</code> y se publica a mano, después del servidor.</li>
         <li><strong>Render (<code>render.yaml</code>, Blueprint):</strong>
             <ul>
                 <li><code>papeleria-matrix-api</code>: servicio Docker, plan gratuito, perfil demo, chequeo de salud en <code>/actuator/health</code>, clave de la API generada por Render y CORS para la página.</li>
@@ -246,6 +293,8 @@ mvn test</pre>
         <li><strong>Plan gratuito:</strong> el servicio se duerme tras un rato sin uso y la primera petición tarda cerca de un minuto.</li>
         <li><strong>Sesiones en memoria:</strong> funcionan con una sola instancia del servidor; para varias habría que guardarlas en una base compartida.</li>
         <li><strong>Precio por línea:</strong> la base no guarda el precio de cada línea de la factura; los totales por tipo usan el precio actual del catálogo.</li>
+        <li><strong>MariaDB:</strong> el conector la presenta como MySQL y se generaban consultas de bloqueo que MariaDB no entiende (no se podía vender). El modo local fija el dialecto de MariaDB.</li>
+        <li><strong>Retirados:</strong> lo retirado del catálogo no se puede recuperar desde el panel.</li>
         <li><strong>CORS:</strong> el método PATCH no está entre los permitidos para el navegador; la página usa PUT para cambiar la clave de permiso.</li>
         <li><strong>Rol en H2:</strong> el rol del usuario se guarda como texto. Si fuera un enum, Hibernate crearía en H2 una restricción CHECK con la «é» que falla en cada conexión nueva del grupo (a los 30 minutos) y el operador ya no podría entrar. La prueba <code>RolEnLaBaseTest</code> lo vigila.</li>
         <li><strong>Hora:</strong> la imagen Docker usa la zona horaria de Colombia (<code>TZ=America/Bogota</code>); sin eso, las ventas de la noche quedarían con la fecha del día siguiente.</li>

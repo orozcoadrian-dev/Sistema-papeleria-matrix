@@ -29,6 +29,11 @@ QUE_SE_PRUEBA = {
     'EstadisticaDelNegocioServiceTest': 'Servicio de estadísticas',
     'IngresoDelNegocioServiceTest': 'Servicio de ingresos',
     'AlmacenDeSesionesTest': 'Cierre de sesión por inactividad',
+    'CambiosDeVentaTest': 'Cambiar y anular ventas con la clave de permiso',
+    'CasosDeUsoTest': 'Retirar, estados, destacados, existencias, reportes y correo',
+    'ConsistenciaTest': 'Varias personas a la vez',
+    'ImagenControllerTest': 'Fotos',
+    'RolEnLaBaseTest': 'El rol guardado en la base',
 }
 
 # Los nombres de los métodos no llevan tildes; aquí se las ponemos para leerlos como frase.
@@ -42,6 +47,7 @@ CON_TILDE = {
     'valido': 'válido', 'rapido': 'rápido', 'electronico': 'electrónico', 'documentacion': 'documentación',
     'vacia': 'vacía', 'articulo': 'artículo', 'numerico': 'numérico', 'digitos': 'dígitos', 'esta': 'está',
     'parametro': 'parámetro', 'publica': 'pública', 'json': 'JSON',
+    'tenia': 'tenía', 'atendia': 'atendía', 'restriccion': 'restricción',
 }
 
 
