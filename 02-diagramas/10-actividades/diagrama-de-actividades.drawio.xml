@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Claude" pages="6">
+  <diagram name="D1-VENTA-FACTURACIÓN-REPORTES" id="i0HkhQXboWsehi4RFTlh">
+    <mxGraphModel dx="2887" dy="3081" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="2200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="O9zir_QnaFZOf7MBO2PE-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="2240" width="1440" x="-140" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_lane_C" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F7F3FD;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Cliente" vertex="1">
+          <mxGeometry height="2040" width="240" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ini" parent="AD01_lane_C" style="ellipse;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="28" width="28" x="106" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_c_buscar" parent="AD01_lane_C" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Buscar en el catálogo público (papelería, ropa y servicios)" vertex="1">
+          <mxGeometry height="64" width="200" x="20" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_c_dec" parent="AD01_lane_C" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Desea adquirir algo?" vertex="1">
+          <mxGeometry height="90" width="190" x="25" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_c_fin" parent="AD01_lane_C" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="104" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_c_fin_in" parent="AD01_c_fin" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_lane_O" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F0E9FB;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Operador de cibercafé" vertex="1">
+          <mxGeometry height="2040" width="260" x="280" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_o_reg" parent="AD01_lane_O" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Registrar tipo de factura, ítems y datos temporales del cliente" vertex="1">
+          <mxGeometry height="70" width="220" x="20" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_o_corr" parent="AD01_lane_O" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Recibir el mensaje de error y corregir los datos" vertex="1">
+          <mxGeometry height="60" width="220" x="20" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_o_entregar" parent="AD01_lane_O" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Entregar factura en PDF al cliente" vertex="1">
+          <mxGeometry height="60" width="220" x="20" y="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_lane_S" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F7F3FD;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Sistema" vertex="1">
+          <mxGeometry height="2040" width="320" x="540" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_mostrar" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Mostrar resultados (destacados si no hay criterio de búsqueda)" vertex="1">
+          <mxGeometry height="56" width="240" x="40" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_validar" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar sesión, permisos y datos de la venta" vertex="1">
+          <mxGeometry height="60" width="240" x="40" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_decval" parent="AD01_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Datos válidos y stock suficiente?" vertex="1">
+          <mxGeometry height="100" width="220" x="50" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_guardar" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Guardar factura y detalle, y descontar stock (transacción)" vertex="1">
+          <mxGeometry height="70" width="240" x="40" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_decstock" parent="AD01_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Stock bajo?" vertex="1">
+          <mxGeometry height="80" width="160" x="80" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_merge1" parent="AD01_lane_S" style="rhombus;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="145" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_pdf" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Generar factura en PDF" vertex="1">
+          <mxGeometry height="56" width="240" x="40" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_correo" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Enviar factura por correo al cliente" vertex="1">
+          <mxGeometry height="60" width="240" x="40" y="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_ingresos" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Calcular ingresos automáticamente y actualizar el dashboard" vertex="1">
+          <mxGeometry height="60" width="240" x="40" y="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_hist" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Consultar históricos y calcular ingresos y estadísticas" vertex="1">
+          <mxGeometry height="64" width="240" x="40" y="1448" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_reporte" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Generar el reporte" vertex="1">
+          <mxGeometry height="56" width="240" x="40" y="1570" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_decpdf" parent="AD01_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Exportar a PDF?" vertex="1">
+          <mxGeometry height="80" width="180" x="70" y="1670" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_pdfrep" parent="AD01_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Generar PDF del reporte" vertex="1">
+          <mxGeometry height="56" width="240" x="40" y="1790" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_s_merge2" parent="AD01_lane_S" style="rhombus;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="145" y="1890" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_lane_A" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F0E9FB;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Administrador" vertex="1">
+          <mxGeometry height="2040" width="340" x="860" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_a_alerta" parent="AD01_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Visualizar alerta de stock bajo en el panel de productos" vertex="1">
+          <mxGeometry height="60" width="240" x="20" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_a_dash" parent="AD01_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Consultar ingresos en el dashboard" vertex="1">
+          <mxGeometry height="60" width="240" x="20" y="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_a_dec" parent="AD01_lane_A" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Requiere un reporte?" vertex="1">
+          <mxGeometry height="90" width="200" x="40" y="1310" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_a_solicitar" parent="AD01_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Solicitar reporte de ingresos y estadísticas" vertex="1">
+          <mxGeometry height="64" width="240" x="20" y="1448" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_a_ver" parent="AD01_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Visualizar o descargar el reporte" vertex="1">
+          <mxGeometry height="60" width="240" x="20" y="1875" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_a_fin" parent="AD01_lane_A" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="124" y="1984" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_a_fin_in" parent="AD01_a_fin" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_titulo" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor=#311B92;fontSize=12;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;&lt;font style=&quot;font-size: 25px;&quot;&gt;D1 - DIAGRAMA DE ACTIVIDADES&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;Consulta pública → venta o servicio → factura → ingresos → reporte" vertex="1">
+          <mxGeometry height="52" width="430" x="340" y="-20" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_fork" parent="1" style="rounded=0;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="8" width="410" x="350" y="1056" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_join" parent="1" style="rounded=0;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="8" width="410" x="350" y="1216" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e1" edge="1" parent="1" source="AD01_ini" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_c_buscar" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e2" edge="1" parent="1" source="AD01_c_buscar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_mostrar" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e3" edge="1" parent="1" source="AD01_s_mostrar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_c_dec" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e4" edge="1" parent="1" source="AD01_c_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_o_reg" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e5" edge="1" parent="1" source="AD01_c_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_c_fin" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e6" edge="1" parent="1" source="AD01_o_reg" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_validar" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e7" edge="1" parent="1" source="AD01_s_validar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_decval" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e8" edge="1" parent="1" source="AD01_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_o_corr" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e9" edge="1" parent="1" source="AD01_o_corr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_o_reg" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e10" edge="1" parent="1" source="AD01_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_guardar" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e11" edge="1" parent="1" source="AD01_s_guardar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_decstock" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e12" edge="1" parent="1" source="AD01_s_decstock" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_a_alerta" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e13" edge="1" parent="1" source="AD01_s_decstock" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_merge1" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e14" edge="1" parent="1" source="AD01_a_alerta" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_merge1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e15" edge="1" parent="1" source="AD01_s_merge1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_pdf" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e16" edge="1" parent="1" source="AD01_s_pdf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.8536585365853658;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_fork" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e17" edge="1" parent="1" source="AD01_fork" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.14634146341463414;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_o_entregar" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e18" edge="1" parent="1" source="AD01_fork" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.8536585365853658;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_correo" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e19" edge="1" parent="1" source="AD01_o_entregar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.14634146341463414;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_join" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e20" edge="1" parent="1" source="AD01_s_correo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.8536585365853658;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_join" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e21" edge="1" parent="1" source="AD01_join" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.8536585365853658;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_ingresos" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e22" edge="1" parent="1" source="AD01_s_ingresos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_a_dash" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e23" edge="1" parent="1" source="AD01_a_dash" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_a_dec" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e24" edge="1" parent="1" source="AD01_a_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_a_solicitar" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e25" edge="1" parent="1" source="AD01_a_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_a_fin" value="[no]">
+          <mxGeometry relative="1" x="-0.9" y="-10" as="geometry">
+            <Array as="points">
+              <mxPoint x="1170" y="1425" />
+              <mxPoint x="1170" y="2070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AD01_e26" edge="1" parent="1" source="AD01_a_solicitar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_hist" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e27" edge="1" parent="1" source="AD01_s_hist" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_reporte" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e28" edge="1" parent="1" source="AD01_s_reporte" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_decpdf" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e29" edge="1" parent="1" source="AD01_s_decpdf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_pdfrep" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e30" edge="1" parent="1" source="AD01_s_decpdf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_merge2" value="[no]">
+          <mxGeometry relative="1" x="-0.7" y="-10" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="1780" />
+              <mxPoint x="560" y="1975" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AD01_e31" edge="1" parent="1" source="AD01_s_pdfrep" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_s_merge2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e32" edge="1" parent="1" source="AD01_s_merge2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_a_ver" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_e33" edge="1" parent="1" source="AD01_a_ver" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD01_a_fin" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley" parent="1" style="rounded=1;arcSize=6;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fillColor=#FFFFFF;strokeColor=#7E57C2;strokeWidth=2;fontColor=#311B92;fontSize=12;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Leyenda&lt;/b&gt;" vertex="1">
+          <mxGeometry height="215" width="300" x="60" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_i" parent="1" style="ellipse;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="88" y="1339" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_i_t" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Nodo inicial" vertex="1">
+          <mxGeometry height="20" width="220" x="130" y="1337" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="20" width="40" x="76" y="1366" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_a_t" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Acción" vertex="1">
+          <mxGeometry height="20" width="220" x="130" y="1366" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_d" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="22" width="28" x="82" y="1393" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_d_t" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Decisión / fusión (guardas entre corchetes)" vertex="1">
+          <mxGeometry height="20" width="220" x="130" y="1394" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_b" parent="1" style="rounded=0;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="6" width="40" x="76" y="1426" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_b_t" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Bifurcación y unión (flujos paralelos)" vertex="1">
+          <mxGeometry height="20" width="220" x="130" y="1419" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_f" parent="1" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="86" y="1447" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_f_in" parent="AD01_ley_f" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="10" width="10" x="5" y="5" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_f_t" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Nodo final" vertex="1">
+          <mxGeometry height="20" width="220" x="130" y="1447" as="geometry" />
+        </mxCell>
+        <mxCell id="AD01_ley_e" edge="1" parent="1" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#5E35B1;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="76" y="1490" as="sourcePoint" />
+            <mxPoint x="116" y="1490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AD01_ley_e_t" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Flujo de control" vertex="1">
+          <mxGeometry height="20" width="220" x="130" y="1480" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="D2-ANULACIÓN-DE-FACTURA" id="30FSXrXa4H3NLqADj5_c">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1100" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="-jorn8-6S4JXjOmxMku7-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="1040" width="850" x="-50" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_lane_O" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F7F3FD;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Operador de cibercafé" vertex="1">
+          <mxGeometry height="830" width="280" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_ini" parent="AD02_lane_O" style="ellipse;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="28" width="28" x="126" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_o_sel" parent="AD02_lane_O" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Seleccionar la factura y solicitar su anulación" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_o_clave" parent="AD02_lane_O" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Ingresar la clave de permiso otorgada por el administrador" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_o_err" parent="AD02_lane_O" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Recibir el mensaje: clave inválida o vencida" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_o_conf" parent="AD02_lane_O" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Visualizar la confirmación de la anulación" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="585" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_fin" parent="AD02_lane_O" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="124" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_fin_in" parent="AD02_fin" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_lane_S" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F0E9FB;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Sistema" vertex="1">
+          <mxGeometry height="830" width="340" x="320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_s_pedir" parent="AD02_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Solicitar la clave de permiso" vertex="1">
+          <mxGeometry height="56" width="240" x="50" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_s_validar" parent="AD02_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar sesión, rol y clave de permiso" vertex="1">
+          <mxGeometry height="60" width="240" x="50" y="307" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_s_dec" parent="AD02_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Clave existente y vigente?" vertex="1">
+          <mxGeometry height="100" width="220" x="60" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_s_anular" parent="AD02_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Anular la factura y registrar la fecha y el usuario" vertex="1">
+          <mxGeometry height="70" width="240" x="50" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e1" edge="1" parent="1" source="AD02_ini" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_o_sel" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e2" edge="1" parent="1" source="AD02_o_sel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_s_pedir" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e3" edge="1" parent="1" source="AD02_s_pedir" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_o_clave" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e4" edge="1" parent="1" source="AD02_o_clave" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_s_validar" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e5" edge="1" parent="1" source="AD02_s_validar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_s_dec" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e6" edge="1" parent="1" source="AD02_s_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_o_err" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e7" edge="1" parent="1" source="AD02_s_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_s_anular" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e8" edge="1" parent="1" source="AD02_s_anular" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_o_conf" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e9" edge="1" parent="1" source="AD02_o_conf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_fin" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD02_e10" edge="1" parent="1" source="AD02_o_err" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD02_fin" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="540" />
+              <mxPoint x="60" y="806" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1U0z0FQ6ueUBfY0xT5h4-1" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor=#311B92;fontSize=12;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;&lt;font style=&quot;font-size: 25px;&quot;&gt;D2 - DIAGRAMA DE ACTIVIDADES&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;Anulación de factura → clave de permiso&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="430" x="150" y="-10" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="D3-GESTION-DE-OPERADORES-CIBERCAFE" id="PilNzzj2WjMedUIxs5WX">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1455" pageHeight="1450" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="JTGIIX_QLfQzrg5gz5Xs-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="1640" width="1640" x="-120" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_lane_A" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F7F3FD;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Administrador" vertex="1">
+          <mxGeometry height="1320" width="280" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_ini" parent="AD03_lane_A" style="ellipse;html=1;fillColor=#311B92;strokeColor=#311B92;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="28" width="28" x="126" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_a_sel" parent="AD03_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Seleccionar la operación sobre operadores" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_a_datos" parent="AD03_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Ingresar los datos de la operación" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_a_err" parent="AD03_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Recibir el mensaje de error y corregir los datos" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_a_res" parent="AD03_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Visualizar el resultado de la operación" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_fin" parent="AD03_lane_A" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="124" y="1240" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_fin_in" parent="AD03_fin" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_lane_S" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F0E9FB;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Sistema" vertex="1">
+          <mxGeometry height="1320" width="1035" x="320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_s_auth" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar sesión y rol de administrador" vertex="1">
+          <mxGeometry height="56" width="200" x="10" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_s_decauth" parent="AD03_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Autorizado?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_s_deny" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Denegar el acceso con un mensaje claro" vertex="1">
+          <mxGeometry height="60" width="220" x="260" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_fin_deny" parent="AD03_lane_S" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="530" y="314" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_fin_deny_in" parent="AD03_fin_deny" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_s_val" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar los datos de la operación" vertex="1">
+          <mxGeometry height="64" width="200" x="10" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_s_decval" parent="AD03_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Datos válidos?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_s_decop" parent="AD03_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Operación solicitada?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_op0" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Consultar y listar los operadores" vertex="1">
+          <mxGeometry height="76" width="170" x="25" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_op1" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Registrar el usuario y el operador (transacción; contraseña con hash)" vertex="1">
+          <mxGeometry height="76" width="170" x="225" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_op2" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Actualizar los datos del operador" vertex="1">
+          <mxGeometry height="76" width="170" x="425" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_op3" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Separar al operador del negocio" vertex="1">
+          <mxGeometry height="76" width="170" x="625" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_op4" parent="AD03_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Otorgar una clave de permiso vigente al operador" vertex="1">
+          <mxGeometry height="76" width="170" x="825" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_merge" parent="AD03_lane_S" style="rhombus;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="495" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e1" edge="1" parent="1" source="AD03_ini" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_a_sel" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e2" edge="1" parent="1" source="AD03_a_sel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_s_auth" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e3" edge="1" parent="1" source="AD03_s_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_s_decauth" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e4" edge="1" parent="1" source="AD03_s_decauth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_s_deny" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e5" edge="1" parent="1" source="AD03_s_deny" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_fin_deny" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e6" edge="1" parent="1" source="AD03_s_decauth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_a_datos" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e7" edge="1" parent="1" source="AD03_a_datos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_s_val" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e8" edge="1" parent="1" source="AD03_s_val" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_s_decval" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e9" edge="1" parent="1" source="AD03_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_a_err" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e10" edge="1" parent="1" source="AD03_a_err" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_a_datos" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e11" edge="1" parent="1" source="AD03_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_s_decop" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e12" edge="1" parent="1" source="AD03_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_op0" value="[consultar]">
+          <mxGeometry relative="1" x="0.6" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e13" edge="1" parent="1" source="AD03_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_op1" value="[contratar]">
+          <mxGeometry relative="1" x="0.858" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e14" edge="1" parent="1" source="AD03_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_op2" value="[actualizar]">
+          <mxGeometry relative="1" x="0.914" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e15" edge="1" parent="1" source="AD03_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_op3" value="[separar]">
+          <mxGeometry relative="1" x="0.938" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e16" edge="1" parent="1" source="AD03_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_op4" value="[otorgar clave]">
+          <mxGeometry relative="1" x="0.952" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e17" edge="1" parent="1" source="AD03_op0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e18" edge="1" parent="1" source="AD03_op1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e19" edge="1" parent="1" source="AD03_op2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e20" edge="1" parent="1" source="AD03_op3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e21" edge="1" parent="1" source="AD03_op4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e22" edge="1" parent="1" source="AD03_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_a_res" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD03_e23" edge="1" parent="1" source="AD03_a_res" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD03_fin" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dI-Mzag73AFG8xSggY19-1" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor=#311B92;fontSize=12;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;&lt;font style=&quot;font-size: 25px;&quot;&gt;D3 - DIAGRAMA DE ACTIVIDADES&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;Gestión de operadores de cibercafé y claves de permiso&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="430" x="580" y="-10" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="D4-GESTIÓN-DE-CATALOGOS" id="WZD_hQv3NM_QalPsju0f">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1255" pageHeight="1450" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="hIiEz3TPFL3oQQD4F4tE-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="1545" width="1362.5" x="-82.5" y="-35" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_lane_A" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F7F3FD;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Administrador" vertex="1">
+          <mxGeometry height="1320" width="280" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_ini" parent="AD04_lane_A" style="ellipse;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="28" width="28" x="126" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_a_sel" parent="AD04_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Seleccionar el catálogo (servicio, producto de papelería o ropa) y la operación" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_a_datos" parent="AD04_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Ingresar los datos del registro" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_a_err" parent="AD04_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Recibir el mensaje de error y corregir los datos" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_a_res" parent="AD04_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Visualizar el resultado de la operación" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_fin" parent="AD04_lane_A" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="124" y="1240" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_fin_in" parent="AD04_fin" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_lane_S" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F0E9FB;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Sistema" vertex="1">
+          <mxGeometry height="1320" width="835" x="320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_s_auth" parent="AD04_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar sesión y rol de administrador" vertex="1">
+          <mxGeometry height="56" width="200" x="10" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_s_decauth" parent="AD04_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Autorizado?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_s_deny" parent="AD04_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Denegar el acceso con un mensaje claro" vertex="1">
+          <mxGeometry height="60" width="220" x="260" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_fin_deny" parent="AD04_lane_S" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="530" y="314" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_fin_deny_in" parent="AD04_fin_deny" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_s_val" parent="AD04_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar los datos de la operación" vertex="1">
+          <mxGeometry height="64" width="200" x="10" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_s_decval" parent="AD04_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Datos válidos?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_s_decop" parent="AD04_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Operación solicitada?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_op0" parent="AD04_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Consultar y listar los registros del catálogo" vertex="1">
+          <mxGeometry height="76" width="170" x="25" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_op1" parent="AD04_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Registrar el servicio, el producto de papelería o la prenda" vertex="1">
+          <mxGeometry height="76" width="170" x="225" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_op2" parent="AD04_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Actualizar los datos del registro" vertex="1">
+          <mxGeometry height="76" width="170" x="425" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_op3" parent="AD04_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Eliminar el registro del catálogo" vertex="1">
+          <mxGeometry height="76" width="170" x="625" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_merge" parent="AD04_lane_S" style="rhombus;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="395" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e1" edge="1" parent="1" source="AD04_ini" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_a_sel" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e2" edge="1" parent="1" source="AD04_a_sel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_s_auth" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e3" edge="1" parent="1" source="AD04_s_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_s_decauth" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e4" edge="1" parent="1" source="AD04_s_decauth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_s_deny" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e5" edge="1" parent="1" source="AD04_s_deny" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_fin_deny" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e6" edge="1" parent="1" source="AD04_s_decauth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_a_datos" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e7" edge="1" parent="1" source="AD04_a_datos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_s_val" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e8" edge="1" parent="1" source="AD04_s_val" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_s_decval" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e9" edge="1" parent="1" source="AD04_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_a_err" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e10" edge="1" parent="1" source="AD04_a_err" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_a_datos" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e11" edge="1" parent="1" source="AD04_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_s_decop" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e12" edge="1" parent="1" source="AD04_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_op0" value="[consultar]">
+          <mxGeometry relative="1" x="0.6" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e13" edge="1" parent="1" source="AD04_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_op1" value="[crear]">
+          <mxGeometry relative="1" x="0.858" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e14" edge="1" parent="1" source="AD04_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_op2" value="[actualizar]">
+          <mxGeometry relative="1" x="0.914" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e15" edge="1" parent="1" source="AD04_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_op3" value="[eliminar]">
+          <mxGeometry relative="1" x="0.938" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e16" edge="1" parent="1" source="AD04_op0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e17" edge="1" parent="1" source="AD04_op1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e18" edge="1" parent="1" source="AD04_op2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e19" edge="1" parent="1" source="AD04_op3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e20" edge="1" parent="1" source="AD04_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_a_res" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD04_e21" edge="1" parent="1" source="AD04_a_res" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD04_fin" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cjbprMZyPn8HuneIIjVk-1" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor=#311B92;fontSize=12;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;&lt;font style=&quot;font-size: 25px;&quot;&gt;D4 - DIAGRAMA DE ACTIVIDADES&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;Gestión de catálogo&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="430" x="420" y="-10" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="D5-INFORMACIÓN-DEL-NEGOCIO" id="QjZYuIudIAdVxC_Pr6dR">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1255" pageHeight="1450" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="0OatvlDN08Wk50zLk_fR-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="1560" width="1350" x="-80" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_lane_A" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F7F3FD;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Administrador" vertex="1">
+          <mxGeometry height="1320" width="280" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_ini" parent="AD05_lane_A" style="ellipse;html=1;fillColor=#311B92;strokeColor=#311B92;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="28" width="28" x="126" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_a_sel" parent="AD05_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Seleccionar la operación sobre la información del negocio" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_a_datos" parent="AD05_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Ingresar los datos de la información" vertex="1">
+          <mxGeometry height="64" width="200" x="40" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_a_err" parent="AD05_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Recibir el mensaje de error y corregir los datos" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_a_res" parent="AD05_lane_A" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Visualizar el resultado de la operación" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_fin" parent="AD05_lane_A" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="124" y="1240" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_fin_in" parent="AD05_fin" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_lane_S" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F0E9FB;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Sistema" vertex="1">
+          <mxGeometry height="1320" width="835" x="320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_s_auth" parent="AD05_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar sesión y rol de administrador" vertex="1">
+          <mxGeometry height="56" width="200" x="10" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_s_decauth" parent="AD05_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Autorizado?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_s_deny" parent="AD05_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Denegar el acceso con un mensaje claro" vertex="1">
+          <mxGeometry height="60" width="220" x="260" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_fin_deny" parent="AD05_lane_S" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="530" y="314" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_fin_deny_in" parent="AD05_fin_deny" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_s_val" parent="AD05_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar los datos de la operación" vertex="1">
+          <mxGeometry height="64" width="200" x="10" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_s_decval" parent="AD05_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Datos válidos?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_s_decop" parent="AD05_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Operación solicitada?" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_op0" parent="AD05_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Consultar la información del negocio" vertex="1">
+          <mxGeometry height="76" width="170" x="25" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_op1" parent="AD05_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Agregar la información del negocio" vertex="1">
+          <mxGeometry height="76" width="170" x="225" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_op2" parent="AD05_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Actualizar la información del negocio" vertex="1">
+          <mxGeometry height="76" width="170" x="425" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_op3" parent="AD05_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Eliminar la información del negocio" vertex="1">
+          <mxGeometry height="76" width="170" x="625" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_merge" parent="AD05_lane_S" style="rhombus;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontStyle=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="395" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e1" edge="1" parent="1" source="AD05_ini" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_a_sel" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e2" edge="1" parent="1" source="AD05_a_sel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_s_auth" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e3" edge="1" parent="1" source="AD05_s_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_s_decauth" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e4" edge="1" parent="1" source="AD05_s_decauth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_s_deny" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e5" edge="1" parent="1" source="AD05_s_deny" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_fin_deny" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e6" edge="1" parent="1" source="AD05_s_decauth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_a_datos" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e7" edge="1" parent="1" source="AD05_a_datos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_s_val" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e8" edge="1" parent="1" source="AD05_s_val" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_s_decval" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e9" edge="1" parent="1" source="AD05_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_a_err" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e10" edge="1" parent="1" source="AD05_a_err" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_a_datos" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e11" edge="1" parent="1" source="AD05_s_decval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_s_decop" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e12" edge="1" parent="1" source="AD05_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_op0" value="[consultar]">
+          <mxGeometry relative="1" x="0.6" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e13" edge="1" parent="1" source="AD05_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_op1" value="[agregar]">
+          <mxGeometry relative="1" x="0.858" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e14" edge="1" parent="1" source="AD05_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_op2" value="[actualizar]">
+          <mxGeometry relative="1" x="0.914" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e15" edge="1" parent="1" source="AD05_s_decop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_op3" value="[eliminar]">
+          <mxGeometry relative="1" x="0.938" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e16" edge="1" parent="1" source="AD05_op0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e17" edge="1" parent="1" source="AD05_op1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e18" edge="1" parent="1" source="AD05_op2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e19" edge="1" parent="1" source="AD05_op3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e20" edge="1" parent="1" source="AD05_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_a_res" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD05_e21" edge="1" parent="1" source="AD05_a_res" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD05_fin" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d0YduL7RyIpf2f_1m_kX-1" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor=#311B92;fontSize=12;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;&lt;font style=&quot;font-size: 25px;&quot;&gt;D5 - DIAGRAMA DE ACTIVIDADES&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;Gestión de información del negocio&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="430" x="475" y="-20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="D6-LOGIN" id="k92B_FIqYwJPiYbUYGWm">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1100" pageHeight="1700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="p0rYlMMmJ_T_FKD5NI5N-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="1692" width="1350" x="-235" y="-72" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_lane_U" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F7F3FD;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Usuario interno (Administrador u Operador)" vertex="1">
+          <mxGeometry height="1470" width="280" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_ini" parent="AD06_lane_U" style="ellipse;html=1;fillColor=#311B92;strokeColor=#311B92;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="28" width="28" x="126" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_u_abrir" parent="AD06_lane_U" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Abrir el inicio de sesión" vertex="1">
+          <mxGeometry height="56" width="200" x="40" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_u_cred" parent="AD06_lane_U" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Ingresar las credenciales" vertex="1">
+          <mxGeometry height="56" width="200" x="40" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_u_err" parent="AD06_lane_U" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Recibir un mensaje claro de credenciales inválidas" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_u_aviso" parent="AD06_lane_U" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Ver el aviso de sesión cerrada" vertex="1">
+          <mxGeometry height="60" width="200" x="40" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_fin" parent="AD06_lane_U" style="ellipse;html=1;fillColor=#FFFFFF;strokeColor=#311B92;strokeWidth=3;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="32" width="32" x="124" y="1410" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_fin_in" parent="AD06_fin" style="ellipse;html=1;fillColor=#311B92;strokeColor=none;connectable=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="16" width="16" x="8" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_lane_S" parent="1" style="swimlane;html=1;horizontal=1;startSize=36;collapsible=0;whiteSpace=wrap;fontStyle=1;fontSize=13;fontColor=#FFFFFF;fillColor=#4527A0;swimlaneFillColor=#F0E9FB;strokeColor=#7E57C2;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Sistema" vertex="1">
+          <mxGeometry height="1470" width="440" x="320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_val" parent="AD06_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Validar las credenciales (contraseña con hash)" vertex="1">
+          <mxGeometry height="56" width="240" x="100" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_dec" parent="AD06_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Credenciales válidas?" vertex="1">
+          <mxGeometry height="100" width="200" x="120" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_ses" parent="AD06_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Identificar el rol y crear la sesión" vertex="1">
+          <mxGeometry height="60" width="240" x="100" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_ult" parent="AD06_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Registrar la fecha de la última sesión" vertex="1">
+          <mxGeometry height="60" width="240" x="100" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_rol" parent="AD06_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿Rol del usuario?" vertex="1">
+          <mxGeometry height="90" width="180" x="130" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_adm" parent="AD06_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Habilitar las opciones del Administrador" vertex="1">
+          <mxGeometry height="60" width="180" x="30" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_ope" parent="AD06_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Habilitar las opciones del Operador de cibercafé" vertex="1">
+          <mxGeometry height="60" width="180" x="230" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_merge" parent="AD06_lane_S" style="rhombus;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="205" y="980" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_mon" parent="AD06_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Monitorear la actividad de la sesión" vertex="1">
+          <mxGeometry height="56" width="240" x="100" y="1050" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_in" parent="AD06_lane_S" style="rhombus;whiteSpace=wrap;html=1;fillColor=#CDB8F4;strokeColor=#4527A0;strokeWidth=2;fontColor=#311B92;fontSize=11;spacing=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="¿15 min de inactividad?" vertex="1">
+          <mxGeometry height="100" width="200" x="120" y="1150" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_s_cerrar" parent="AD06_lane_S" style="rounded=1;whiteSpace=wrap;html=1;arcSize=28;fillColor=#E8DEF8;strokeColor=#5E35B1;strokeWidth=2;fontColor=#311B92;fontSize=12;spacing=6;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="Cerrar la sesión interna" vertex="1">
+          <mxGeometry height="60" width="240" x="100" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e1" edge="1" parent="1" source="AD06_ini" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_u_abrir" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e2" edge="1" parent="1" source="AD06_u_abrir" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_u_cred" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e3" edge="1" parent="1" source="AD06_u_cred" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_val" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e4" edge="1" parent="1" source="AD06_s_val" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_dec" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e5" edge="1" parent="1" source="AD06_s_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_u_err" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e6" edge="1" parent="1" source="AD06_u_err" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_u_cred" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e7" edge="1" parent="1" source="AD06_s_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_ses" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e8" edge="1" parent="1" source="AD06_s_ses" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_ult" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e9" edge="1" parent="1" source="AD06_s_ult" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_rol" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e10" edge="1" parent="1" source="AD06_s_rol" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_adm" value="[Administrador]">
+          <mxGeometry relative="1" x="0.768" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e11" edge="1" parent="1" source="AD06_s_rol" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_ope" value="[Operador]">
+          <mxGeometry relative="1" x="0.768" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e12" edge="1" parent="1" source="AD06_s_adm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e13" edge="1" parent="1" source="AD06_s_ope" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e14" edge="1" parent="1" source="AD06_s_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_mon" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e15" edge="1" parent="1" source="AD06_s_mon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_in" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e16" edge="1" parent="1" source="AD06_s_in" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_mon" value="[no]">
+          <mxGeometry relative="1" x="-0.8" y="-10" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="1270" />
+              <mxPoint x="700" y="1148" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AD06_e17" edge="1" parent="1" source="AD06_s_in" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_s_cerrar" value="[sí]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e18" edge="1" parent="1" source="AD06_s_cerrar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_u_aviso" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AD06_e19" edge="1" parent="1" source="AD06_u_aviso" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5E35B1;strokeWidth=2;endArrow=block;endFill=1;endSize=6;fontColor=#4527A0;fontStyle=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="AD06_fin" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="adSHx0OXU3-wjxcJaQG3-1" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor=#311B92;fontSize=12;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;&lt;font style=&quot;font-size: 25px;&quot;&gt;D6 - DIAGRAMA DE ACTIVIDADES&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(49, 27, 146), rgb(210, 191, 255));&quot;&gt;Inicio de sesión&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="430" x="200" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
