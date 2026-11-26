@@ -67,12 +67,27 @@ public class ProductoPapeleriaController {
 		return productoService.actualizar(id, req);
 	}
 
-	@Operation(summary = "Eliminar producto")
+	@Operation(summary = "Retirar un producto del catálogo")
 	@SecurityRequirement(name = "claveApi")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void eliminar(@PathVariable Integer id) {
-		productoService.eliminar(id);
+	public void eliminar(@PathVariable Integer id, @org.springframework.web.bind.annotation.RequestParam(required = false) String motivo) {
+		productoService.eliminar(id, motivo);
 	}
 
+	@org.springframework.web.bind.annotation.PutMapping("/{id}/destacado")
+	@io.swagger.v3.oas.annotations.Operation(summary = "Marcar o desmarcar como destacado",
+		security = { @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "sesion"), @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "claveApi") })
+	public ProductoResponse destacar(@PathVariable Integer id, @Valid @org.springframework.web.bind.annotation.RequestBody com.papeleriamatrix.dto.DestacadoRequest peticion)
+	{
+		return productoService.destacar(id, peticion.destacado());
+	}
+
+	@PutMapping("/{id}/existencias")
+	@Operation(summary = "Anotar cuántas unidades hay de un producto", description = "La puede usar el operador de cibercafé o la administradora.",
+		security = { @SecurityRequirement(name = "sesion"), @SecurityRequirement(name = "claveApi") })
+	public ProductoInternoResponse ajustarExistencias(@PathVariable Integer id,
+		@Valid @RequestBody com.papeleriamatrix.dto.ExistenciasRequest peticion) {
+		return productoService.ajustarExistencias(id, peticion);
+	}
 }

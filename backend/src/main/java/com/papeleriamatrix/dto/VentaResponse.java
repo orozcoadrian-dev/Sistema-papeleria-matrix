@@ -15,7 +15,8 @@ public record VentaResponse(
 	double total,
 	int operadorId,
 	String operador,
-	List<Linea> articulos)
+	List<Linea> articulos,
+	boolean anulada)
 {
 	public record Linea(
 		String tipo,

@@ -59,6 +59,7 @@ export interface OperadorResponse {
   idUsuario: number;
   primerNombre: string;
   primerApellido: string;
+  estado?: string;
 }
 
 /** Formato de error de la API (application/problem+json). */

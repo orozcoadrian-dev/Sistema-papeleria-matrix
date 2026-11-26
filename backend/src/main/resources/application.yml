@@ -32,6 +32,10 @@ app:
   sesion:
     # Minutos sin usar el sistema después de los cuales la sesión se cierra sola.
     minutos-inactividad: ${SESION_MINUTOS:15}
+  correo:
+    # Cuenta de Brevo que envía los registros de venta. Vacías, el envío desde el sistema queda apagado.
+    clave: ${CORREO_CLAVE:}
+    remitente: ${CORREO_REMITENTE:}
   cors:
     # Direcciones desde las que el frontend puede consultar la API, separadas por comas.
     # Por defecto, el servidor local del frontend. Al publicar la página, se agrega su dirección en CORS_ORIGENES.

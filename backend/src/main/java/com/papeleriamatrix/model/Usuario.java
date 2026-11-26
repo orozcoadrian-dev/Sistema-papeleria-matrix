@@ -1,5 +1,6 @@
 package com.papeleriamatrix.model;
 
+import org.hibernate.annotations.ColumnDefault;
 import com.papeleriamatrix.common.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
@@ -62,6 +63,11 @@ public class Usuario
 
 	@Column(name = "Ultima_sesion", nullable = false)
 	private LocalDateTime ultimaSesion;
+
+	// Activo, Suspendido o Despedido. Solo quien está activo puede entrar.
+	@Column(name = "Estado", nullable = false, length = 12)
+	@ColumnDefault("'Activo'")
+	private String estado = EstadoUsuario.ACTIVO.getTexto();
 
 	@Transient
 	private Utils utilidades = new Utils();
@@ -356,5 +362,20 @@ public class Usuario
 	public LocalDateTime getUltimaSesion() 
 	{
 		return ultimaSesion;
+	}
+
+	public String getEstado()
+	{
+		return estado;
+	}
+
+	public void setEstado(EstadoUsuario estado)
+	{
+		this.estado = estado.getTexto();
+	}
+
+	public boolean isActivo()
+	{
+		return EstadoUsuario.ACTIVO.getTexto().equals(estado);
 	}
 }

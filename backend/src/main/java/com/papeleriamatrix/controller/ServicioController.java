@@ -67,8 +67,16 @@ public class ServicioController
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Eliminar un servicio", security = @SecurityRequirement(name = "claveApi"))
-	public void eliminar(@PathVariable Integer id)
+	public void eliminar(@PathVariable Integer id, @org.springframework.web.bind.annotation.RequestParam(required = false) String motivo)
 	{
-		servicioService.eliminar(id);
+		servicioService.eliminar(id, motivo);
+	}
+
+	@org.springframework.web.bind.annotation.PutMapping("/{id}/destacado")
+	@io.swagger.v3.oas.annotations.Operation(summary = "Marcar o desmarcar como destacado",
+		security = { @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "sesion"), @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "claveApi") })
+	public ServicioResponse destacar(@PathVariable Integer id, @Valid @org.springframework.web.bind.annotation.RequestBody com.papeleriamatrix.dto.DestacadoRequest peticion)
+	{
+		return servicioService.destacar(id, peticion.destacado());
 	}
 }

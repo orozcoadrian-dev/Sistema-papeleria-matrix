@@ -1,5 +1,6 @@
 package com.papeleriamatrix.service;
 
+import com.papeleriamatrix.dto.ContadoresResponse;
 import com.papeleriamatrix.dto.EstadisticaDelNegocioRequest;
 import com.papeleriamatrix.dto.EstadisticaResponse;
 import com.papeleriamatrix.exception.RecursoDuplicadoException;
@@ -26,13 +27,16 @@ public class EstadisticaDelNegocioService
 	private final FacturaDelNegocioRepository facturaRepositorio;
 	private final DetalleDeFacturaRepository detalleRepositorio;
 	private final HistorialEstadisticaDelNegocioRepository historialRepositorio;
+	private final ContadoresService contadores;
 
 	public EstadisticaDelNegocioService(
 		EstadisticaDelNegocioRepository repositorio,
 		FacturaDelNegocioRepository facturaRepositorio,
 		DetalleDeFacturaRepository detalleRepositorio,
-		HistorialEstadisticaDelNegocioRepository historialRepositorio)
+		HistorialEstadisticaDelNegocioRepository historialRepositorio,
+		ContadoresService contadores)
 	{
+		this.contadores = contadores;
 		this.repositorio = repositorio;
 		this.facturaRepositorio = facturaRepositorio;
 		this.detalleRepositorio = detalleRepositorio;
@@ -128,6 +132,7 @@ public class EstadisticaDelNegocioService
 		estadistica.setNumeroProductosVendidos(resumen.numeroProductosVendidos());
 		estadistica.setNumeroRopaVendida(resumen.numeroRopaVendida());
 		estadistica.setNumeroServicios(resumen.numeroServicios());
+		anotarContadores(estadistica, contadores.contar());
 		Estadistica_del_negocio guardada = repositorio.save(estadistica);
 		historialRepositorio.save(new Historial_estadistica_del_negocio(
 			guardada.getIdEstadistica(),
@@ -190,5 +195,19 @@ public class EstadisticaDelNegocioService
 		{
 			throw new IllegalArgumentException("La fecha final no puede ser anterior a la inicial.");
 		}
+	}
+
+	/** La foto de lo registrado en el momento de guardar la estadística. */
+	private static void anotarContadores(Estadistica_del_negocio estadistica, ContadoresResponse conteo)
+	{
+		estadistica.setNumeroServiciosOfrecidos(Math.toIntExact(conteo.serviciosOfrecidos()));
+		estadistica.setServiciosEliminados(Math.toIntExact(conteo.serviciosRetirados()));
+		estadistica.setNumeroProductosPapeleria(Math.toIntExact(conteo.productosEnCatalogo()));
+		estadistica.setProductosRemovidos(Math.toIntExact(conteo.productosRetirados()));
+		estadistica.setRopaActualCatalogo(Math.toIntExact(conteo.ropaDisponible()));
+		estadistica.setRopaRemovidaCatalogo(Math.toIntExact(conteo.ropaRetirada()));
+		estadistica.setNumeroInformacionAgregada(Math.toIntExact(conteo.datosPublicados() + conteo.datosRetirados()));
+		estadistica.setNumeroInformacionEliminada(Math.toIntExact(conteo.datosRetirados()));
+		estadistica.setOperadoresCibercafeDespedidos(Math.toIntExact(conteo.operadoresDespedidos()));
 	}
 }

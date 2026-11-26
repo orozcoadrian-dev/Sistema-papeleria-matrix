@@ -18,6 +18,11 @@ services:
       # Direcciones desde las que la página puede consultar la API: la página publicada en Render.
       - key: CORS_ORIGENES
         value: https://papeleria-matrix-web.onrender.com
+      # Opcionales, para enviar los registros de venta por correo. Se escriben en Environment, nunca aquí.
+      - key: CORREO_CLAVE
+        sync: false
+      - key: CORREO_REMITENTE
+        sync: false
 
   # La página (pública y pantallas internas). Son archivos fijos, no hay que compilar nada.
   - type: web

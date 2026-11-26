@@ -30,7 +30,7 @@ public class ServicioService
 	@Transactional(readOnly = true)
 	public List<ServicioResponse> listar()
 	{
-		return repositorio.findAll(Sort.by("id")).stream().map(ServicioResponse::desde).toList();
+		return repositorio.findByActivoTrue(Sort.by("id")).stream().map(ServicioResponse::desde).toList();
 	}
 
 	@Transactional(readOnly = true)
@@ -44,7 +44,9 @@ public class ServicioService
 	{
 		if(repositorio.existsByCodigoServicio(peticion.codigo()))
 		{
-			throw new RecursoDuplicadoException("Ya existe un servicio con el código " + peticion.codigo() + ".");
+			throw new RecursoDuplicadoException(repositorio.existsByCodigoServicioAndActivoFalse(peticion.codigo())
+				? "Hay un servicio retirado con el código " + peticion.codigo() + ". Usa otro código."
+				: "Ya existe un servicio con el código " + peticion.codigo() + ".");
 		}
 
 		Servicio servicio = new Servicio(peticion.codigo(), peticion.nombre(), peticion.categoria(), peticion.precio(), peticion.descripcion());
@@ -65,17 +67,24 @@ public class ServicioService
 		return ServicioResponse.desde(repositorio.save(servicio));
 	}
 
+	/** Lo saca del catálogo sin borrarlo de la base: las ventas anteriores lo siguen nombrando. */
 	@Transactional
-	public void eliminar(Integer id)
+	public void eliminar(Integer id, String motivo)
 	{
-		repositorio.delete(buscar(id));
-		// Se confirma el borrado en la base antes de quitar la foto: si no se puede borrar (está en ventas), la foto se queda.
-		repositorio.flush();
+		buscar(id).retirar(motivo);
 		imagenes.quitar("servicios", id);
+	}
+
+	@Transactional
+	public ServicioResponse destacar(Integer id, boolean destacado)
+	{
+		Servicio servicio = buscar(id);
+		servicio.setDestacado(destacado);
+		return ServicioResponse.desde(servicio);
 	}
 
 	private Servicio buscar(Integer id)
 	{
-		return repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe un servicio con el id " + id + "."));
+		return repositorio.findById(id).filter(Servicio::isActivo).orElseThrow(() -> new RecursoNoEncontradoException("No existe un servicio con el id " + id + "."));
 	}
 }

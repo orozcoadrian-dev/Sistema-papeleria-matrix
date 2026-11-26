@@ -17,12 +17,13 @@ public record ProductoInternoResponse(
 	Double precioCompra,
 	String lugarCompra,
 	LocalDate fechaPublicacion,
-	LocalDate fechaActualizacion)
+	LocalDate fechaActualizacion,
+	boolean destacado)
 {
 	/** Para el operador: sin el precio ni el lugar de compra, que son datos de la administradora. */
 	public ProductoInternoResponse sinCostos()
 	{
-		return new ProductoInternoResponse(id, codigo, nombre, descripcion, precio, cantidad, null, null, fechaPublicacion, fechaActualizacion);
+		return new ProductoInternoResponse(id, codigo, nombre, descripcion, precio, cantidad, null, null, fechaPublicacion, fechaActualizacion, destacado);
 	}
 
 	public static ProductoInternoResponse desde(ProductoPapeleria producto)
@@ -37,6 +38,7 @@ public record ProductoInternoResponse(
 			producto.getPrecioCompra(),
 			producto.getLugarCompra(),
 			producto.getFechaPublicacion(),
-			producto.getFechaActualizacion());
+			producto.getFechaActualizacion(),
+			producto.isDestacado());
 	}
 }

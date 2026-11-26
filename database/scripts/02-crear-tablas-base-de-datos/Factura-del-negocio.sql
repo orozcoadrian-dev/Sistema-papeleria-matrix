@@ -6,5 +6,7 @@ CREATE TABLE factura_del_negocio
 	Usuario_id INT NOT NULL,
     Monto DOUBLE NOT NULL,
     Fecha_generacion DATE NOT NULL,
-    Fecha_actualizacion DATE NULL
+    Fecha_actualizacion DATE NULL,
+    Anulada BOOLEAN NOT NULL DEFAULT FALSE,
+    Fecha_anulacion DATE NULL
 );

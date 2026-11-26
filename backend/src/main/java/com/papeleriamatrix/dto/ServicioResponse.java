@@ -14,7 +14,8 @@ public record ServicioResponse(
 	Double precio,
 	String descripcion,
 	LocalDate fechaVinculacion,
-	LocalDate fechaActualizacion)
+	LocalDate fechaActualizacion,
+	boolean destacado)
 {
 	public static ServicioResponse desde(Servicio servicio)
 	{
@@ -26,6 +27,7 @@ public record ServicioResponse(
 			servicio.getPrecio(),
 			servicio.getDescripcion(),
 			servicio.getFechaVinculacion(),
-			servicio.getFechaActualizacion());
+			servicio.getFechaActualizacion(),
+			servicio.isDestacado());
 	}
 }

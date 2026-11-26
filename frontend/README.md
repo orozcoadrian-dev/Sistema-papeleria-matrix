@@ -7,9 +7,9 @@ Página pública y pantallas internas hechas con HTML, CSS y JavaScript, sin lib
 | Pantalla | Quién entra | Qué hace |
 |----------|-------------|----------|
 | `views/login.html` | Todos | Inicio de sesión con usuario y contraseña. Cada rol va a su pantalla. |
-| `views/panel.html` | Administradora | Servicios, papelería (con existencias y precio de compra), ropa, operadores (con su clave de permiso) y datos de la tienda. Lleva a ventas y cuentas. |
-| `views/ventas.html` | Administradora y operador | Caja: elegir artículos, cobrar con cálculo del cambio, ver lo vendido, cambiar ventas y anularlas. El operador solo las suyas y con su clave de permiso; la administradora ve las de todos. |
-| `views/cuentas.html` | Administradora | Lo vendido por tipo, ganancia en papelería, inventario, sueldos y lo más vendido. Guarda cortes en ingresos y estadísticas, e imprime. |
+| `views/panel.html` | Administradora | Servicios, papelería (con existencias y precio de compra), ropa, operadores (con su estado y su clave de permiso) y datos de la tienda. Marca destacados y retira sin borrar. Lleva a ventas y cuentas. |
+| `views/ventas.html` | Administradora y operador | Caja: elegir artículos, cobrar con cálculo del cambio, ver lo vendido, cambiar ventas y anularlas. El operador solo las suyas y con su clave de permiso; la administradora ve las de todos. Datos temporales del cliente, PDF y correo de cada venta, búsqueda de facturas y existencias. |
+| `views/cuentas.html` | Administradora | Lo vendido por tipo, ganancia en papelería, inventario, sueldos, lo más vendido y lo registrado. Guarda cortes en ingresos y estadísticas, consulta y elimina sus historiales, genera reportes en PDF e imprime. |
 
 La sesión se guarda en la pestaña (`sessionStorage`) y se cierra tras 15 minutos sin uso. En el modo demo los usuarios de prueba están al final de `backend/src/main/resources/demo/datos-demo.sql`.
 
@@ -52,6 +52,7 @@ js/config.js          Dirección de la API
 js/datos-respaldo.js  Catálogo que se muestra si la API no responde
 js/main.js            Menú, modales, catálogos y buscadores
 js/sesion.js          Sesión, permisos por rol y cierre por inactividad
+js/pdf.js             Genera los PDF de ventas y reportes
 js/panel.js           Panel de la administradora
 js/ventas.js          Caja y ventas
 js/cuentas.js         Cuentas del negocio
@@ -63,8 +64,8 @@ assets/               Fuentes, íconos e imágenes
 | Requisito o caso de uso | Estado |
 |-------------------------|--------|
 | RF-01, CU-05, CU-10, CU-40, CU-57, CU-59, CU-61: búsqueda del catálogo y de la información del negocio | Hecho. Cada catálogo tiene su buscador y hay un buscador general. |
-| RF-02: información destacada sin criterio de búsqueda | Parcial. Sin criterio se muestra todo el catálogo. La base no tiene un campo de destacado. |
-| CU-15, CU-56: información del negocio | Parcial. Los horarios y el contacto están escritos en la página, no vienen de la API. |
+| RF-02: información destacada sin criterio de búsqueda | Hecho. La administradora marca con una estrella y la página lo muestra mientras no se busca. |
+| CU-15, CU-56: información del negocio | Hecho. Se muestra lo que publica la administradora; sus horarios reemplazan a los escritos en la página. El contacto del pie sigue escrito en la página. |
 | RNF-05: sin errores técnicos para el cliente | Hecho. Los fallos se explican con mensajes claros. |
 | RNF-12: responsive | Hecho. Revisado en 375 px y en 1280 px de ancho. |
 | RNF-16: términos y condiciones, cookies | Hecho. El texto de los términos debe revisarlo el negocio. |
@@ -75,8 +76,16 @@ assets/               Fuentes, íconos e imágenes
 | Ventas y facturas, con descuento de existencias | Hecho. |
 | RF-25, 26, 31, 32, 35 y 36: cambiar y anular ventas | Hecho. Se cambian artículos y cantidades. El operador usa su clave de permiso. |
 | Panel: operadores y claves de permiso | Hecho. |
-| Panel: información del negocio | Hecho en la pantalla. El servidor falla al listarla (ver el PR). |
-| Ingresos, estadísticas y reportes | Parcial. Las cuentas se calculan en la pantalla y se guardan como cortes; los historiales y reportes en archivo esperan al backend. |
+| RF-17 y 18, CU-18 y 19: retirar operadores y ver su estado | Hecho. Activo, suspendido o despedido. |
+| CU-03, 08, 13 y 41: retirar sin borrar | Hecho, con motivo opcional. |
+| CU-47: anular dejando el registro | Hecho. La venta queda marcada y no cuenta. |
+| CU-53: actualizar existencias | Hecho, en la pestaña «Existencias». |
+| Panel: información del negocio | Hecho. |
+| CU-24 a 32, 36 y 38: ingresos, estadísticas, historiales y contadores | Hecho. |
+| CU-33 a 35 y 37: reportes en PDF | Hecho. El PDF se arma en el navegador con lo guardado. |
+| CU-44: datos temporales del cliente | Hecho. No se guardan. |
+| CU-50: venta en PDF | Hecho. |
+| CU-54: venta por correo | Hecho. Sin cuenta de envío configurada, abre el correo de la persona con el mensaje escrito. |
 | RNF-18: cierre de sesión a los 15 minutos | Hecho, en el servidor y en el navegador. |
 
 La página no tiene botón de registro: según RF-41 solo entran la administradora y los operadores, y sus cuentas las crea la administradora desde el panel.

@@ -147,7 +147,7 @@ class ConsistenciaTest
 			() -> pedir("DELETE", "/ventas/" + id, null, "Authorization", primera),
 			() -> pedir("DELETE", "/ventas/" + id, null, "Authorization", segunda)));
 
-		assertTrue(estados.contains(204) && estados.contains(404), "Respuestas: " + estados);
+		assertTrue(estados.contains(204) && estados.contains(409), "Respuestas: " + estados);
 		assertEquals(10, existencias(producto));
 	}
 

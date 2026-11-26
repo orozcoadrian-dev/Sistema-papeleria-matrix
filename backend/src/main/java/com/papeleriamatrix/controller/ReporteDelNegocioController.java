@@ -45,4 +45,11 @@ public class ReporteDelNegocioController {
     public ResponseEntity<ReporteDelNegocioResponse> obtener(@PathVariable Integer id) {
         return ResponseEntity.ok(ReporteDelNegocioResponse.desde(reporteService.obtener(id)));
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina un reporte")
+    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+        reporteService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
 }

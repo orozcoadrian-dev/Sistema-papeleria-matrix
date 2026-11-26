@@ -12,7 +12,8 @@ public record ProductoResponse(
 	String nombre,
 	String descripcion,
 	Double precio,
-	boolean disponible)
+	boolean disponible,
+	boolean destacado)
 {
 	public static ProductoResponse desde(ProductoPapeleria producto)
 	{
@@ -22,6 +23,7 @@ public record ProductoResponse(
 			producto.getNombre(),
 			producto.getDescripcion(),
 			producto.getPrecioVenta(),
-			producto.getCantidad() > 0);
+			producto.getCantidad() > 0,
+			producto.isDestacado());
 	}
 }

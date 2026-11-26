@@ -1,5 +1,6 @@
 package com.papeleriamatrix.service;
 
+import com.papeleriamatrix.model.EstadoUsuario;
 import com.papeleriamatrix.common.Utils;
 import com.papeleriamatrix.exception.RecursoNoEncontradoException;
 import com.papeleriamatrix.model.Operador_de_cibercafe;
@@ -80,9 +81,24 @@ public class OperadorDeCibercafeService
 	}
 
 	@Transactional
+	public Operador_de_cibercafe cambiarEstado(Integer id, EstadoUsuario estado)
+	{
+		Operador_de_cibercafe operador = repositorio.findById(id)
+			.orElseThrow(() -> new RecursoNoEncontradoException("No existe un operador de cibercafé con el id " + id + "."));
+		operador.setEstado(estado);
+		if (estado != EstadoUsuario.ACTIVO)
+		{
+			// Sale de inmediato de los equipos donde tenga la sesión abierta.
+			sesiones.cerrarDelUsuario(id);
+		}
+		return operador;
+	}
+
+	/** Retirar no borra al operador: sus datos y sus ventas se conservan. */
+	@Transactional
 	public void eliminar(Integer id)
 	{
-		repositorio.delete(repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe un operador de cibercafé con el id " + id + ".")));
+		cambiarEstado(id, EstadoUsuario.DESPEDIDO);
 	}
 
 	private String codificarContrasenia(String contrasenia)

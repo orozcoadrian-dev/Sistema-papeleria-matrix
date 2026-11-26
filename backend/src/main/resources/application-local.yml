@@ -11,3 +11,7 @@ spring:
       # Al arrancar, compara las entidades con las tablas y avisa de cualquier diferencia de nombre.
       ddl-auto: validate
     open-in-view: false
+    # XAMPP trae MariaDB, pero el conector la presenta como MySQL y se arman consultas que MariaDB no entiende
+    # (sin esto no se puede registrar ninguna venta). Con MySQL de verdad se define la variable
+    # DB_DIALECTO=org.hibernate.dialect.MySQLDialect
+    database-platform: ${DB_DIALECTO:org.hibernate.dialect.MariaDBDialect}

@@ -158,7 +158,8 @@ class VentaControllerTest
 		mvc.perform(delete("/api/ventas/" + venta).header("Authorization", administrador)).andExpect(status().isNoContent());
 
 		assertEquals(5, existencias(producto));
-		mvc.perform(get("/api/ventas/" + venta).header("Authorization", administrador)).andExpect(status().isNotFound());
+		mvc.perform(get("/api/ventas/" + venta).header("Authorization", administrador))
+			.andExpect(status().isOk()).andExpect(jsonPath("$.anulada").value(true));
 	}
 
 	private double ingresoDeHoy(String campo) throws Exception

@@ -25,6 +25,9 @@ const CATEGORIAS_SERVICIO = ['Impresión', 'Copias', 'Escáner', 'Transcripción
 
 const SECCIONES = {
     servicios: {
+        destacable: true,
+        pideMotivo: true,
+        textoQuitar: 'Dejará de verse en la página y ya no se podrá vender. Las ventas anteriores se conservan.',
         icono: '🖨️',
         titulo: 'Servicios',
         plural: 'servicios',
@@ -55,6 +58,9 @@ const SECCIONES = {
     },
 
     productos: {
+        destacable: true,
+        pideMotivo: true,
+        textoQuitar: 'Dejará de verse en la página y ya no se podrá vender. Las ventas anteriores se conservan.',
         icono: '✏️',
         titulo: 'Papelería',
         plural: 'productos',
@@ -94,6 +100,9 @@ const SECCIONES = {
     },
 
     ropa: {
+        destacable: true,
+        pideMotivo: true,
+        textoQuitar: 'Dejará de verse en la página y ya no se podrá vender. Las ventas anteriores se conservan.',
         icono: '👗',
         titulo: 'Ropa',
         plural: 'prendas',
@@ -147,10 +156,9 @@ const SECCIONES = {
             nombre: nombreCompleto(o),
             precio: o.salario,
             precioSufijo: ' al mes',
-            estado: clavesDePermiso.has(o.idUsuario)
-                ? { texto: '🔑 Tiene clave de permiso', bien: true }
-                : { texto: 'Sin clave de permiso', bien: false },
-            etiquetas: [`Usuario: ${o.nombreUsuario}`, o.telefono && `Tel. ${o.telefono}`, o.horario],
+            estado: estadoDelOperador(o),
+            etiquetas: [clavesDePermiso.has(o.idUsuario) ? '🔑 Tiene clave de permiso' : 'Sin clave de permiso',
+                `Usuario: ${o.nombreUsuario}`, o.telefono && `Tel. ${o.telefono}`, o.horario],
             descripcion: o.direccion
         }),
         mismoQue: (a, b) => normalizar(a.nombreUsuario) === normalizar(b.nombreUsuario),
@@ -178,18 +186,23 @@ const SECCIONES = {
         valoresNuevos: () => ({ fechaContrato: hoyISO() }),
         cuerpoExtra: () => ({ rol: 'Operador de cibercafé' }),
         paraFormulario: (o) => ({ ...o, contrasenia: '' }),
-        accionesExtra: (o) => [{
-            texto: clavesDePermiso.has(o.idUsuario) ? '🔑 Cambiar clave' : '🔑 Poner clave',
-            nombre: `Clave de permiso de ${nombreCompleto(o)}`,
-            accion: () => abrirClave(o)
-        }],
+        accionesExtra: accionesDelOperador,
         cargarExtra: cargarClavesDePermiso,
-        // El sistema no borra operadores: sus ventas quedan a su nombre.
+        // La primera opción es la que se ve al entrar: quienes siguen en el equipo.
+        filtros: [
+            { texto: 'En el equipo', pasa: (o) => o.estado !== 'Despedido' },
+            { texto: 'Activos', pasa: (o) => o.estado === 'Activo' },
+            { texto: 'Suspendidos', pasa: (o) => o.estado === 'Suspendido' },
+            { texto: 'Despedidos', pasa: (o) => o.estado === 'Despedido' }
+        ],
+        // No se borran: «Retirar» los deja como despedidos y sus ventas quedan a su nombre.
         sinQuitar: true
     },
 
     informacion: {
         icono: '🏪',
+        pideMotivo: true,
+        textoQuitar: 'Dejará de verse en la página y en esta lista. Queda guardado en la base de datos.',
         titulo: 'Datos de la tienda',
         plural: 'datos',
         singular: 'dato',
@@ -253,7 +266,9 @@ const $ = (id) => document.getElementById(id);
 const datos = {};           // registros cargados por sección (undefined = cargando, null = sin conexión)
 let seccionActual = 'servicios';
 let editando = null;        // registro que se está cambiando, o null si es nuevo
-let porQuitar = null;       // registro que se va a quitar
+let porConfirmar = null;    // lo que hace el botón de la ventana de confirmar
+let filtroActual = 0;       // opción elegida en las secciones que se pueden filtrar
+let formularioInicial = ''; // lo que tenía el formulario al abrirlo
 let fotoNueva = null;      // foto elegida en el formulario (ya achicada), lista para subir
 let quitarFoto = false;    // se tocó «Quitar foto» en el formulario
 const fallosDelServidor = new Set(); // secciones cuya lista el servidor no pudo armar (error 500)
@@ -357,7 +372,7 @@ function dibujarMosaicos() {
         const lista = datos[clave];
         detalle.textContent = lista === undefined ? 'Cargando…'
             : lista === null ? (fallosDelServidor.has(clave) ? 'No se pudo abrir' : 'Sin conexión')
-            : contarTexto(seccion, lista.length);
+            : contarTexto(seccion, seccion.filtros ? lista.filter(seccion.filtros[0].pasa).length : lista.length);
         textos.append(titulo, detalle);
 
         boton.append(icono, textos);
@@ -392,6 +407,7 @@ function mosaicoEnlace(ruta, simbolo, nombre, texto) {
 
 function elegirSeccion(clave) {
     seccionActual = clave;
+    filtroActual = 0;
     try { sessionStorage.setItem(SECCION_ALMACEN, clave); } catch { /* solo es una comodidad */ }
     const seccion = SECCIONES[clave];
     $('seccion-titulo').textContent = seccion.titulo;
@@ -472,6 +488,7 @@ function dibujarTarjetas() {
     $('estado').hidden = true;
 
     const lista = datos[seccionActual];
+    dibujarFiltros(seccion, lista);
 
     if (lista === undefined) {
         contenedor.setAttribute('aria-busy', 'true');
@@ -518,8 +535,19 @@ function dibujarTarjetas() {
         return;
     }
 
+    const filtradas = seccion.filtros ? lista.filter(seccion.filtros[filtroActual].pasa) : lista;
+    if (filtradas.length === 0) {
+        contador.textContent = '';
+        mostrarEstado({
+            icono: seccion.icono,
+            titulo: `No hay nadie en «${seccion.filtros[filtroActual].texto}»`,
+            texto: 'Toca otra de las opciones de arriba para ver a las demás personas.'
+        });
+        return;
+    }
+
     const palabras = normalizar($('buscar').value).split(/\s+/).filter(Boolean);
-    const visibles = palabras.length ? lista.filter((r) => coincide(seccion, r, palabras)) : lista;
+    const visibles = palabras.length ? filtradas.filter((r) => coincide(seccion, r, palabras)) : filtradas;
 
     if (visibles.length === 0) {
         contador.textContent = '';
@@ -533,8 +561,8 @@ function dibujarTarjetas() {
     }
 
     contador.textContent = palabras.length
-        ? `Encontramos ${contarTexto(seccion, visibles.length)} de ${lista.length}`
-        : `Tienes ${contarTexto(seccion, lista.length)}`;
+        ? `Encontramos ${contarTexto(seccion, visibles.length)} de ${filtradas.length}`
+        : `Tienes ${contarTexto(seccion, filtradas.length)}`;
 
     for (const registro of visibles) {
         contenedor.append(crearTarjeta(registro, seccion));
@@ -571,6 +599,9 @@ function crearTarjeta(registro, seccion) {
 
     const etiquetas = document.createElement('div');
     etiquetas.className = 'etiquetas';
+    if (seccion.destacable && registro.destacado) {
+        etiquetas.append(crearEtiqueta('⭐ Destacado', 'etiqueta--destacada'));
+    }
     if (info.estado) {
         etiquetas.append(crearEtiqueta(info.estado.texto, info.estado.bien ? 'etiqueta--bien' : 'etiqueta--mal'));
     }
@@ -591,7 +622,11 @@ function crearTarjeta(registro, seccion) {
     const nombreVisible = info.nombre || seccion.singular;
     acciones.append(crearBoton('✏️ Cambiar', 'boton boton--suave', `Cambiar ${nombreVisible}`, () => abrirFormulario(registro)));
     for (const extra of seccion.accionesExtra?.(registro) || []) {
-        acciones.append(crearBoton(extra.texto, 'boton boton--suave', extra.nombre, extra.accion));
+        acciones.append(crearBoton(extra.texto, extra.peligro ? 'boton boton--peligro-suave' : 'boton boton--suave', extra.nombre, extra.accion));
+    }
+    if (seccion.destacable) {
+        acciones.append(crearBoton(registro.destacado ? '☆ No destacar' : '⭐ Destacar', 'boton boton--suave',
+            `${registro.destacado ? 'Dejar de destacar' : 'Destacar'} ${nombreVisible}`, () => alternarDestacado(registro)));
     }
     if (!seccion.sinQuitar) {
         acciones.append(crearBoton('🗑️ Quitar', 'boton boton--peligro-suave', `Quitar ${nombreVisible}`, () => pedirQuitar(registro)));
@@ -767,6 +802,7 @@ function abrirFormulario(registro = null) {
     formularioCambiado = false;
     advertenciasVistas = '';
     $('ventana-formulario').showModal();
+    formularioInicial = copiaDelFormulario();
     campos.querySelector('input, textarea')?.focus();
 }
 
@@ -861,6 +897,10 @@ function buscarAdvertencias(seccion, cuerpo) {
 
 async function guardar() {
     const seccion = SECCIONES[seccionActual];
+    if (editando && !fotoNueva && !quitarFoto && copiaDelFormulario() === formularioInicial) {
+        $('formulario-error').textContent = 'No cambiaste nada: los datos son los mismos que ya estaban. Cambia algo o toca «Cancelar».';
+        return;
+    }
     const cuerpo = leerFormulario(seccion);
     if (!cuerpo) return;
 
@@ -964,45 +1004,180 @@ function mensajeGeneral(error) {
     return 'Algo salió mal. Intenta otra vez en un momento; si sigue pasando, avísale a Osvaldo.';
 }
 
-/* ---------- Quitar ---------- */
+/* ---------- Confirmar: quitar y cambiar el estado ---------- */
 
-function pedirQuitar(registro) {
-    const seccion = SECCIONES[seccionActual];
-    porQuitar = registro;
-    const nombre = seccion.tarjeta(registro).nombre;
-    $('quitar-titulo').textContent = nombre ? `¿Quitar «${nombre}»?` : `¿Quitar ${este(seccion)}?`;
+function confirmar({ icono, titulo, texto, boton, peligro, conMotivo, accion }) {
+    $('quitar-icono').textContent = icono;
+    $('quitar-titulo').textContent = titulo;
+    $('quitar-texto').textContent = texto;
+    $('quitar-motivo-caja').hidden = !conMotivo;
+    $('quitar-motivo').value = '';
+    const confirmarBoton = $('boton-confirmar-quitar');
+    confirmarBoton.textContent = boton;
+    confirmarBoton.className = `boton ${peligro ? 'boton--peligro' : 'boton--principal'}`;
+    porConfirmar = accion;
     $('ventana-quitar').showModal();
     $('ventana-quitar').querySelector('[data-cerrar]').focus();
 }
 
-async function quitar() {
-    const seccion = SECCIONES[seccionActual];
-    const registro = porQuitar;
-    if (!registro) return;
-    const nombre = seccion.tarjeta(registro).nombre || seccion.singular;
+async function alConfirmar() {
+    const accion = porConfirmar;
+    if (!accion) return;
     const boton = $('boton-confirmar-quitar');
     boton.disabled = true;
     try {
-        await llamar(`${seccion.ruta}/${idDe(seccion, registro)}`, { metodo: 'DELETE' });
-        $('ventana-quitar').close();
-        avisar(`✓ Se quitó «${nombre}».`);
-        await cargar(seccionActual);
-    } catch (error) {
-        $('ventana-quitar').close();
-        if (error.estado === 401) {
-            // La sesión se venció: ya se está yendo al inicio de sesión.
-        } else if (error.estado === 404) {
-            // Ya no estaba: el resultado es el mismo que se quería.
-            avisar(`«${nombre}» ya no estaba en la lista.`);
-            recargar(seccionActual);
-        } else if (error.estado === 409) {
-            avisar(`No se puede quitar «${nombre}» ${seccion.mensajeAlQuitar409 || 'porque ya aparece en facturas o ventas.'}`, 'error');
-        } else {
-            avisar(mensajeGeneral(error), 'error');
-        }
+        await accion();
     } finally {
         boton.disabled = false;
     }
+}
+
+function falloAlConfirmar(error, nombre, clave) {
+    $('ventana-quitar').close();
+    if (error.estado === 401) return; // la sesión se venció: ya se está yendo al inicio de sesión
+    if (error.estado === 404) {
+        // Ya no estaba: el resultado es el mismo que se quería.
+        avisar(`«${nombre}» ya no estaba en la lista.`);
+        recargar(clave);
+    } else {
+        avisar(error.estado === 409 ? error.message : mensajeGeneral(error), 'error');
+    }
+}
+
+function pedirQuitar(registro) {
+    const clave = seccionActual;
+    const seccion = SECCIONES[clave];
+    const nombre = seccion.tarjeta(registro).nombre;
+    confirmar({
+        icono: '🗑️',
+        titulo: nombre ? `¿Quitar «${nombre}»?` : `¿Quitar ${este(seccion)}?`,
+        texto: seccion.textoQuitar,
+        boton: 'Sí, quitar',
+        peligro: true,
+        conMotivo: seccion.pideMotivo,
+        accion: () => quitar(registro, clave)
+    });
+}
+
+async function quitar(registro, clave) {
+    const seccion = SECCIONES[clave];
+    const nombre = seccion.tarjeta(registro).nombre || seccion.singular;
+    const motivo = $('quitar-motivo').value.trim();
+    const extra = motivo ? `?motivo=${encodeURIComponent(motivo)}` : '';
+    try {
+        await llamar(`${seccion.ruta}/${idDe(seccion, registro)}${extra}`, { metodo: 'DELETE' });
+        $('ventana-quitar').close();
+        avisar(`✓ Se quitó «${nombre}».`);
+        await cargar(clave);
+    } catch (error) {
+        falloAlConfirmar(error, nombre, clave);
+    }
+}
+
+/* ---------- Estado de los operadores ---------- */
+
+function estadoDelOperador(operador) {
+    if (operador.estado === 'Suspendido') return { texto: '⏸️ Suspendido', bien: false };
+    if (operador.estado === 'Despedido') return { texto: '🚪 Despedido', bien: false };
+    return { texto: '✅ Activo', bien: true };
+}
+
+function accionesDelOperador(operador) {
+    const nombre = nombreCompleto(operador);
+    const despedido = operador.estado === 'Despedido';
+    const acciones = [];
+    if (!despedido) {
+        acciones.push({
+            texto: clavesDePermiso.has(operador.idUsuario) ? '🔑 Cambiar clave' : '🔑 Poner clave',
+            nombre: `Clave de permiso de ${nombre}`,
+            accion: () => abrirClave(operador)
+        });
+    }
+    if (operador.estado === 'Activo') {
+        acciones.push({ texto: '⏸️ Suspender', nombre: `Suspender a ${nombre}`, accion: () => pedirEstado(operador, 'Suspendido') });
+    } else {
+        acciones.push({
+            texto: despedido ? '✅ Volver a contratar' : '✅ Reactivar',
+            nombre: `Reactivar a ${nombre}`,
+            accion: () => pedirEstado(operador, 'Activo')
+        });
+    }
+    if (!despedido) {
+        acciones.push({ texto: '🚪 Retirar', nombre: `Retirar a ${nombre}`, peligro: true, accion: () => pedirEstado(operador, 'Despedido') });
+    }
+    return acciones;
+}
+
+function pedirEstado(operador, estado) {
+    const nombre = operador.primerNombre;
+    const textos = {
+        Suspendido: {
+            icono: '⏸️', titulo: `¿Suspender a ${nombre}?`, boton: 'Sí, suspender', peligro: true, listo: `Se suspendió a ${nombre}.`,
+            texto: 'No podrá entrar al sistema hasta que reactives su usuario. Si tiene la sesión abierta, se cierra.'
+        },
+        Despedido: {
+            icono: '🚪', titulo: `¿Retirar a ${nombre}?`, boton: 'Sí, retirar', peligro: true, listo: `${nombre} salió del equipo.`,
+            texto: 'Saldrá del equipo y no podrá entrar. Sus datos y sus ventas se conservan, y queda en «Despedidos».'
+        },
+        Activo: {
+            icono: '✅', titulo: `¿Reactivar a ${nombre}?`, boton: 'Sí, reactivar', listo: `Se reactivó a ${nombre}.`,
+            texto: 'Podrá volver a entrar con su usuario y su contraseña.'
+        }
+    }[estado];
+    confirmar({ ...textos, accion: () => cambiarEstado(operador, estado, textos.listo) });
+}
+
+async function cambiarEstado(operador, estado, listo) {
+    try {
+        await llamar(`/api/operadores-cibercafe/${operador.idUsuario}/estado`, { metodo: 'PUT', cuerpo: { estado } });
+        $('ventana-quitar').close();
+        avisar(`✓ ${listo}`);
+        await cargar('operadores');
+    } catch (error) {
+        falloAlConfirmar(error, operador.primerNombre, 'operadores');
+    }
+}
+
+/* ---------- Destacados y filtros ---------- */
+
+async function alternarDestacado(registro) {
+    const clave = seccionActual;
+    const seccion = SECCIONES[clave];
+    const nombre = seccion.tarjeta(registro).nombre || seccion.singular;
+    const destacado = !registro.destacado;
+    try {
+        await llamar(`${seccion.ruta}/${idDe(seccion, registro)}/destacado`, { metodo: 'PUT', cuerpo: { destacado } });
+        avisar(destacado ? `⭐ «${nombre}» ahora sale entre los destacados de la página.` : `«${nombre}» ya no sale entre los destacados.`);
+        await cargar(clave);
+    } catch (error) {
+        if (error.estado !== 401) avisar(mensajeGeneral(error), 'error');
+    }
+}
+
+function dibujarFiltros(seccion, lista) {
+    const contenedor = $('filtros');
+    contenedor.replaceChildren();
+    contenedor.hidden = !seccion.filtros || !lista;
+    if (contenedor.hidden) return;
+    seccion.filtros.forEach((filtro, posicion) => {
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.className = 'filtro';
+        boton.setAttribute('aria-pressed', String(posicion === filtroActual));
+        boton.textContent = `${filtro.texto} (${lista.filter(filtro.pasa).length})`;
+        boton.addEventListener('click', () => {
+            filtroActual = posicion;
+            dibujarTarjetas();
+        });
+        contenedor.append(boton);
+    });
+}
+
+function copiaDelFormulario() {
+    return [...$('formulario').querySelectorAll('input, textarea, select')]
+        .filter((entrada) => entrada.type !== 'file')
+        .map((entrada) => `${entrada.id}=${entrada.value.trim()}`)
+        .join('\n');
 }
 
 /* ---------- Foto de productos, ropa y servicios ---------- */
@@ -1202,7 +1377,7 @@ $('formulario').addEventListener('submit', (evento) => {
     if (!$('boton-guardar').disabled) guardar();
 });
 
-$('boton-confirmar-quitar').addEventListener('click', quitar);
+$('boton-confirmar-quitar').addEventListener('click', alConfirmar);
 $('boton-agregar').addEventListener('click', () => abrirFormulario());
 $('buscar').addEventListener('input', dibujarTarjetas);
 

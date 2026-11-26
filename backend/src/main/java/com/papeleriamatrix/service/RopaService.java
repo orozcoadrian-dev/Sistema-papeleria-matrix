@@ -35,15 +35,14 @@ public class RopaService
 	public List<RopaResponse> listar()
 	{
 		java.util.Set<Integer> vendidas = new java.util.HashSet<>(detalles.ropaVendida());
-		return repositorio.findAll(Sort.by("id")).stream().map(r -> RopaResponse.desde(r, vendidas.contains(r.getId()))).toList();
+		return repositorio.findByActivoTrue(Sort.by("id")).stream().map(r -> RopaResponse.desde(r, vendidas.contains(r.getId()))).toList();
 	}
 
 	@Transactional(readOnly = true)
 	public RopaResponse obtener(Integer id)
 	{
-		return repositorio.findById(id)
-			.map(r -> RopaResponse.desde(r, detalles.existsByRopaId(r.getId())))
-			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda con el id " + id + "."));
+		Ropa prenda = buscar(id);
+		return RopaResponse.desde(prenda, detalles.existsByRopaId(id));
 	}
 
 	@Transactional
@@ -51,7 +50,9 @@ public class RopaService
 	{
 		if (repositorio.existsByCodigoRopa(peticion.codigo()))
 		{
-			throw new RecursoDuplicadoException("Ya existe una prenda con el código " + peticion.codigo() + ".");
+			throw new RecursoDuplicadoException(repositorio.existsByCodigoRopaAndActivoFalse(peticion.codigo())
+				? "Hay una prenda retirada con el código " + peticion.codigo() + ". Usa otro código."
+				: "Ya existe una prenda con el código " + peticion.codigo() + ".");
 		}
 		Ropa ropa = new Ropa(peticion.codigo(), peticion.tipoRopa(), peticion.material(), peticion.talla(), peticion.descripcion(), peticion.nombre(), peticion.precio(), peticion.color());
 		return RopaResponse.desde(repositorio.save(ropa));
@@ -60,7 +61,7 @@ public class RopaService
 	@Transactional
 	public RopaResponse actualizar(Integer id, RopaRequest peticion)
 	{
-		Ropa ropa = repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda con el id " + id + "."));
+		Ropa ropa = buscar(id);
 		if (repositorio.existsByCodigoRopaAndIdNot(peticion.codigo(), id))
 		{
 			throw new RecursoDuplicadoException("Ya existe otra prenda con el código " + peticion.codigo() + ".");
@@ -70,11 +71,25 @@ public class RopaService
 	}
 
 	@Transactional
-	public void eliminar(Integer id)
+	public void eliminar(Integer id, String motivo)
 	{
-		repositorio.delete(repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda con el id " + id + ".")));
-		// Se confirma el borrado en la base antes de quitar la foto: si no se puede borrar (está en ventas), la foto se queda.
-		repositorio.flush();
+		// La saca del catálogo sin borrarla de la base: las ventas anteriores la siguen nombrando.
+		buscar(id).retirar(motivo);
 		imagenes.quitar("ropa", id);
+	}
+
+	@Transactional
+	public RopaResponse destacar(Integer id, boolean destacado)
+	{
+		Ropa prenda = buscar(id);
+		prenda.setDestacado(destacado);
+		return RopaResponse.desde(prenda, detalles.existsByRopaId(id));
+	}
+
+	private Ropa buscar(Integer id)
+	{
+		return repositorio.findById(id)
+			.filter(Ropa::isActivo)
+			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda con el id " + id + "."));
 	}
 }

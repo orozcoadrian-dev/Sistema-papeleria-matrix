@@ -34,6 +34,7 @@
             <div class="filtros" role="group" aria-label="Qué días mostrar" id="periodos"></div>
             <div class="cuentas__acciones">
                 <button type="button" class="boton boton--suave" id="boton-imprimir">🖨️ Imprimir</button>
+                <button type="button" class="boton boton--suave" id="boton-reporte">📄 Reporte en PDF</button>
                 <button type="button" class="boton boton--principal" id="boton-guardar-corte">💾 Guardar este corte</button>
             </div>
         </div>
@@ -68,18 +69,40 @@
                 <div class="resumen" id="resumen-gastos"></div>
             </section>
 
+            <section class="seccion" aria-labelledby="registrado-titulo">
+                <h2 id="registrado-titulo">Lo registrado</h2>
+                <div class="resumen" id="resumen-registrado"></div>
+            </section>
+
             <section class="seccion cuentas__cortes" aria-labelledby="cortes-titulo">
-                <h2 id="cortes-titulo">Cortes guardados</h2>
-                <p class="seccion__ayuda">Cada vez que guardas un corte queda una foto de las cuentas de ese momento.</p>
-                <div class="ventas" id="cortes"></div>
+                <h2 id="cortes-titulo">Historiales y reportes</h2>
+                <p class="seccion__ayuda">Cada vez que guardas un corte queda una foto de las cuentas de ese momento. Con ella puedes sacar un reporte en PDF.</p>
+                <div class="filtros" role="group" aria-label="Qué guardado ver" id="pestanas-guardados"></div>
+                <div class="buscador">
+                    <span class="buscador__icono" aria-hidden="true">🔍</span>
+                    <label for="buscar-guardados" class="oculto">Buscar en lo guardado</label>
+                    <input type="search" id="buscar-guardados" class="buscador__entrada" placeholder="Buscar por fecha o código…" autocomplete="off">
+                </div>
+                <div class="ventas" id="guardados"></div>
             </section>
         </div>
     </main>
+
+    <dialog class="ventana ventana--chica" id="ventana-eliminar" aria-labelledby="eliminar-titulo">
+        <p class="ventana__icono" aria-hidden="true">🗑️</p>
+        <h2 id="eliminar-titulo" class="ventana__titulo"></h2>
+        <p class="ventana__texto">Después de eliminarlo no se puede recuperar. Las ventas no cambian.</p>
+        <div class="ventana__botones ventana__botones--centro">
+            <button type="button" class="boton boton--suave" data-cerrar>No, dejarlo</button>
+            <button type="button" class="boton boton--peligro" id="boton-confirmar-eliminar">Sí, eliminar</button>
+        </div>
+    </dialog>
 
     <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
 
     <script src="../js/config.js"></script>
     <script src="../js/sesion.js"></script>
+    <script src="../js/pdf.js"></script>
     <script src="../js/cuentas.js"></script>
 </body>
 

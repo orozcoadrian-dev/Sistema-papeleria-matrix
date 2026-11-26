@@ -186,7 +186,8 @@ class CambiosDeVentaTest
 			.andExpect(status().isNoContent());
 
 		assertEquals(6, existencias(producto));
-		mvc.perform(get("/api/ventas/" + venta).header("Authorization", administrador)).andExpect(status().isNotFound());
+		mvc.perform(get("/api/ventas/" + venta).header("Authorization", administrador))
+			.andExpect(status().isOk()).andExpect(jsonPath("$.anulada").value(true));
 	}
 
 	@Test

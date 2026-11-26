@@ -1,5 +1,6 @@
 package com.papeleriamatrix.model;
 
+import org.hibernate.annotations.ColumnDefault;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,6 +45,19 @@ public class ProductoPapeleria
 	@Column(name = "Fecha_actualizacion")
 	private LocalDate fechaActualizacion;
 
+	// Retirar no borra: deja de mostrarse y lo anterior lo sigue nombrando.
+	@Column(name = "Activo", nullable = false)
+	@ColumnDefault("true")
+	private boolean activo = true;
+
+	@Column(name = "Motivo_retiro", length = 150)
+	private String motivoRetiro;
+
+	// La administradora lo marca para que salga entre los destacados de la página.
+	@Column(name = "Destacado", nullable = false)
+	@ColumnDefault("false")
+	private boolean destacado = false;
+
 	protected ProductoPapeleria()
 	{
 	}
@@ -80,6 +94,17 @@ public class ProductoPapeleria
 			throw new IllegalArgumentException("No hay suficientes existencias de " + nombre + ".");
 		}
 		this.cantidad = cantidad - unidades;
+	}
+
+	/** Anota cuántas unidades hay de verdad en la tienda. */
+	public void ajustarExistencias(int unidades)
+	{
+		if (unidades < 0)
+		{
+			throw new IllegalArgumentException("La cantidad no puede ser negativa.");
+		}
+		this.cantidad = unidades;
+		this.fechaActualizacion = LocalDate.now();
 	}
 
 	/** Devuelve a las existencias lo de una venta anulada. */
@@ -136,5 +161,32 @@ public class ProductoPapeleria
 	public LocalDate getFechaActualizacion()
 	{
 		return fechaActualizacion;
+	}
+
+	public boolean isActivo()
+	{
+		return activo;
+	}
+
+	public String getMotivoRetiro()
+	{
+		return motivoRetiro;
+	}
+
+	public void retirar(String motivo)
+	{
+		this.motivoRetiro = Retiro.motivo(motivo);
+		this.activo = false;
+		this.destacado = false;
+	}
+
+	public boolean isDestacado()
+	{
+		return destacado;
+	}
+
+	public void setDestacado(boolean destacado)
+	{
+		this.destacado = destacado;
 	}
 }

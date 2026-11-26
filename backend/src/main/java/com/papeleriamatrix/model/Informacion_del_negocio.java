@@ -1,5 +1,6 @@
 package com.papeleriamatrix.model;
 
+import org.hibernate.annotations.ColumnDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.papeleriamatrix.common.Utils;
 import jakarta.persistence.Column;
@@ -48,6 +49,14 @@ public class Informacion_del_negocio
 
 	@Column(name = "Fecha_actualizacion", nullable = false)
 	private LocalDate fechaActualizacion;
+
+	// Retirar no borra: deja de mostrarse y lo anterior lo sigue nombrando.
+	@Column(name = "Activo", nullable = false)
+	@ColumnDefault("true")
+	private boolean activo = true;
+
+	@Column(name = "Motivo_retiro", length = 150)
+	private String motivoRetiro;
 
 	@Transient
 	private Utils utilidades = new Utils();
@@ -244,5 +253,21 @@ public class Informacion_del_negocio
 	public LocalDate getFechaActualizacion()
 	{
 		return fechaActualizacion;
+	}
+
+	public boolean isActivo()
+	{
+		return activo;
+	}
+
+	public String getMotivoRetiro()
+	{
+		return motivoRetiro;
+	}
+
+	public void retirar(String motivo)
+	{
+		this.motivoRetiro = Retiro.motivo(motivo);
+		this.activo = false;
 	}
 }

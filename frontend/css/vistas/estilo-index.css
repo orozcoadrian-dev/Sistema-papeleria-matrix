@@ -508,6 +508,7 @@ h1,h2,h3 {
 
 .search__input {
     flex: 1;
+    min-width: 0;
     padding: 0.65rem 1rem;
     border-radius: var(--radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -1022,4 +1023,9 @@ h1,h2,h3 {
     .hero {
         padding-block: 3.5rem 2.5rem;
     }
+}
+
+/* Los horarios escritos en la página se ocultan cuando la administradora publica los suyos. */
+.quick-info__list[hidden] {
+    display: none;
 }

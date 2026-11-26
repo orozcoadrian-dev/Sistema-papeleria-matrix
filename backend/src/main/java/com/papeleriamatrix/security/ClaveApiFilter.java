@@ -1,5 +1,6 @@
 package com.papeleriamatrix.security;
 
+import java.util.regex.Pattern;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,6 +42,7 @@ public class ClaveApiFilter extends OncePerRequestFilter
 
 	private static final String RUTA_SESION = "/api/sesion";
 	private static final String RUTA_VENTAS = "/api/ventas";
+	private static final Pattern RUTA_EXISTENCIAS = Pattern.compile("/api/productos/\\d+/existencias");
 
 	private final byte[] claveEsperada;
 	private final AlmacenDeSesiones sesiones;
@@ -119,7 +121,8 @@ public class ClaveApiFilter extends OncePerRequestFilter
 			// Qué ventas puede tocar y si tiene la clave de permiso lo revisa el servicio de ventas.
 			boolean trabajaConVentas = esRuta(ruta, RUTA_VENTAS);
 			boolean consultaExistencias = METODOS_DE_CONSULTA.contains(metodo) && CONSULTA_INTERNA.stream().anyMatch(base -> esRuta(ruta, base));
-			return trabajaConVentas || consultaExistencias;
+			boolean ajustaExistencias = "PUT".equals(metodo) && RUTA_EXISTENCIAS.matcher(ruta).matches();
+			return trabajaConVentas || consultaExistencias || ajustaExistencias;
 		}
 		return false;
 	}

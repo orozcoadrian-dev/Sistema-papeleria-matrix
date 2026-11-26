@@ -1,5 +1,6 @@
 package com.papeleriamatrix.service;
 
+import com.papeleriamatrix.dto.ContadoresResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,6 +42,8 @@ class EstadisticaDelNegocioServiceTest
 	private DetalleDeFacturaRepository detalleRepositorio;
 	@Mock
 	private HistorialEstadisticaDelNegocioRepository historialRepositorio;
+	@Mock
+	private ContadoresService contadores;
 
 	private EstadisticaDelNegocioService servicio;
 	private final LocalDate desde = LocalDate.of(2026, 3, 1);
@@ -49,7 +52,7 @@ class EstadisticaDelNegocioServiceTest
 	@BeforeEach
 	void preparar()
 	{
-		servicio = new EstadisticaDelNegocioService(repositorio, facturaRepositorio, detalleRepositorio, historialRepositorio);
+		servicio = new EstadisticaDelNegocioService(repositorio, facturaRepositorio, detalleRepositorio, historialRepositorio, contadores);
 	}
 
 	@Test
@@ -99,6 +102,7 @@ class EstadisticaDelNegocioServiceTest
 			return estadistica;
 		});
 		when(historialRepositorio.save(any(Historial_estadistica_del_negocio.class))).thenAnswer(invocacion -> invocacion.getArgument(0));
+		when(contadores.contar()).thenReturn(new ContadoresResponse(4, 1, 6, 2, 3, 1, 0, 5, 1, 2, 0, 1, 1, 2, 0, 0));
 
 		EstadisticaResponse respuesta = servicio.calcularYGuardar(desde, hasta);
 
@@ -109,6 +113,9 @@ class EstadisticaDelNegocioServiceTest
 		verify(repositorio).save(estadisticaCaptor.capture());
 		assertTrue(estadisticaCaptor.getValue().getCodigoEstadistica().matches("\\d{15}"));
 		assertEquals(3, estadisticaCaptor.getValue().getNumeroProductosVendidos());
+		assertEquals(4, estadisticaCaptor.getValue().getNumeroServiciosOfrecidos());
+		assertEquals(6, estadisticaCaptor.getValue().getNumeroInformacionAgregada());
+		assertEquals(1, estadisticaCaptor.getValue().getOperadoresCibercafeDespedidos());
 		ArgumentCaptor<Historial_estadistica_del_negocio> historialCaptor = ArgumentCaptor.forClass(Historial_estadistica_del_negocio.class);
 		verify(historialRepositorio).save(historialCaptor.capture());
 		assertEquals(9, historialCaptor.getValue().getEstadisticaDelNegocioId());

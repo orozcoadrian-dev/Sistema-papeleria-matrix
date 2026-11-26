@@ -1,5 +1,7 @@
 package com.papeleriamatrix.repository;
 
+import java.util.List;
+import org.springframework.data.domain.Sort;
 import com.papeleriamatrix.model.ProductoPapeleria;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
@@ -20,4 +22,11 @@ public interface ProductoPapeleriaRepository extends JpaRepository<ProductoPapel
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("SELECT p FROM ProductoPapeleria p WHERE p.id = :id")
 	Optional<ProductoPapeleria> bloquear(@Param("id") Integer id);
+
+	/** Lo que está en el catálogo, sin lo retirado. */
+	List<ProductoPapeleria> findByActivoTrue(Sort orden);
+
+	boolean existsByCodigoProductoAndActivoFalse(String codigo);
+
+	long countByActivo(boolean activo);
 }

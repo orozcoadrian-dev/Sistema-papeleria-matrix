@@ -7,5 +7,8 @@ CREATE TABLE servicio
     Precio DOUBLE NOT NULL,
     Descripcion VARCHAR(150) NULL,
     Fecha_vinculacion DATE NOT NULL,
-    Fecha_actualizacion DATE NULL
+    Fecha_actualizacion DATE NULL,
+    Activo BOOLEAN NOT NULL DEFAULT TRUE,
+    Motivo_retiro VARCHAR(150) NULL,
+    Destacado BOOLEAN NOT NULL DEFAULT FALSE
 );

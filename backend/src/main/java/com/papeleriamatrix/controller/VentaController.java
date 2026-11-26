@@ -1,5 +1,7 @@
 package com.papeleriamatrix.controller;
 
+import com.papeleriamatrix.dto.CorreoDeVentaRequest;
+import com.papeleriamatrix.service.CorreoDeVentas;
 import com.papeleriamatrix.dto.VentaRequest;
 import com.papeleriamatrix.dto.VentaResponse;
 import com.papeleriamatrix.security.PermisoDeVentas;
@@ -33,10 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class VentaController
 {
 	private final VentaService ventaService;
+	private final CorreoDeVentas correoDeVentas;
 
-	public VentaController(VentaService ventaService)
+	public VentaController(VentaService ventaService, CorreoDeVentas correoDeVentas)
 	{
 		this.ventaService = ventaService;
+		this.correoDeVentas = correoDeVentas;
 	}
 
 	@PostMapping
@@ -49,14 +53,15 @@ public class VentaController
 	}
 
 	@GetMapping
-	@Operation(summary = "Listar las ventas", description = "Por defecto, las de los últimos 30 días. El operador solo ve las suyas.",
+	@Operation(summary = "Listar las ventas", description = "Por defecto, las de los últimos 30 días y sin las anuladas. El operador solo ve las suyas.",
 		security = { @SecurityRequirement(name = "sesion"), @SecurityRequirement(name = "claveApi") })
 	public List<VentaResponse> listar(
 		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
 		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta,
+		@RequestParam(defaultValue = "false") boolean incluirAnuladas,
 		@Parameter(hidden = true) @RequestAttribute(Sesion.ATRIBUTO) Sesion sesion)
 	{
-		return ventaService.listar(sesion, desde, hasta);
+		return ventaService.listar(sesion, desde, hasta, incluirAnuladas);
 	}
 
 	@GetMapping("/{id}")
@@ -81,11 +86,22 @@ public class VentaController
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Anular una venta",
-		description = "Devuelve las existencias de los productos. El operador solo anula las suyas y envía su clave de permiso en la cabecera X-Clave-Permiso.",
+		description = "La venta queda marcada como anulada y devuelve las existencias de los productos. El operador solo anula las suyas y envía su clave de permiso en la cabecera X-Clave-Permiso.",
 		security = { @SecurityRequirement(name = "sesion"), @SecurityRequirement(name = "claveApi") })
 	public void anular(@PathVariable Integer id, @Parameter(hidden = true) @RequestAttribute(Sesion.ATRIBUTO) Sesion sesion,
 		@RequestHeader(name = PermisoDeVentas.CABECERA, required = false) String clavePermiso)
 	{
 		ventaService.anular(id, sesion, clavePermiso);
+	}
+
+	@PostMapping("/{id}/correo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "Enviar el registro de una venta por correo",
+		description = "Responde 503 mientras no se hayan configurado CORREO_CLAVE y CORREO_REMITENTE.",
+		security = { @SecurityRequirement(name = "sesion"), @SecurityRequirement(name = "claveApi") })
+	public void enviarPorCorreo(@PathVariable Integer id, @Valid @RequestBody CorreoDeVentaRequest peticion,
+		@Parameter(hidden = true) @RequestAttribute(Sesion.ATRIBUTO) Sesion sesion)
+	{
+		correoDeVentas.enviar(id, peticion, sesion);
 	}
 }
