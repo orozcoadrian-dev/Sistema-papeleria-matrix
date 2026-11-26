@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Claude" pages="5">
+  <diagram id="d1" name="1. SESIÓN USUARIO INTERNO">
+    <mxGraphModel dx="2449" dy="1449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#FAF7FF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="0WhvXXSLQbXnvk3ufWTH-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="480" width="1140" x="-40" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_t3" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontStyle=1;fontColor=#4527A0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="SESIÓN DE USUARIO INTERNO" vertex="1">
+          <mxGeometry height="30" width="1000" x="-30" y="-30" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_ini4" parent="1" style="ellipse;html=1;fillColor=#4527A0;strokeColor=#4527A0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="40" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_st5" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Sin sesión&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="150" x="120" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_st6" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Validando credenciales&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="180" x="420" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_st7" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Sesión activa&lt;/b&gt;&lt;hr&gt;entry / abrir sesión según el rol (administrador u operador de cibercafé)" vertex="1">
+          <mxGeometry height="94" width="220" x="770" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_e8" edge="1" parent="1" source="d1_ini4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d1_st5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_e9" edge="1" parent="1" source="d1_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d1_st6" value="enviar credenciales">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_e10" edge="1" parent="1" source="d1_st6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d1_st7" value="[credenciales válidas]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d1_e11" edge="1" parent="1" source="d1_st6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d1_st5" value="[credenciales inválidas]&lt;br&gt;/ mostrar error">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="465" y="240" />
+              <mxPoint x="232.5" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d1_e12" edge="1" parent="1" source="d1_st7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d1_st5" value="after(15 min sin actividad)&lt;br&gt;/ cerrar sesión">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="75" />
+              <mxPoint x="195" y="75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d1_e13" edge="1" parent="1" source="d1_st7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d1_st5" value="cerrar sesión">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="310" />
+              <mxPoint x="157.5" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="d2" name="2. OPERADOR-DE-CIBERCAFÉ">
+    <mxGraphModel dx="930" dy="1217" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#FAF7FF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="AE27gnJLliXEoL16G2w5-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="580" width="840" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_t3" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontStyle=1;fontColor=#4527A0;" value="OPERADOR DE CIBERCAF+E" vertex="1">
+          <mxGeometry height="30" width="1000" x="30" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_ini4" parent="1" style="ellipse;html=1;fillColor=#4527A0;strokeColor=#4527A0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="40" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_st5" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Activo&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="150" x="240" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_st6" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Suspendido&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="150" x="640" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_st7" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F8EAFB;strokeColor=#8E24AA;fontSize=12;gradientColor=#CE93D8;gradientDirection=south;strokeWidth=2;fontColor=#4A148C;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Despedido&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="150" x="440" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_fin8" parent="1" style="ellipse;html=1;shape=endState;fillColor=#4527A0;strokeColor=#7E57C2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="500" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_e9" edge="1" parent="1" source="d2_ini4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d2_st5" value="registrar operador&lt;br&gt;/ crear clave de permiso">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_e10" edge="1" parent="1" source="d2_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d2_st5" value="actualizar datos">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="262.5" y="80" />
+              <mxPoint x="367.5" y="80" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d2_e11" edge="1" parent="1" source="d2_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d2_st6" value="suspender">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_e12" edge="1" parent="1" source="d2_st6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d2_st5" value="reactivar&lt;br&gt;(por confirmar)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_e13" edge="1" parent="1" source="d2_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d2_st7" value="despedir">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_e14" edge="1" parent="1" source="d2_st6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d2_st7" value="despedir">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_e15" edge="1" parent="1" source="d2_st7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d2_fin8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="d3" name="3. ITEM-CATALOGO">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#FAF7FF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="RsXh_iJj24sCJyn48Okp-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="560" width="1080" x="-40" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_t3" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontStyle=1;fontColor=#4527A0;" value="SERVICIO, PRODUCTO DE PAPELERÍA O ROPA" vertex="1">
+          <mxGeometry height="30" width="1000" x="-20" y="-70" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_ini4" parent="1" style="ellipse;html=1;fillColor=#4527A0;strokeColor=#4527A0;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="40" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_st5" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;" value="&lt;b&gt;Vigente&lt;/b&gt;&lt;hr&gt;entry / visible en el catálogo público" vertex="1">
+          <mxGeometry height="84" width="200" x="280" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_st6" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F8EAFB;strokeColor=#8E24AA;fontSize=12;gradientColor=#CE93D8;gradientDirection=south;strokeWidth=2;fontColor=#4A148C;shadow=1;" value="&lt;b&gt;Retirado&lt;/b&gt;&lt;hr&gt;no se muestra al cliente" vertex="1">
+          <mxGeometry height="84" width="170" x="700" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_fin7" parent="1" style="ellipse;html=1;shape=endState;fillColor=#4527A0;strokeColor=#7E57C2;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="940" y="177" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_e8" edge="1" parent="1" source="d3_ini4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;" target="d3_st5" value="registrar&lt;br&gt;[solo administrador]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_e9" edge="1" parent="1" source="d3_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;" target="d3_st5" value="actualizar&lt;br&gt;[solo administrador]">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="100" />
+              <mxPoint x="450" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d3_e10" edge="1" parent="1" source="d3_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;" target="d3_st6" value="remover&lt;br&gt;[solo administrador]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d3_e11" edge="1" parent="1" source="d3_st6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;" target="d3_fin7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="d4" name="4. FACTURA DE SERVICIO">
+    <mxGraphModel dx="3027" dy="1770" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#FAF7FF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="yjVBDfBT120XBmIQzWFs-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="480" width="1120" x="-80" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_t3" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontStyle=1;fontColor=#4527A0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="FACTURA DE SERVICIO" vertex="1">
+          <mxGeometry height="30" width="1000" x="-60" y="-30" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_ini4" parent="1" style="ellipse;html=1;fillColor=#4527A0;strokeColor=#4527A0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="40" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_st5" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Vigente&lt;/b&gt;" vertex="1">
+          <mxGeometry height="84" width="200" x="280" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_st6" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F8EAFB;strokeColor=#8E24AA;fontSize=12;gradientColor=#CE93D8;gradientDirection=south;strokeWidth=2;fontColor=#4A148C;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Eliminada&lt;/b&gt;" vertex="1">
+          <mxGeometry height="84" width="170" x="700" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_fin7" parent="1" style="ellipse;html=1;shape=endState;fillColor=#4527A0;strokeColor=#7E57C2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="940" y="177" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e8" edge="1" parent="1" source="d4_ini4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d4_st5" value="generar factura&lt;br&gt;[operador o administrador]&lt;br&gt;/ guardar cabecera y detalle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e9" edge="1" parent="1" source="d4_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d4_st5" value="modificar datos&lt;br&gt;[clave de permiso válida]">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="100" />
+              <mxPoint x="450" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d4_e10" edge="1" parent="1" source="d4_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d4_st6" value="eliminar&lt;br&gt;[clave de permiso válida]&lt;br&gt;(devolución o cancelación)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e11" edge="1" parent="1" source="d4_st6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d4_fin7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="d5" name="5. VENTA">
+    <mxGraphModel dx="2449" dy="1449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#FAF7FF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="JJ6iF18C4Y95bGCcAWCh-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;labelBackgroundColor=none;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="520" width="1160" x="-120" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_t3" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontStyle=1;fontColor=#4527A0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="VENTA DE PAPELERÍA Y ROPA" vertex="1">
+          <mxGeometry height="30" width="1000" x="30" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_ini4" parent="1" style="ellipse;html=1;fillColor=#4527A0;strokeColor=#4527A0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="40" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_st5" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F3EEFC;strokeColor=#7E57C2;fontSize=12;gradientColor=#D1C4E9;gradientDirection=south;strokeWidth=2;fontColor=#311B92;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Registrada&lt;/b&gt;&lt;hr&gt;stock descontado" vertex="1">
+          <mxGeometry height="84" width="200" x="280" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_st6" parent="1" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#F8EAFB;strokeColor=#8E24AA;fontSize=12;gradientColor=#CE93D8;gradientDirection=south;strokeWidth=2;fontColor=#4A148C;shadow=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="&lt;b&gt;Cancelada&lt;/b&gt;&lt;hr&gt;stock devuelto" vertex="1">
+          <mxGeometry height="84" width="170" x="700" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_fin7" parent="1" style="ellipse;html=1;shape=endState;fillColor=#4527A0;strokeColor=#7E57C2;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="940" y="177" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e8" edge="1" parent="1" source="d5_ini4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d5_st5" value="registrar venta&lt;br&gt;/ descontar stock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e9" edge="1" parent="1" source="d5_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d5_st5" value="modificar venta&lt;br&gt;[clave de permiso válida]&lt;br&gt;/ ajustar stock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="100" />
+              <mxPoint x="450" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d5_e10" edge="1" parent="1" source="d5_st5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d5_st6" value="eliminar venta&lt;br&gt;[clave de permiso válida]&lt;br&gt;(reembolso o queja)&lt;br&gt;/ devolver stock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e11" edge="1" parent="1" source="d5_st6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FAF7FF;strokeColor=#7E57C2;strokeWidth=1.5;fontColor=#4A148C;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" target="d5_fin7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
