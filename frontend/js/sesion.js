@@ -106,13 +106,14 @@ const Sesion = (() => {
         }, 30000);
     }
 
-    async function llamar(ruta, { metodo = 'GET', cuerpo } = {}) {
+    async function llamar(ruta, { metodo = 'GET', cuerpo, cabeceras: otras = {} } = {}) {
         const sesion = leer();
         const cabeceras = { Accept: 'application/json' };
         // Una foto (Blob) se manda tal cual; lo demás, como JSON.
         const binario = cuerpo instanceof Blob;
         if (cuerpo !== undefined) cabeceras['Content-Type'] = binario ? cuerpo.type : 'application/json';
         if (sesion) cabeceras.Authorization = `Bearer ${sesion.codigo}`;
+        Object.assign(cabeceras, otras);
 
         const control = new AbortController();
         const temporizador = setTimeout(() => control.abort(), CONFIG.tiempoMaximoMs);

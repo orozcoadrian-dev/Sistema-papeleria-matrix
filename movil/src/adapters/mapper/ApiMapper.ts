@@ -48,6 +48,7 @@ export function aArticuloRequest(tipo: TipoDeArticulo, datos: DatosDeArticulo): 
 
 export const aVenta = (v: VentaResponse): Venta => ({
   id: v.id, codigo: v.codigo, fecha: v.fecha, total: v.total, operador: v.operador, articulos: v.articulos,
+  esDeCaja: v.tipo === 'Venta en tienda',
 });
 
 export const aOperador = (o: OperadorResponse): Operador => ({

@@ -9,7 +9,7 @@ Versión para teléfono de Papelería Matrix, hecha con Vue 3 y TypeScript. Usa 
 | Entrar y salir | Sí | Sí |
 | Inicio con lo vendido hoy | Todas las ventas | Sus ventas |
 | Vender y cobrar con cálculo del cambio | A nombre de un operador | A su nombre |
-| Lo vendido (hoy, 7 días, 30 días) | Ve todo y anula | Ve lo suyo |
+| Lo vendido (hoy, 7 días, 30 días) | Ve todo, cambia y anula | Ve, cambia y anula lo suyo con su clave de permiso |
 | Catálogo | Crea, edita y elimina | Solo consulta |
 
 ## Cómo abrirlo

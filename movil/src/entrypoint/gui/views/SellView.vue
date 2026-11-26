@@ -1,22 +1,36 @@
 <script setup lang="ts">
 import { CircleCheck, Minus, Plus, SearchX, ShoppingCart, Trash2, WifiOff } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { POCAS_UNIDADES } from '../../../domain/constants/articulos';
 import { ErrorDeApi } from '../../../domain/exceptions/errors';
 import type { Articulo } from '../../../domain/model/Articulo';
 import { claveDe } from '../../../domain/model/Carrito';
-import type { Operador, Venta } from '../../../domain/model/Venta';
+import { carritoDeLaVenta, conUnidadesDeLaVenta, type Operador, type Venta } from '../../../domain/model/Venta';
 import { calcularCambio, leerEntero, pagosRapidos } from '../../../domain/valueobjects/dinero';
 import ArticleFilter from '../components/ArticleFilter.vue';
 import BottomSheet from '../components/BottomSheet.vue';
-import { ICONO_DEL_TIPO, avisar, carrito, mensajeDe, operadorElegido, pesos, useAplicacion } from '../context';
+import { ICONO_DEL_TIPO, avisar, carrito, mensajeDe, operadorElegido, pesos, terminarCambio, useAplicacion, ventaEnCambio } from '../context';
 import { useCatalog } from '../useCatalog';
 
 const { auth, ventas } = useAplicacion();
 const esAdministrador = auth.usuarioActual()?.esAdministrador ?? false;
-const { visibles, cargando, error, busqueda, filtro, cargar } = useCatalog((articulos) => {
-  carrito.value = carrito.value.actualizar(articulos);
-});
+const router = useRouter();
+const enCambio = computed(() => ventaEnCambio.value?.venta);
+const { visibles, cargando, error, busqueda, filtro, cargar } = useCatalog(
+  (articulos) => {
+    const edicion = ventaEnCambio.value;
+    if (!edicion || edicion.preparado) {
+      carrito.value = carrito.value.actualizar(articulos);
+      return;
+    }
+    const { carrito: suyo, faltan } = carritoDeLaVenta(edicion.venta, articulos);
+    carrito.value = suyo;
+    ventaEnCambio.value = { venta: edicion.venta, preparado: true };
+    if (faltan) avisar('Algo de esa venta ya no está en el catálogo y no aparece en la lista.', true);
+  },
+  (articulos) => (ventaEnCambio.value ? conUnidadesDeLaVenta(articulos, ventaEnCambio.value.venta) : articulos),
+);
 
 const operadores = ref<Operador[]>([]);
 const cobrando = ref(false);
@@ -26,6 +40,16 @@ const errorDeCobro = ref('');
 const recibo = ref<{ venta: Venta; devolver: number }>();
 
 const cambio = computed(() => (pago.value.trim() ? calcularCambio(carrito.value.total, pago.value) : undefined));
+const clavePermiso = ref('');
+
+const diferencia = computed(() => {
+  const antes = enCambio.value?.total ?? 0;
+  const ahora = carrito.value.total;
+  const texto = `Antes eran ${pesos(antes)}.`;
+  if (ahora > antes) return `${texto} Cobra ${pesos(ahora - antes)} más.`;
+  if (ahora < antes) return `${texto} Devuelve ${pesos(antes - ahora)}.`;
+  return `${texto} El total no cambia.`;
+});
 
 onMounted(async () => {
   if (!esAdministrador) return;
@@ -58,10 +82,37 @@ function existencias(articulo: Articulo): string {
 function abrirCobro() {
   pago.value = '';
   errorDeCobro.value = '';
+  clavePermiso.value = '';
   cobrando.value = true;
 }
 
+async function guardarCambio(venta: Venta) {
+  errorDeCobro.value = '';
+  registrando.value = true;
+  try {
+    await ventas.modificar({ id: venta.id, carrito: carrito.value, clavePermiso: clavePermiso.value });
+    cobrando.value = false;
+    terminarCambio();
+    avisar(`Se guardaron los cambios de la factura n.º ${venta.codigo}.`);
+    await router.push({ name: 'ventas' });
+  } catch (fallo) {
+    errorDeCobro.value = mensajeDe(fallo);
+    if (fallo instanceof ErrorDeApi && (fallo.estado === 409 || fallo.estado === 404)) await cargar();
+  } finally {
+    registrando.value = false;
+  }
+}
+
+async function dejarVenta() {
+  terminarCambio();
+  await router.push({ name: 'ventas' });
+}
+
 async function registrar() {
+  if (enCambio.value) {
+    await guardarCambio(enCambio.value);
+    return;
+  }
   errorDeCobro.value = '';
   if (cambio.value?.estado === 'falta') {
     errorDeCobro.value = 'Lo que paga no alcanza. Revisa el valor o déjalo vacío.';
@@ -87,10 +138,15 @@ async function registrar() {
 </script>
 
 <template>
-  <h1>Vender</h1>
-  <p class="suave">Toca lo que se lleva el cliente y después «Cobrar».</p>
+  <h1>{{ enCambio ? 'Cambiar venta' : 'Vender' }}</h1>
+  <p class="suave">Toca lo que se lleva el cliente y después «{{ enCambio ? 'Guardar' : 'Cobrar' }}».</p>
 
-  <label v-if="esAdministrador" class="campo">
+  <div v-if="enCambio" class="aviso-cambio" role="status">
+    <p>Estás cambiando la factura n.º {{ enCambio.codigo }}, de {{ pesos(enCambio.total) }}. Si el cliente no se lleva nada, anúlala en «Vendido».</p>
+    <button type="button" class="boton boton--suave" @click="dejarVenta">Dejarla como estaba</button>
+  </div>
+
+  <label v-if="esAdministrador && !enCambio" class="campo">
     <span>La venta queda a nombre de</span>
     <select v-model="operadorElegido">
       <option :value="undefined" disabled>Elige el operador</option>
@@ -128,11 +184,11 @@ async function registrar() {
   <div v-if="carrito.unidades" class="barra-cobro">
     <button type="button" class="boton boton--dorado" @click="abrirCobro">
       <span><ShoppingCart :size="20" aria-hidden="true" /> {{ carrito.unidades === 1 ? '1 artículo' : `${carrito.unidades} artículos` }}</span>
-      <strong>Cobrar {{ pesos(carrito.total) }}</strong>
+      <strong>{{ enCambio ? 'Guardar' : 'Cobrar' }} {{ pesos(carrito.total) }}</strong>
     </button>
   </div>
 
-  <BottomSheet v-if="cobrando" titulo="Cobrar" @cerrar="cobrando = false">
+  <BottomSheet v-if="cobrando" :titulo="enCambio ? 'Guardar cambios' : 'Cobrar'" @cerrar="cobrando = false">
     <ul class="lineas">
       <li v-for="linea in carrito.lineas" :key="claveDe(linea.articulo)">
         <div><b>{{ linea.articulo.nombre }}</b><small>{{ pesos(linea.articulo.precio) }} c/u</small></div>
@@ -147,6 +203,14 @@ async function registrar() {
     <p class="total"><span>Total</span><strong>{{ pesos(carrito.total) }}</strong></p>
 
     <form class="formulario" @submit.prevent="registrar">
+      <template v-if="enCambio">
+        <p class="cambio" role="status">{{ diferencia }}</p>
+        <template v-if="!esAdministrador">
+          <label for="permiso">Tu clave de permiso</label>
+          <input id="permiso" v-model="clavePermiso" type="password" autocomplete="new-password" maxlength="30" />
+        </template>
+      </template>
+      <template v-else>
       <label for="pago">¿Con cuánto paga? (opcional)</label>
       <input id="pago" v-model="pago" inputmode="numeric" autocomplete="off" />
       <div class="filtros">
@@ -160,8 +224,9 @@ async function registrar() {
         <template v-else-if="cambio.estado === 'exacto'">Pago exacto, sin cambio.</template>
         <template v-else>Hay que devolver {{ pesos(cambio.valor) }}</template>
       </p>
+      </template>
       <p v-if="errorDeCobro" class="error" role="alert">{{ errorDeCobro }}</p>
-      <button type="submit" class="boton boton--principal" :disabled="registrando">{{ registrando ? 'Registrando…' : 'Listo, registrar venta' }}</button>
+      <button type="submit" class="boton boton--principal" :disabled="registrando">{{ registrando ? 'Guardando…' : enCambio ? 'Guardar cambios' : 'Listo, registrar venta' }}</button>
       <button type="button" class="boton boton--suave" @click="cobrando = false">Seguir eligiendo</button>
     </form>
   </BottomSheet>

@@ -15,6 +15,18 @@ export interface GuardarArticuloCommand {
   cantidadAnterior?: number;
 }
 
+export interface CambiarVentaCommand {
+  id: number;
+  carrito: Carrito;
+  /** La pide el operador; la administradora no la necesita. */
+  clavePermiso?: string;
+}
+
+export interface AnularVentaCommand {
+  id: number;
+  clavePermiso?: string;
+}
+
 export interface CobrarCommand {
   carrito: Carrito;
   operadorId?: number;

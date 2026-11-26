@@ -50,7 +50,9 @@ export interface VentaResponse {
   fecha: string;
   total: number;
   operador: string;
-  articulos: { tipo: TipoDeArticulo; nombre: string; cantidad: number; precioUnitario: number | null }[];
+  /** Tipo de factura. */
+  tipo: string;
+  articulos: { tipo: TipoDeArticulo; id: number | null; nombre: string; cantidad: number; precioUnitario: number | null }[];
 }
 
 export interface OperadorResponse {

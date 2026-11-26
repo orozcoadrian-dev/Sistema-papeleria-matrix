@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ErrorDeDominio } from '../../src/domain/exceptions/errors';
 import { coincide, validarArticulo, type Articulo } from '../../src/domain/model/Articulo';
 import { Carrito } from '../../src/domain/model/Carrito';
+import { carritoDeLaVenta, conUnidadesDeLaVenta, type Venta } from '../../src/domain/model/Venta';
 import { Credenciales } from '../../src/domain/valueobjects/credenciales';
 import { calcularCambio, leerEntero, pagosRapidos } from '../../src/domain/valueobjects/dinero';
 
@@ -58,6 +59,27 @@ describe('carrito', () => {
     expect(lleno.cambiar(articulo(), -1).lineas).toHaveLength(0);
     expect(lleno.actualizar([articulo({ precio: 1500 })]).total).toBe(1500);
     expect(lleno.actualizar([]).unidades).toBe(0);
+  });
+});
+
+describe('cambiar una venta', () => {
+  const venta: Venta = {
+    id: 1, codigo: '1', fecha: '2026-11-26', total: 3600, operador: 'Daniel', esDeCaja: true,
+    articulos: [
+      { tipo: 'producto', id: 1, nombre: 'Lápiz', cantidad: 3, precioUnitario: 1200 },
+      { tipo: 'servicio', id: null, nombre: 'Ya borrado', cantidad: 1, precioUnitario: null },
+    ],
+  };
+
+  it('vuelve a contar como disponibles las unidades que tenía la venta', () => {
+    const [lapiz] = conUnidadesDeLaVenta([articulo({ existencias: 0 })], venta);
+    expect(lapiz?.existencias).toBe(3);
+  });
+
+  it('arma el carrito con lo vendido y cuenta lo que ya no existe', () => {
+    const { carrito, faltan } = carritoDeLaVenta(venta, conUnidadesDeLaVenta([articulo()], venta));
+    expect(carrito.unidades).toBe(3);
+    expect(faltan).toBe(1);
   });
 });
 

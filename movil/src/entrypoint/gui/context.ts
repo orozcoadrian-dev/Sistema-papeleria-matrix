@@ -4,6 +4,7 @@ import type { Aplicacion } from '../../bootstrap/container';
 import type { TipoDeArticulo } from '../../domain/constants/articulos';
 import { ErrorDeApi, ErrorDeDominio } from '../../domain/exceptions/errors';
 import { Carrito } from '../../domain/model/Carrito';
+import type { Venta } from '../../domain/model/Venta';
 
 export const APLICACION: InjectionKey<Aplicacion> = Symbol('aplicacion');
 
@@ -17,8 +18,21 @@ export function useAplicacion(): Aplicacion {
 export const carrito = shallowRef(Carrito.vacio());
 export const operadorElegido = shallowRef<number>();
 
-export function olvidarVenta(): void {
+/** La venta registrada que se está cambiando. «preparado» indica que sus artículos ya están en el carrito. */
+export const ventaEnCambio = shallowRef<{ venta: Venta; preparado: boolean }>();
+
+export function empezarCambio(venta: Venta): void {
+  ventaEnCambio.value = { venta, preparado: false };
   carrito.value = Carrito.vacio();
+}
+
+export function terminarCambio(): void {
+  ventaEnCambio.value = undefined;
+  carrito.value = Carrito.vacio();
+}
+
+export function olvidarVenta(): void {
+  terminarCambio();
   operadorElegido.value = undefined;
 }
 
@@ -33,7 +47,8 @@ export function avisar(texto: string, esError = false): void {
 }
 
 export function mensajeDe(error: unknown): string {
-  if (error instanceof ErrorDeApi && error.estado === 403) return 'Tu usuario no tiene permiso para hacer esto.';
+  // Un 403 por la clave de permiso dice qué pasó; los demás se explican en general.
+  if (error instanceof ErrorDeApi && error.estado === 403 && !/clave/i.test(error.titulo)) return 'Tu usuario no tiene permiso para hacer esto.';
   if (error instanceof ErrorDeApi && error.estado >= 500) return 'Algo salió mal en el sistema. Intenta otra vez en un momento.';
   if (error instanceof ErrorDeApi || error instanceof ErrorDeDominio) return error.message;
   return 'Algo salió mal. Intenta otra vez en un momento.';

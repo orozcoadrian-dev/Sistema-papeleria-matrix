@@ -34,6 +34,11 @@
         <!-- Nueva venta -->
         <section class="caja-registradora" id="vista-vender" role="tabpanel" aria-labelledby="pestana-vender">
             <div class="seccion catalogo">
+                <div class="aviso-cambio" id="aviso-cambio" role="status" hidden>
+                    <p id="aviso-cambio-texto"></p>
+                    <button type="button" class="boton boton--suave" id="boton-dejar-venta">Dejarla como estaba</button>
+                </div>
+
                 <div class="campo operador-venta" id="caja-operador" hidden>
                     <label class="campo__etiqueta" for="operador">¿A nombre de quién queda la venta?</label>
                     <select class="campo__entrada" id="operador"></select>
@@ -104,9 +109,10 @@
     <!-- Cobrar -->
     <dialog class="ventana ventana--chica" id="ventana-cobrar" aria-labelledby="cobrar-titulo">
         <form id="formulario-cobrar" novalidate>
-            <p class="ventana__icono" aria-hidden="true">💵</p>
-            <h2 id="cobrar-titulo" class="ventana__titulo">Cobrar <span id="cobrar-total"></span></h2>
+            <p class="ventana__icono" id="cobrar-icono" aria-hidden="true">💵</p>
+            <h2 id="cobrar-titulo" class="ventana__titulo"><span id="cobrar-verbo">Cobrar</span> <span id="cobrar-total"></span></h2>
             <p class="ventana__texto" id="cobrar-detalle"></p>
+            <div id="caja-pago">
             <label for="pago" class="campo__etiqueta">¿Con cuánto paga? <span class="campo__opcional">(opcional)</span></label>
             <div class="campo__caja">
                 <input type="text" id="pago" class="campo__entrada campo__entrada--con-prefijo" inputmode="numeric" autocomplete="off" placeholder="Ej: 20.000">
@@ -114,6 +120,12 @@
             </div>
             <div class="pagos-rapidos" id="pagos-rapidos"></div>
             <p class="cambio" id="cambio" aria-live="polite"></p>
+            </div>
+            <div id="caja-permiso" hidden>
+                <label for="clave-permiso" class="campo__etiqueta">Tu clave de permiso</label>
+                <input type="password" id="clave-permiso" class="campo__entrada" maxlength="30" autocomplete="new-password">
+                <p class="campo__ayuda">Te la entrega la administradora.</p>
+            </div>
             <p class="ventana__error" id="cobrar-error" role="alert"></p>
             <div class="ventana__botones ventana__botones--centro">
                 <button type="button" class="boton boton--suave" data-cerrar>Volver</button>
@@ -137,6 +149,12 @@
         <p class="ventana__icono" aria-hidden="true">↩️</p>
         <h2 id="anular-titulo" class="ventana__titulo"></h2>
         <p class="ventana__texto">Se borra la venta y los productos vuelven a la tienda. No se puede deshacer.</p>
+        <div id="anular-clave-caja" hidden>
+            <label for="anular-clave" class="campo__etiqueta">Tu clave de permiso</label>
+            <input type="password" id="anular-clave" class="campo__entrada" maxlength="30" autocomplete="new-password">
+            <p class="campo__ayuda">Te la entrega la administradora.</p>
+        </div>
+        <p class="ventana__error" id="anular-error" role="alert"></p>
         <div class="ventana__botones ventana__botones--centro">
             <button type="button" class="boton boton--suave" data-cerrar>No, dejarla</button>
             <button type="button" class="boton boton--peligro" id="boton-confirmar-anular">Sí, anular</button>

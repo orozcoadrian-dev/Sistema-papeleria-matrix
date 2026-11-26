@@ -4,7 +4,10 @@ import { coincide, type Articulo } from '../../domain/model/Articulo';
 import { mensajeDe, useAplicacion } from './context';
 
 /** Carga, búsqueda y filtro del catálogo: lo comparten la caja y la pantalla de catálogo. */
-export function useCatalog(alCargar: (articulos: Articulo[]) => void = () => {}) {
+export function useCatalog(
+  alCargar: (articulos: Articulo[]) => void = () => {},
+  ajustar: (articulos: Articulo[]) => Articulo[] = (articulos) => articulos,
+) {
   const { catalogo } = useAplicacion();
   const articulos = shallowRef<Articulo[]>([]);
   const cargando = ref(true);
@@ -20,7 +23,7 @@ export function useCatalog(alCargar: (articulos: Articulo[]) => void = () => {})
     cargando.value = true;
     error.value = '';
     try {
-      articulos.value = await catalogo.listar();
+      articulos.value = ajustar(await catalogo.listar());
       alCargar(articulos.value);
     } catch (fallo) {
       error.value = mensajeDe(fallo);
