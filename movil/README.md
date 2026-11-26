@@ -52,9 +52,11 @@ Se copia `.env.example` como `.env` y se cambia `API_PROXY_TARGET`.
 
 Para las pruebas de navegador se necesita Postman CLI y el navegador de Playwright (`npx playwright install chromium`).
 
-## Publicarla
+## Publicada en internet
 
-Se compila con `VITE_API_BASE_URL` apuntando a la API publicada, terminada en `/api`. Además, la dirección de la app móvil se agrega a la variable `CORS_ORIGENES` del backend. El servidor web debe devolver `index.html` en todas las rutas.
+La versión web está en `https://matrix-movil.vercel.app`, en el proyecto `matrix-movil` de Vercel. `vercel.json` pasa las peticiones de `/api` al servidor de Render. Si cambia la dirección de la app o la del servidor, se actualiza ese archivo.
+
+Para instalarla en un iPhone se abre en Safari, se toca **Compartir** y luego **Agregar a inicio**. En Android, desde el menú de Chrome.
 
 ## APK para Android
 

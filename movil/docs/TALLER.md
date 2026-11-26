@@ -14,6 +14,7 @@ Hice la versión móvil de mi proyecto de aula, Papelería Matrix, con Vue 3 y T
 | Simulación de la API | `movil/postman/` | Hecho |
 | Capturas | `movil/docs/evidencias/` | Hecho |
 | APK de Android | GitHub, pestaña Actions, proceso «APK móvil» | Hecho |
+| App publicada para iPhone y navegador | `https://matrix-movil.vercel.app` | Hecho |
 
 La versión web (`frontend/`) y el servidor (`backend/`) quedaron igual.
 
@@ -210,11 +211,21 @@ El botón Atrás cierra la ventana abierta, vuelve de pantalla o minimiza la apl
 
 Es un APK firmado con la clave de desarrollo. Sirve para instalarlo directamente, no para publicarlo en una tienda.
 
+## La app en iPhone
+
+Un iPhone no instala APK. Para usarla allí publiqué la versión web en Vercel y se agrega a la pantalla de inicio desde Safari. Queda con el logo y se abre a pantalla completa. Es gratis y no necesita un computador Mac.
+
+| Archivo | Qué hace |
+|---------|----------|
+| `index.html` y `public/manifest.webmanifest` | Nombre, icono y pantalla completa |
+| `vercel.json` | Pasa las peticiones de `/api` al servidor y devuelve `index.html` en las demás rutas |
+
+El servidor rechaza los orígenes que no conoce. Por eso `vercel.json` quita la cabecera de origen solo cuando la petición viene de esta misma app. Las de otras páginas siguen siendo rechazadas.
+
 ## Lo que quedó fuera
 
-- [ ] Publicar la versión de navegador en internet. Falta agregar su dirección en la configuración del servidor.
 - [ ] Probar el APK en un teléfono físico.
-- [ ] Publicarla en una tienda. Requiere un APK firmado con una clave propia.
+- [ ] Publicarla en una tienda. Requiere firmas propias de Google y de Apple.
 - [ ] Usar datos reales. El servidor publicado está en modo demo y sus datos se reinician.
 - [ ] Operadores, claves, datos de la tienda y cuentas. Siguen en la versión web.
 - [ ] Paginación desde el servidor. Requiere cambiar el backend.
