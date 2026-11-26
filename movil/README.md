@@ -56,6 +56,22 @@ Para las pruebas de navegador se necesita Postman CLI y el navegador de Playwrig
 
 Se compila con `VITE_API_BASE_URL` apuntando a la API publicada, terminada en `/api`. Además, la dirección de la app móvil se agrega a la variable `CORS_ORIGENES` del backend. El servidor web debe devolver `index.html` en todas las rutas.
 
+## APK para Android
+
+GitHub genera el APK en cada cambio de una rama que toque `movil/`. Se descarga en la pestaña Actions, proceso **APK móvil**, archivo `PapeleriaMatrix-apk`. En `main` se lanza a mano con **Run workflow**.
+
+Para instalarlo se pasa `PapeleriaMatrix.apk` al teléfono, se abre y se permite instalar aplicaciones de esa fuente. Si Android no deja actualizar una versión anterior, se desinstala primero.
+
+El APK usa la API escrita en `.env.apk`. El servidor gratuito tarda en despertar la primera vez. Con Android Studio también se puede compilar en el computador:
+
+```powershell
+npm run build:apk
+```
+
+```powershell
+npx cap open android
+```
+
 ## Estructura
 
 ```
@@ -66,6 +82,7 @@ src/bootstrap/        armado de dependencias
 src/entrypoint/gui/   pantallas Vue y estilos
 tests/                pruebas y recorrido con capturas
 postman/              simulación de la API
+android/              proyecto de Android para el APK
 docs/                 documento del taller y capturas
 ```
 
