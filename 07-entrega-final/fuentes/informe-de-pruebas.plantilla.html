@@ -6,6 +6,7 @@
     <title>Informe de pruebas · Papelería Matrix</title>
     <link rel="stylesheet" href="estilo-documento.css">
     <style>
+        .casos td:first-child { white-space: nowrap; }
         .detalle td:first-child { width: 55%; }
         .detalle td:last-child { width: 10%; }
         .detalle code { word-break: break-all; font-size: 8pt; }
@@ -16,10 +17,10 @@
     <section class="portada">
         <p class="portada__marca">Papelería Matrix</p>
         <h1>Informe de pruebas</h1>
-        <p class="portada__sub">Pruebas automáticas del backend, pruebas de las pantallas en el navegador y comprobación de la versión publicada.</p>
+        <p class="portada__sub">Pruebas automáticas del backend y de la aplicación móvil, colección de Postman, pruebas de las pantallas en el navegador y comprobación de la versión publicada.</p>
         <div class="portada__datos">
-            <p>Fecha de ejecución: 25 de noviembre de 2026</p>
-            <p>Versión probada: rama <code>main</code> con los cambios de la entrega final</p>
+            <p>Fecha de ejecución: 26 de noviembre de 2026</p>
+            <p>Versión probada: rama <code>main</code>, commit <code>fc3d45b</code></p>
             <p>Equipo: Osvaldo De Jesús Pacheco Sanabria y Adrián Orozco</p>
         </div>
     </section>
@@ -29,16 +30,21 @@
         <tr><th>Tipo de prueba</th><th>Resultado</th></tr>
         <tr><td>Pruebas automáticas del backend (JUnit 5, MockMvc, Mockito)</td><td class="ok">{{OK}} de {{TOTAL}} pasan · {{FALLAS}} fallan</td></tr>
         <tr><td>Integración continua en GitHub Actions (compilar, probar y construir la imagen Docker)</td><td class="ok">Pasa en main</td></tr>
-        <tr><td>Pruebas de las pantallas en el navegador (escritorio y celular)</td><td class="ok">Todas las funciones probadas responden como se espera</td></tr>
-        <tr><td>Versión publicada en Render</td><td class="ok">Página, catálogo, inicio de sesión y permisos responden</td></tr>
+        <tr><td>Aplicación móvil: reglas y casos de uso (Vitest)</td><td class="ok">30 de 30 pasan</td></tr>
+        <tr><td>Aplicación móvil: recorridos en un navegador con tamaño de teléfono (Playwright)</td><td class="ok">9 de 9 pasan</td></tr>
+        <tr><td>Colección de Postman: 47 peticiones, en modo demo y contra MariaDB</td><td class="ok">85 de 85 comprobaciones</td></tr>
+        <tr><td>Pruebas de las pantallas en el navegador (escritorio y celular)</td><td class="ok">33 de 33 casos pasan</td></tr>
+        <tr><td>Versión publicada (Render y Vercel), sin iniciar sesión</td><td class="ok">Responde con las funciones nuevas</td></tr>
     </table>
 
     <h2>2. Entorno</h2>
     <ul>
         <li>Windows 11, JDK 21 (Temurin), Maven 3.10, Spring Boot 4.1 con Hibernate 7.4.</li>
         <li>Base de datos H2 en memoria con el perfil <code>demo</code> y sus datos de ejemplo.</li>
-        <li>Navegador: Chromium (panel de vista previa), en 1280 × 800 y en 375 × 812 (celular).</li>
-        <li>Publicación: Render, plan gratuito (API en Docker y página como sitio estático).</li>
+        <li>Navegador: Chromium con Playwright, en 1280 × 800 y en 375 × 812 (celular).</li>
+        <li>Aplicación móvil: Node 22, Vitest, Playwright y la simulación de la API de Postman.</li>
+        <li>Base de datos real: una instancia temporal de la MariaDB 10.4 de XAMPP, para la colección de Postman y el recorrido de las funciones nuevas.</li>
+        <li>Publicación: Render, plan gratuito (API en Docker y página como sitio estático), y Vercel (aplicación móvil).</li>
     </ul>
 
     <h2>3. Pruebas automáticas del backend</h2>
@@ -55,8 +61,8 @@
     </table>
 
     <h2 class="salto">4. Pruebas de las pantallas en el navegador</h2>
-    <p>Se hicieron con el backend en modo demo y los usuarios de prueba. Las capturas están en <code>07-entrega-final/capturas</code>.</p>
-    <table>
+    <p>Se ejecutan con <code>07-entrega-final/fuentes/probar-pantallas.mjs</code> contra el backend en modo demo recién encendido y los usuarios de prueba. El mismo recorrido toma las capturas de <code>07-entrega-final/capturas</code>.</p>
+    <table class="casos">
         <tr><th>N.º</th><th>Caso</th><th>Pasos</th><th>Resultado esperado</th><th>Obtenido</th></tr>
         <tr><td>P-01</td><td>Entrar sin sesión al panel</td><td>Abrir <code>views/panel.html</code> sin haber entrado.</td><td>Lleva al inicio de sesión con el aviso «Entra con tu usuario».</td><td class="ok">Pasa</td></tr>
         <tr><td>P-02</td><td>Contraseña incorrecta</td><td>Entrar como administradora con una contraseña falsa.</td><td>«El usuario o la contraseña no son correctos.»</td><td class="ok">Pasa</td></tr>
@@ -68,34 +74,67 @@
         <tr><td>P-08</td><td>Cambiar operador sin tocar la contraseña</td><td>Cambiar el sueldo dejando la contraseña vacía.</td><td>Guarda y la contraseña anterior sigue sirviendo.</td><td class="ok">Pasa</td></tr>
         <tr><td>P-09</td><td>Clave de permiso</td><td>Poner una clave a un operador.</td><td>La tarjeta muestra «Tiene clave de permiso».</td><td class="ok">Pasa</td></tr>
         <tr><td>P-10</td><td>Datos de la tienda con números</td><td>Guardar «Lunes a sábado de 8 a. m. a 7 p. m.».</td><td>Se guarda y aparece en la lista.</td><td class="ok">Pasa</td></tr>
-        <tr><td>P-11</td><td>Venta completa</td><td>Agregar 2 impresiones a color, 1 carpeta y 1 sobre; cobrar con $ 5.000.</td><td>Total $ 2.900, cambio $ 2.100, recibo con número de factura.</td><td class="ok">Pasa</td></tr>
-        <tr><td>P-12</td><td>No vender más de lo que hay</td><td>Intentar agregar más unidades de las existentes.</td><td>Avisa cuántas quedan y no las agrega.</td><td class="ok">Pasa</td></tr>
-        <tr><td>P-13</td><td>Anular venta</td><td>Como administradora, anular una venta de 2 carpetas.</td><td>La venta desaparece y las existencias vuelven (57 → 59).</td><td class="ok">Pasa</td></tr>
-        <tr><td>P-14</td><td>Lo vendido por rol</td><td>Abrir «Lo vendido» como operador y como administradora.</td><td>El operador ve solo las suyas y sin «Anular»; la administradora ve todas.</td><td class="ok">Pasa</td></tr>
-        <tr><td>P-15</td><td>Cuentas y corte</td><td>Abrir Cuentas del mes y guardar el corte.</td><td>El total de la pantalla coincide con el calculado por el servidor por tipo ($ 18.800 = 4.000 + 2.800 + 12.000) y el corte aparece en la lista.</td><td class="ok">Pasa</td></tr>
-        <tr><td>P-16</td><td>Celular</td><td>Abrir la caja y Cuentas en 375 px de ancho.</td><td>Sin desplazamiento lateral; total y «Cobrar» fijos abajo.</td><td class="ok">Pasa</td></tr>
-        <tr><td>P-17</td><td>Página pública</td><td>Abrir la página sin sesión.</td><td>Muestra servicios, papelería y ropa desde la API; ya no tiene botón «Registrarse».</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-11</td><td>Venta completa</td><td>Agregar 2 impresiones a color, 1 carpeta blanca y 1 sobre carta; cobrar con $ 5.000.</td><td>Total $ 2.900, cambio $ 2.100, recibo con número de factura.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-12</td><td>No vender más de lo que hay</td><td>Agregar tres veces un producto del que quedan 2.</td><td>Avisa cuántas quedan y no agrega la tercera.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-13</td><td>Anular venta (administradora)</td><td>Vender 2 carpetas a nombre de otro operador y anular la venta.</td><td>La venta queda marcada como anulada y las unidades vuelven (56 → 58).</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-14</td><td>Lo vendido por rol</td><td>Abrir «Lo vendido» como operador y como administradora.</td><td>El operador ve solo las suyas; la administradora ve todas y quién vendió.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-15</td><td>Cambiar una venta con la clave</td><td>Como operador, quitar una impresión de una venta con una clave equivocada y luego con la correcta.</td><td>La clave equivocada se rechaza; con la correcta se guarda y la factura conserva su número.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-16</td><td>Anular con la clave de permiso</td><td>Como operador, anular una de sus ventas escribiendo su clave.</td><td>Sin clave no se anula; con la clave queda marcada como anulada.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-17</td><td>Datos temporales del cliente</td><td>Vender escribiendo un celular incompleto y después corregirlo.</td><td>Avisa del dato mal escrito; al corregirlo, el recibo muestra al cliente.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-18</td><td>Venta en PDF</td><td>En el recibo, tocar «Descargar PDF».</td><td>Se descarga un PDF con el número, el cliente, los artículos y el total.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-19</td><td>Venta por correo</td><td>Tocar «Enviar por correo» sin cuenta de envío configurada.</td><td>Ofrece abrir el correo de la persona con el mensaje ya escrito.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-20</td><td>Buscar y filtrar facturas</td><td>Buscar por número y usar «Con servicios» y «Anuladas».</td><td>Muestra solo las facturas que coinciden.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-21</td><td>El operador anota existencias</td><td>En «Existencias», escribir una letra y después la cantidad contada.</td><td>Rechaza el texto y guarda la cantidad nueva.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-22</td><td>Retirar sin borrar</td><td>Quitar, con un motivo, un producto que ya aparece en ventas.</td><td>Deja de mostrarse y las ventas anteriores lo siguen nombrando.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-23</td><td>Guardar sin cambiar nada</td><td>Abrir un producto y tocar «Guardar» sin modificarlo.</td><td>Avisa que no se cambió nada.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-24</td><td>Estados de un operador</td><td>Suspender, intentar entrar, retirar y volver a contratar.</td><td>Suspendido no puede entrar; retirado queda en «Despedidos» y se puede volver a contratar.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-25</td><td>Página pública</td><td>Abrir la página sin sesión.</td><td>Muestra servicios, papelería y ropa desde la API; no tiene botón «Registrarse».</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-26</td><td>Destacados</td><td>Mirar la página, escribir en un buscador y abrir la lupa.</td><td>Los destacados se ven mientras no se busca y aparecen en la lupa.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-27</td><td>Horarios publicados y retirados</td><td>Publicar un horario, mirar la página, quitarlo y recargar.</td><td>Se ve el horario publicado; al quitarlo vuelven los de la página.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-28</td><td>Cuentas y corte</td><td>Abrir Cuentas del mes y guardar el corte.</td><td>El total de la pantalla coincide con el del servidor ($ 19.300) y el corte aparece en el historial.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-29</td><td>Contadores y todos los ingresos</td><td>Revisar «Lo registrado» y elegir el periodo «Todo».</td><td>Muestra seis contadores y el consolidado desde el comienzo.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-30</td><td>Historiales</td><td>Ver y buscar los historiales de ingresos y de estadísticas.</td><td>Cada historial muestra su fecha, sus cifras y el periodo; la búsqueda filtra.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-31</td><td>Reporte en PDF</td><td>Generar un reporte y volver a descargarlo desde la lista.</td><td>Se descarga con ingresos y estadísticas y queda en «Reportes».</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-32</td><td>Eliminar historiales y reportes</td><td>Eliminar un historial que tiene reporte; después el reporte y el historial.</td><td>Pide borrar primero el reporte; después se eliminan ambos.</td><td class="ok">Pasa</td></tr>
+        <tr><td>P-33</td><td>Celular</td><td>Abrir la página, el panel, la caja y Cuentas en 375 px de ancho.</td><td>Sin desplazamiento lateral; total y «Cobrar» fijos abajo.</td><td class="ok">Pasa</td></tr>
     </table>
 
-    <h2>5. Comprobación de la versión publicada</h2>
+    <h2>5. Aplicación móvil</h2>
+    <table>
+        <tr><th>Recorrido en el navegador con tamaño de teléfono</th><th>Resultado</th></tr>
+        <tr><td>Protege las pantallas, rechaza una clave mala y vuelve a donde se quería ir</td><td class="ok">Pasa</td></tr>
+        <tr><td>El operador cobra con cambio y solo consulta el catálogo</td><td class="ok">Pasa</td></tr>
+        <tr><td>La administradora crea, edita y elimina un artículo</td><td class="ok">Pasa</td></tr>
+        <tr><td>La administradora vende a nombre de un operador y anula la venta</td><td class="ok">Pasa</td></tr>
+        <tr><td>El operador cambia su venta con la clave de permiso</td><td class="ok">Pasa</td></tr>
+        <tr><td>El operador anula con su clave y la administradora cambia sin clave</td><td class="ok">Pasa</td></tr>
+        <tr><td>Un 403 conserva la sesión y un 401 la cierra</td><td class="ok">Pasa</td></tr>
+        <tr><td>La sesión sigue al recargar y salir la borra</td><td class="ok">Pasa</td></tr>
+        <tr><td>Ninguna pantalla se sale del ancho del teléfono</td><td class="ok">Pasa</td></tr>
+    </table>
+    <p>Además pasan 30 pruebas unitarias de las reglas, los casos de uso y la conexión con la API. Estas pruebas usan una simulación de la API.</p>
+
+    <h2>6. Comprobación de la versión publicada</h2>
+    <p>Hecha el 26 de noviembre sin iniciar sesión.</p>
     <table>
         <tr><th>Comprobación</th><th>Resultado</th></tr>
         <tr><td><code>GET /api/estado</code> en la API de Render</td><td class="ok">«en línea», modo demo</td></tr>
-        <tr><td>La página publicada carga el catálogo desde la API (incluidos los servicios, que no tienen respaldo)</td><td class="ok">Pasa</td></tr>
-        <tr><td>Inicio de sesión con datos inventados desde la página publicada</td><td class="ok">401 «El usuario o la contraseña no son correctos.»</td></tr>
-        <tr><td>Ventas, usuarios e ingresos sin sesión</td><td class="ok">401</td></tr>
-        <tr><td>Petición con cabecera Authorization desde la página (CORS)</td><td class="ok">Permitida</td></tr>
-        <tr><td>Rutas nuevas de ingresos publicadas tras el último cambio</td><td class="ok">Presentes en <code>/v3/api-docs</code></td></tr>
+        <tr><td>La página publicada carga el catálogo desde la API y muestra los destacados</td><td class="ok">Pasa</td></tr>
+        <tr><td>Ventas, usuarios, ingresos, contadores y reportes sin sesión</td><td class="ok">401</td></tr>
+        <tr><td>El navegador puede enviar la sesión y la clave de permiso desde la página (CORS)</td><td class="ok">Permitido</td></tr>
+        <tr><td>Rutas nuevas presentes en <code>/v3/api-docs</code></td><td class="ok">Presentes</td></tr>
+        <tr><td>La aplicación móvil de Vercel carga la entrada y el catálogo</td><td class="ok">Pasa, sin errores</td></tr>
     </table>
+    <p>El inicio de sesión y las ventas no se probaron en la versión publicada, ni el sistema en un teléfono físico. El envío de correo por Brevo se probó con un servicio simulado, no con una cuenta real.</p>
 
-    <h2>6. Auditoría de inconsistencias</h2>
+    <h2>7. Auditoría de inconsistencias</h2>
     <p>Se probaron situaciones de uso real con varias personas a la vez, con peticiones en paralelo contra la API. También quedan como pruebas automáticas en <code>ConsistenciaTest</code> y <code>RolEnLaBaseTest</code>.</p>
     <table>
         <tr><th>Situación</th><th>Antes</th><th>Ahora</th></tr>
         <tr><td>El operador entra después de 30 minutos de encendido el servidor</td><td>No podía entrar (409): la restricción del rol con «é» fallaba al renovarse las conexiones</td><td class="ok">Entra siempre</td></tr>
         <tr><td>Dos operadores venden la última unidad al mismo tiempo</td><td>Pasaban las dos ventas</td><td class="ok">Pasa una; la otra avisa cuántas quedan</td></tr>
         <tr><td>Diez ventas a la vez de un producto con 5 unidades</td><td>Pasaban las 10 y quedaban 4 unidades</td><td class="ok">Pasan 5, se rechazan 5, quedan 0</td></tr>
-        <tr><td>Dos personas anulan la misma venta a la vez</td><td>Una respondía error del servidor (500)</td><td class="ok">Una anula; la otra recibe «no existe»; las unidades vuelven una vez</td></tr>
+        <tr><td>Dos personas anulan la misma venta a la vez</td><td>Una respondía error del servidor (500)</td><td class="ok">Una anula; la otra recibe «ya se anuló»; las unidades vuelven una vez</td></tr>
         <tr><td>La administradora guarda un producto con el formulario abierto antes de una venta</td><td>Borraba la venta de las existencias (17 → 20)</td><td class="ok">No guarda y muestra cuántas quedan</td></tr>
         <tr><td>Cambia un precio mientras el operador está cobrando</td><td>Se registraba un total distinto al cobrado</td><td class="ok">No registra, avisa y actualiza la caja</td></tr>
         <tr><td>Se cambia la contraseña de un operador desde el panel</td><td>Su sesión abierta seguía sirviendo</td><td class="ok">Se cierra en todos los navegadores</td></tr>
@@ -106,21 +145,28 @@
         <tr><td>Mismo usuario en dos navegadores; salir en uno</td><td>El otro sigue abierto (correcto)</td><td class="ok">Sin cambios</td></tr>
     </table>
 
-    <h2>7. Errores encontrados y corregidos</h2>
+    <h2>8. Errores encontrados y corregidos</h2>
     <table>
         <tr><th>Error</th><th>Causa</th><th>Corrección</th></tr>
         <tr><td>El segundo usuario sin correo o sin celular no se podía guardar.</td><td>Se guardaba texto vacío en columnas únicas.</td><td>Se guarda NULL. Prueba <code>dosUsuariosSinEmailNiTelefonoNoChocan</code>.</td></tr>
         <tr><td>Listar facturas fallaba al convertir a JSON.</td><td>Relaciones perezosas de Hibernate.</td><td><code>@JsonIgnore</code> en las relaciones.</td></tr>
         <tr><td>«Datos de la tienda» respondía 500 al listar.</td><td>Relación perezosa con el administrador.</td><td><code>@JsonIgnore</code>; el texto además acepta números.</td></tr>
         <tr><td>El CI de main fallaba en dos pruebas de ingresos.</td><td>Faltaba simular un tipo de factura y una comprobación esperaba el total en lugar de lo de papelería.</td><td>Pruebas corregidas; ahora comprueban cada tipo.</td></tr>
+        <tr><td>Con la base de XAMPP (MariaDB) no se podía registrar ninguna venta (error 500).</td><td>El conector la presenta como MySQL y se generaba una consulta de bloqueo que MariaDB no entiende.</td><td>El modo local usa el dialecto de MariaDB.</td></tr>
+        <tr><td>En el celular, el panel y «Lo vendido» quedaban más anchos que la pantalla.</td><td>Los botones de las tarjetas no pasaban a otra línea.</td><td>Los botones se acomodan en varias líneas. Caso P-33.</td></tr>
         <tr><td>Los ingresos de las ventas de la caja salían en cero.</td><td>Las ventas mezclan tipos en una factura («Venta en tienda»).</td><td>Se suman por línea. Prueba <code>lasVentasDeLaCajaEntranEnElResumenDeIngresos</code>.</td></tr>
     </table>
 
-    <h2>8. Cómo repetir las pruebas</h2>
+    <h2>9. Cómo repetir las pruebas</h2>
     <pre>cd backend
-mvn test                                         (pruebas automáticas)
-mvn spring-boot:run -Dspring-boot.run.profiles=demo   (para las pruebas manuales)</pre>
-    <p>En Postman: importar <code>postman/papeleria-matrix.postman_collection.json</code> y el entorno Local o Render, y ejecutar la colección completa. Las carpetas 5 y 6 usan los usuarios de prueba del modo demo.</p>
+mvn test                                              (pruebas del backend)
+mvn spring-boot:run -Dspring-boot.run.profiles=demo   (para Postman y las pantallas)</pre>
+    <pre>cd movil
+npm test                                              (pruebas unitarias)
+npm run test:e2e                                      (recorridos en el navegador)</pre>
+    <pre>jwebserver -d frontend -p 5500
+node 07-entrega-final/fuentes/probar-pantallas.mjs    (con el backend recién encendido)</pre>
+    <p>En Postman: importar <code>postman/papeleria-matrix.postman_collection.json</code> y el entorno Local o Render, y ejecutar la colección completa. Las carpetas 5, 6 y 7 usan los usuarios de prueba del modo demo.</p>
 </body>
 
 </html>
