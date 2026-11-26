@@ -29,6 +29,7 @@
         <div class="pestanas" role="tablist" aria-label="Ventas">
             <button type="button" class="pestana" role="tab" id="pestana-vender" aria-controls="vista-vender" aria-selected="true">🛒 Nueva venta</button>
             <button type="button" class="pestana" role="tab" id="pestana-vendido" aria-controls="vista-vendido" aria-selected="false" tabindex="-1">🧾 Lo vendido</button>
+            <button type="button" class="pestana" role="tab" id="pestana-existencias" aria-controls="vista-existencias" aria-selected="false" tabindex="-1">📦 Existencias</button>
         </div>
 
         <!-- Nueva venta -->
@@ -86,7 +87,14 @@
                 </div>
             </div>
             <div class="filtros" role="group" aria-label="Qué días mostrar" id="periodos"></div>
+            <div class="buscador">
+                <span class="buscador__icono" aria-hidden="true">🔍</span>
+                <label for="buscar-vendido" class="oculto">Buscar una factura</label>
+                <input type="search" id="buscar-vendido" class="buscador__entrada" placeholder="Buscar por número de factura, artículo o quién vendió…" autocomplete="off">
+            </div>
+            <div class="filtros" role="group" aria-label="Qué ventas mostrar" id="clases"></div>
             <div class="resumen" id="resumen"></div>
+            <p class="contador" id="vendido-contador" aria-live="polite"></p>
             <div class="ventas" id="ventas" aria-busy="true"></div>
             <div class="estado" id="vendido-estado" hidden>
                 <p class="estado__icono" id="vendido-estado-icono" aria-hidden="true"></p>
@@ -94,6 +102,23 @@
                 <p class="estado__texto" id="vendido-estado-texto"></p>
                 <button type="button" class="boton boton--principal" id="vendido-estado-boton" hidden></button>
             </div>
+        </section>
+
+        <!-- Existencias -->
+        <section class="seccion" id="vista-existencias" role="tabpanel" aria-labelledby="pestana-existencias" hidden>
+            <div class="seccion__cabecera">
+                <div>
+                    <h2>Existencias</h2>
+                    <p class="seccion__ayuda">Cuenta lo que hay en la tienda y anótalo aquí.</p>
+                </div>
+            </div>
+            <div class="buscador">
+                <span class="buscador__icono" aria-hidden="true">🔍</span>
+                <label for="buscar-existencias" class="oculto">Buscar un producto</label>
+                <input type="search" id="buscar-existencias" class="buscador__entrada" placeholder="Buscar un producto…" autocomplete="off">
+            </div>
+            <p class="contador" id="existencias-contador" aria-live="polite"></p>
+            <div class="ventas" id="existencias-lista"></div>
         </section>
     </main>
 
@@ -126,6 +151,16 @@
                 <input type="password" id="clave-permiso" class="campo__entrada" maxlength="30" autocomplete="new-password">
                 <p class="campo__ayuda">Te la entrega la administradora.</p>
             </div>
+            <details class="avanzado" id="caja-cliente">
+                <summary>Datos del cliente (opcional)</summary>
+                <p class="campo__ayuda">Solo se usan para el recibo. No se guardan.</p>
+                <label for="cliente-nombre" class="campo__etiqueta">Nombre</label>
+                <input type="text" id="cliente-nombre" class="campo__entrada" maxlength="60" autocomplete="off">
+                <label for="cliente-celular" class="campo__etiqueta">Celular</label>
+                <input type="text" id="cliente-celular" class="campo__entrada" inputmode="tel" maxlength="15" autocomplete="off">
+                <label for="cliente-correo" class="campo__etiqueta">Correo</label>
+                <input type="email" id="cliente-correo" class="campo__entrada" maxlength="100" autocomplete="off">
+            </details>
             <p class="ventana__error" id="cobrar-error" role="alert"></p>
             <div class="ventana__botones ventana__botones--centro">
                 <button type="button" class="boton boton--suave" data-cerrar>Volver</button>
@@ -140,6 +175,8 @@
         <h2 id="recibo-titulo" class="ventana__titulo">¡Venta registrada!</h2>
         <div class="recibo" id="recibo"></div>
         <div class="ventana__botones ventana__botones--centro">
+            <button type="button" class="boton boton--suave" id="boton-recibo-pdf">📄 Descargar PDF</button>
+            <button type="button" class="boton boton--suave" id="boton-recibo-correo">✉️ Enviar por correo</button>
             <button type="button" class="boton boton--principal boton--grande" id="boton-nueva-venta">Nueva venta</button>
         </div>
     </dialog>
@@ -148,7 +185,7 @@
     <dialog class="ventana ventana--chica" id="ventana-anular" aria-labelledby="anular-titulo">
         <p class="ventana__icono" aria-hidden="true">↩️</p>
         <h2 id="anular-titulo" class="ventana__titulo"></h2>
-        <p class="ventana__texto">Se borra la venta y los productos vuelven a la tienda. No se puede deshacer.</p>
+        <p class="ventana__texto">La venta queda marcada como anulada y los productos vuelven a la tienda. No se puede deshacer.</p>
         <div id="anular-clave-caja" hidden>
             <label for="anular-clave" class="campo__etiqueta">Tu clave de permiso</label>
             <input type="password" id="anular-clave" class="campo__entrada" maxlength="30" autocomplete="new-password">
@@ -161,11 +198,45 @@
         </div>
     </dialog>
 
+    <!-- Enviar por correo -->
+    <dialog class="ventana ventana--chica" id="ventana-correo" aria-labelledby="correo-titulo">
+        <form id="formulario-correo" novalidate>
+            <p class="ventana__icono" aria-hidden="true">✉️</p>
+            <h2 id="correo-titulo" class="ventana__titulo">Enviar el registro por correo</h2>
+            <p class="ventana__texto" id="correo-detalle"></p>
+            <label for="correo-para" class="campo__etiqueta">Correo del cliente</label>
+            <input type="email" id="correo-para" class="campo__entrada" maxlength="100" autocomplete="off" placeholder="Ej: cliente@correo.com">
+            <p class="ventana__error" id="correo-error" role="alert"></p>
+            <div class="ventana__botones ventana__botones--centro">
+                <button type="button" class="boton boton--suave" data-cerrar>Volver</button>
+                <a class="boton boton--principal" id="correo-propio" hidden>Abrir mi correo</a>
+                <button type="submit" class="boton boton--principal" id="boton-enviar-correo">Enviar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Anotar existencias -->
+    <dialog class="ventana ventana--chica" id="ventana-existencias" aria-labelledby="existencias-titulo">
+        <form id="formulario-existencias" novalidate>
+            <p class="ventana__icono" aria-hidden="true">📦</p>
+            <h2 id="existencias-titulo" class="ventana__titulo"></h2>
+            <p class="ventana__texto" id="existencias-detalle"></p>
+            <label for="existencias-cantidad" class="campo__etiqueta">Unidades que hay ahora</label>
+            <input type="text" id="existencias-cantidad" class="campo__entrada" inputmode="numeric" autocomplete="off">
+            <p class="ventana__error" id="existencias-error" role="alert"></p>
+            <div class="ventana__botones ventana__botones--centro">
+                <button type="button" class="boton boton--suave" data-cerrar>Cancelar</button>
+                <button type="submit" class="boton boton--principal" id="boton-guardar-existencias">Guardar</button>
+            </div>
+        </form>
+    </dialog>
+
     <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
 
     <script src="../js/config.js"></script>
     <script src="../js/sesion.js"></script>
     <script src="../js/fotos.js"></script>
+    <script src="../js/pdf.js"></script>
     <script src="../js/ventas.js"></script>
 </body>
 

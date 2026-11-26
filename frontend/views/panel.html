@@ -48,6 +48,8 @@
                 <input type="search" id="buscar" class="buscador__entrada" placeholder="Buscar por nombre…" autocomplete="off">
             </div>
 
+            <div class="filtros filtros--seccion" id="filtros" role="group" aria-label="Qué mostrar" hidden></div>
+
             <p class="contador" id="contador" aria-live="polite"></p>
 
             <div class="tarjetas" id="tarjetas" aria-busy="true"></div>
@@ -79,11 +81,15 @@
         </form>
     </dialog>
 
-    <!-- Quitar -->
+    <!-- Confirmar: quitar algo o cambiar el estado de un operador -->
     <dialog class="ventana ventana--chica" id="ventana-quitar" aria-labelledby="quitar-titulo">
-        <p class="ventana__icono" aria-hidden="true">🗑️</p>
+        <p class="ventana__icono" aria-hidden="true" id="quitar-icono">🗑️</p>
         <h2 id="quitar-titulo" class="ventana__titulo"></h2>
-        <p class="ventana__texto">Después de quitarlo no se puede recuperar.</p>
+        <p class="ventana__texto" id="quitar-texto"></p>
+        <div id="quitar-motivo-caja" hidden>
+            <label for="quitar-motivo" class="campo__etiqueta">¿Por qué lo quitas? <span class="campo__opcional">(opcional)</span></label>
+            <textarea id="quitar-motivo" class="campo__entrada" rows="2" maxlength="150" placeholder="Ej: ya no se consigue"></textarea>
+        </div>
         <div class="ventana__botones ventana__botones--centro">
             <button type="button" class="boton boton--suave" data-cerrar>No, dejarlo</button>
             <button type="button" class="boton boton--peligro" id="boton-confirmar-quitar">Sí, quitar</button>

@@ -66,6 +66,12 @@ public class InicioDeSesionService
 
 		intentos.remove(clave);
 		Usuario usuario = encontrado.get();
+		if (!usuario.isActivo())
+		{
+			// Solo se dice después de comprobar la contraseña, para no revelar qué usuarios existen.
+			throw new OperacionRechazadaException(HttpStatus.FORBIDDEN, "Usuario no disponible",
+				"Tu usuario está " + usuario.getEstado().toLowerCase(Locale.ROOT) + ". Habla con la administradora.");
+		}
 		usuario.setUltimaSesion(LocalDateTime.now());
 		usuarios.save(usuario);
 

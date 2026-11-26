@@ -242,7 +242,7 @@ function iniciarCatalogo(opciones) {
     const formulario = document.querySelector('[data-form="buscar-' + opciones.id + '"]');
     const campo = formulario.querySelector('input');
 
-    const catalogo = { elementos: [] };
+    const catalogo = { elementos: [], campo, crearTarjeta: opciones.crearTarjeta };
     catalogos[opciones.id] = catalogo;
     let mensajeBase = '';
 
@@ -261,6 +261,7 @@ function iniciarCatalogo(opciones) {
         } else {
             estado.textContent = mensajeBase;
         }
+        pintarDestacados();
     }
 
     async function cargar() {
@@ -355,6 +356,22 @@ iniciarCatalogo({
 });
 
 
+/* RF-02: sin criterios de búsqueda, la página muestra lo destacado de los tres catálogos. Lo agotado
+   o vendido no se destaca. */
+function pintarDestacados() {
+    const seccion = document.getElementById('destacados');
+    if (!seccion) {
+        return;
+    }
+    const buscando = Object.values(catalogos).some((catalogo) => catalogo.campo.value.trim());
+    const tarjetas = Object.values(catalogos).flatMap((catalogo) => catalogo.elementos
+        .filter((elemento) => elemento.destacado && elemento.disponible !== false)
+        .map(catalogo.crearTarjeta));
+    document.getElementById('destacados-grid').replaceChildren(...tarjetas);
+    seccion.hidden = buscando || tarjetas.length === 0;
+}
+
+
 /* Datos de la tienda (CU-15): lo que la administradora escribe en el panel. Si la API no responde
    o no hay datos, la sección queda oculta y se ven solo los horarios escritos en la página. */
 let datosTienda = [];
@@ -377,6 +394,9 @@ async function cargarDatosTienda() {
         contenedor.append(fila);
     });
     document.getElementById('datos-tienda').hidden = datosTienda.length === 0;
+    // Si la administradora publicó sus horarios, mandan los suyos y no los escritos en la página.
+    const horariosFijos = document.querySelector('.quick-info__list:not(.quick-info__list--datos)');
+    horariosFijos.hidden = datosTienda.some((dato) => normalizar(dato.tipoInformacion).includes('horario'));
 }
 
 cargarDatosTienda();
@@ -421,8 +441,8 @@ pintarAcceso();
 /* =====================================================================
    6. BUSCADOR GENERAL DEL NEGOCIO (CU-57)
    Busca a la vez en horarios, contacto, servicios, papelería y ropa.
-   Los horarios y el contacto se leen de la propia página: mientras la
-   información del negocio no salga de la API, el HTML es su única fuente.
+   El contacto se lee de la propia página; los horarios y datos de la tienda,
+   de lo que publica la administradora (y de la página si no ha publicado).
    ===================================================================== */
 const PALABRAS_SIN_VALOR = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'y', 'en', 'un', 'una', 'para', 'por', 'con']);
 
@@ -430,7 +450,7 @@ function construirIndice() {
     const indice = [];
 
     // Solo los horarios escritos en la página; los datos de la tienda se agregan aparte.
-    document.querySelectorAll('.quick-info__list:not(.quick-info__list--datos) .quick-info__item').forEach((fila) => {
+    document.querySelectorAll('.quick-info__list:not(.quick-info__list--datos):not([hidden]) .quick-info__item').forEach((fila) => {
         indice.push({
             tipo: 'Horario',
             titulo: fila.querySelector('.quick-info__day').textContent,
@@ -449,13 +469,13 @@ function construirIndice() {
     });
 
     catalogos.servicios.elementos.forEach((s) => {
-        indice.push({ tipo: 'Servicio', titulo: s.nombre, detalle: formatearPrecio(s.precio), claves: [s.categoria, s.descripcion, 'precio valor costo'].join(' '), destino: '#servicios' });
+        indice.push({ tipo: 'Servicio', titulo: s.nombre, detalle: formatearPrecio(s.precio), claves: [s.categoria, s.descripcion, 'precio valor costo'].join(' '), destino: '#servicios', destacado: s.destacado });
     });
     catalogos.papeleria.elementos.forEach((p) => {
-        indice.push({ tipo: 'Papelería', titulo: p.nombre, detalle: formatearPrecio(p.precio), claves: [p.descripcion, 'precio valor costo'].join(' '), destino: '#papeleria' });
+        indice.push({ tipo: 'Papelería', titulo: p.nombre, detalle: formatearPrecio(p.precio), claves: [p.descripcion, 'precio valor costo'].join(' '), destino: '#papeleria', destacado: p.destacado && p.disponible !== false });
     });
     catalogos.ropa.elementos.forEach((r) => {
-        indice.push({ tipo: 'Ropa', titulo: r.nombre || r.tipo, detalle: formatearPrecio(r.precio) + ' · Talla ' + r.talla, claves: [r.tipo, r.color, r.material, 'precio valor costo'].join(' '), destino: '#ropa-glam' });
+        indice.push({ tipo: 'Ropa', titulo: r.nombre || r.tipo, detalle: formatearPrecio(r.precio) + ' · Talla ' + r.talla, claves: [r.tipo, r.color, r.material, 'precio valor costo'].join(' '), destino: '#ropa-glam', destacado: r.destacado && r.disponible !== false });
     });
 
     return indice;
@@ -492,7 +512,7 @@ if (formBuscarNegocio) {
 
         resultadosNegocio.replaceChildren();
         if (!texto.trim()) {
-            resultadosNegocio.append(crear('li', 'resultados__aviso', 'Escribe qué quieres consultar.'));
+            mostrarDestacadosEnElBuscador();
             return;
         }
         if (encontrados.length === 0) {
@@ -500,20 +520,39 @@ if (formBuscarNegocio) {
             return;
         }
 
-        encontrados.forEach((entrada) => {
-            const enlace = crear('a', 'resultados__enlace');
-            enlace.href = entrada.destino;
-            enlace.append(crear('span', 'resultados__tipo', entrada.tipo), crear('strong', 'resultados__titulo', entrada.titulo));
-            if (entrada.detalle) {
-                enlace.append(crear('span', 'resultados__detalle', entrada.detalle));
-            }
-            enlace.addEventListener('click', () => dialogoBuscar.close());
+        encontrados.forEach((entrada) => resultadosNegocio.append(filaDeResultado(entrada)));
+    });
 
-            const fila = crear('li', 'resultados__item');
-            fila.append(enlace);
-            resultadosNegocio.append(fila);
+    // Al abrir el buscador sin haber escrito nada, ya se ve lo destacado.
+    document.querySelectorAll('[data-dialog-open="dialog-buscar"]').forEach((boton) => {
+        boton.addEventListener('click', () => {
+            if (!document.getElementById('dialog-buscar-input').value.trim()) {
+                mostrarDestacadosEnElBuscador();
+            }
         });
     });
+}
+
+function filaDeResultado(entrada) {
+    const enlace = crear('a', 'resultados__enlace');
+    enlace.href = entrada.destino;
+    enlace.append(crear('span', 'resultados__tipo', entrada.tipo), crear('strong', 'resultados__titulo', entrada.titulo));
+    if (entrada.detalle) {
+        enlace.append(crear('span', 'resultados__detalle', entrada.detalle));
+    }
+    enlace.addEventListener('click', () => dialogoBuscar.close());
+
+    const fila = crear('li', 'resultados__item');
+    fila.append(enlace);
+    return fila;
+}
+
+function mostrarDestacadosEnElBuscador() {
+    const destacados = construirIndice().filter((entrada) => entrada.destacado);
+    const aviso = destacados.length
+        ? 'Escribe qué quieres consultar. Mientras tanto, esto es lo destacado:'
+        : 'Escribe qué quieres consultar.';
+    resultadosNegocio.replaceChildren(crear('li', 'resultados__aviso', aviso), ...destacados.map(filaDeResultado));
 }
 
 

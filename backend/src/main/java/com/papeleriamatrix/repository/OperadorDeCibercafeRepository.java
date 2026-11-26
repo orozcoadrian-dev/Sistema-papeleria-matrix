@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OperadorDeCibercafeRepository extends JpaRepository<Operador_de_cibercafe, Integer>
 {
+
+	long countByEstado(String estado);
 }

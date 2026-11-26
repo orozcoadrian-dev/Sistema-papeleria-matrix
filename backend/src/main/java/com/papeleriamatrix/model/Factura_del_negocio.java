@@ -1,5 +1,6 @@
 package com.papeleriamatrix.model;
 
+import org.hibernate.annotations.ColumnDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.papeleriamatrix.common.Utils;
 import jakarta.persistence.Column;
@@ -47,6 +48,14 @@ public class Factura_del_negocio
 
 	@Column(name = "Fecha_actualizacion")
 	private LocalDate fechaActualizacion;
+
+	// Anular no borra la venta: queda marcada y deja de contar en las cuentas.
+	@Column(name = "Anulada", nullable = false)
+	@ColumnDefault("false")
+	private boolean anulada = false;
+
+	@Column(name = "Fecha_anulacion")
+	private LocalDate fechaAnulacion;
 
 	@Transient
 	private Utils utilidades = new Utils();
@@ -239,5 +248,22 @@ public class Factura_del_negocio
 	public LocalDate getFechaActualizacion()
 	{
 		return fechaActualizacion;
+	}
+
+	public boolean isAnulada()
+	{
+		return anulada;
+	}
+
+	public LocalDate getFechaAnulacion()
+	{
+		return fechaAnulacion;
+	}
+
+	public void anular(LocalDate fecha)
+	{
+		this.anulada = true;
+		this.fechaAnulacion = fecha;
+		this.fechaActualizacion = fecha;
 	}
 }

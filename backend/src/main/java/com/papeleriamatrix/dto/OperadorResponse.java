@@ -21,7 +21,8 @@ public record OperadorResponse(
 	double salario,
 	String horario,
 	String direccion,
-	LocalDate fechaContrato
+	LocalDate fechaContrato,
+	String estado
 )
 {
 	public static OperadorResponse desde(Operador_de_cibercafe operador)
@@ -42,7 +43,8 @@ public record OperadorResponse(
 			operador.getSalario(),
 			operador.getHorario(),
 			operador.getDireccion(),
-			operador.getFechaContrato()
+			operador.getFechaContrato(),
+			operador.getEstado()
 		);
 	}
 }

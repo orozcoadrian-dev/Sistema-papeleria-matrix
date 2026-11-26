@@ -117,6 +117,7 @@
                 location.replace(destino(sesion.rol));
             } catch (error) {
                 if (error.estado === 401) mensaje.textContent = 'El usuario o la contraseña no son correctos. Revisa las mayúsculas.';
+                else if (error.estado === 403 && error.message) mensaje.textContent = error.message; // usuario suspendido o retirado
                 else if (error.estado === 429) mensaje.textContent = 'Fallaste la contraseña varias veces. Espera 5 minutos y vuelve a intentarlo.';
                 else if (error.estado === 0) mensaje.textContent = 'No pudimos conectar con el sistema. Revisa el internet e intenta otra vez.';
                 else mensaje.textContent = 'Algo salió mal. Intenta otra vez en un momento.';

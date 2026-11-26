@@ -1,5 +1,7 @@
 package com.papeleriamatrix.service;
 
+import com.papeleriamatrix.model.Operador_de_cibercafe;
+import java.util.HashMap;
 import com.papeleriamatrix.dto.VentaRequest;
 import com.papeleriamatrix.dto.VentaResponse;
 import com.papeleriamatrix.exception.OperacionRechazadaException;
@@ -41,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Al vender un producto de papelería se descuentan sus existencias; si no alcanzan, la venta no se hace.
  * La ropa y los servicios no llevan existencias en la base de datos.
  * Una venta se puede cambiar o anular; el operador necesita para eso su clave de permiso.
+ * Anular no la borra: queda marcada como anulada y deja de contar.
  */
 @Service
 public class VentaService
@@ -80,7 +83,7 @@ public class VentaService
 		Map<String, Integer> cantidades = new TreeMap<>(juntarRepetidos(peticion.articulos()));
 
 		LocalDateTime ahora = LocalDateTime.now();
-		Armado armado = prepararLineas(cantidades, ahora);
+		Armado armado = prepararLineas(cantidades, ahora, Map.of());
 		revisarTotal(armado.total(), peticion.totalEsperado());
 		List<Detalle_de_factura> lineas = armado.lineas();
 
@@ -95,7 +98,7 @@ public class VentaService
 	}
 
 	@Transactional(readOnly = true)
-	public List<VentaResponse> listar(Sesion sesion, LocalDate desde, LocalDate hasta)
+	public List<VentaResponse> listar(Sesion sesion, LocalDate desde, LocalDate hasta, boolean incluirAnuladas)
 	{
 		LocalDate fin = hasta != null ? hasta : LocalDate.now();
 		LocalDate inicio = desde != null ? desde : fin.minusDays(30);
@@ -106,7 +109,7 @@ public class VentaService
 		List<Factura_del_negocio> encontradas = sesion.esOperador()
 			? facturas.findByUsuarioIdAndFechaGeneracionBetweenOrderByIdFacturaDesc(sesion.idUsuario(), inicio, fin)
 			: facturas.findByFechaGeneracionBetweenOrderByIdFacturaDesc(inicio, fin);
-		return armar(encontradas);
+		return armar(encontradas.stream().filter(factura -> incluirAnuladas || !factura.isAnulada()).toList());
 	}
 
 	@Transactional(readOnly = true)
@@ -138,6 +141,7 @@ public class VentaService
 		List<Detalle_de_factura> anteriores = detalles.findByFacturaDelNegocioId(factura.getIdFactura());
 		Map<String, Integer> cantidades = new TreeMap<>(juntarRepetidos(peticion.articulos()));
 
+		Map<String, Integer> previas = cantidadesDe(anteriores);
 		bloquear(anteriores, cantidades.keySet());
 		devolverExistencias(anteriores);
 		detalles.deleteAll(anteriores);
@@ -146,7 +150,7 @@ public class VentaService
 
 		LocalDateTime ahora = LocalDateTime.now();
 		LocalDateTime fechaDeLaVenta = anteriores.isEmpty() ? ahora : anteriores.getFirst().getFechaGeneracion();
-		Armado armado = prepararLineas(cantidades, fechaDeLaVenta);
+		Armado armado = prepararLineas(cantidades, fechaDeLaVenta, previas);
 		revisarTotal(armado.total(), peticion.totalEsperado());
 
 		factura.setMonto(armado.total());
@@ -160,15 +164,14 @@ public class VentaService
 		return armar(List.of(factura)).getFirst();
 	}
 
-	/** Anula la venta: devuelve las existencias de los productos y borra la factura con sus detalles. */
+	/** Anula la venta: devuelve las existencias de los productos y la deja marcada como anulada. */
 	@Transactional
 	public void anular(Integer id, Sesion sesion, String clavePermiso)
 	{
 		Factura_del_negocio factura = paraCambiar(id, sesion, clavePermiso);
 		List<Detalle_de_factura> suyas = detalles.findByFacturaDelNegocioId(factura.getIdFactura());
 		devolverExistencias(suyas);
-		detalles.deleteAll(suyas);
-		facturas.delete(factura);
+		factura.anular(LocalDate.now());
 	}
 
 	/** Busca la venta que se va a cambiar y comprueba que esta persona pueda hacerlo. */
@@ -182,6 +185,10 @@ public class VentaService
 			throw new RecursoNoEncontradoException("No existe una venta con el id " + id + ".");
 		}
 		permisos.exigir(sesion, clavePermiso);
+		if (factura.isAnulada())
+		{
+			throw new OperacionRechazadaException(HttpStatus.CONFLICT, "Venta anulada", "Esta venta ya se anuló.");
+		}
 		return factura;
 	}
 
@@ -229,8 +236,11 @@ public class VentaService
 	{
 	}
 
-	/** Revisa cada artículo, descuenta las existencias y arma las líneas de la factura. */
-	private Armado prepararLineas(Map<String, Integer> cantidades, LocalDateTime fecha)
+	/**
+	 * Revisa cada artículo, descuenta las existencias y arma las líneas de la factura.
+	 * previas son las cantidades que ya tenía la venta que se está cambiando.
+	 */
+	private Armado prepararLineas(Map<String, Integer> cantidades, LocalDateTime fecha, Map<String, Integer> previas)
 	{
 		double total = 0;
 		List<Detalle_de_factura> lineas = new ArrayList<>();
@@ -250,6 +260,7 @@ public class VentaService
 				{
 					ProductoPapeleria producto = productos.bloquear(id)
 						.orElseThrow(() -> new RecursoNoEncontradoException("No existe un producto con el id " + id + "."));
+					revisarEnCatalogo(producto.isActivo(), producto.getNombre(), cantidad, previas.get(entrada.getKey()));
 					if (producto.getCantidad() < cantidad)
 					{
 						throw new OperacionRechazadaException(HttpStatus.CONFLICT, "No hay suficientes existencias",
@@ -268,6 +279,7 @@ public class VentaService
 					Ropa prenda = ropa.bloquear(id)
 						.orElseThrow(() -> new RecursoNoEncontradoException("No existe una prenda de ropa con el id " + id + "."));
 					String nombrePrenda = prenda.getNombre() != null ? prenda.getNombre() : prenda.getTipoRopa();
+					revisarEnCatalogo(prenda.isActivo(), nombrePrenda, cantidad, previas.get(entrada.getKey()));
 					if (cantidad > 1)
 					{
 						throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Cantidad no válida",
@@ -286,6 +298,7 @@ public class VentaService
 				{
 					Servicio servicio = servicios.findById(id)
 						.orElseThrow(() -> new RecursoNoEncontradoException("No existe un servicio con el id " + id + "."));
+					revisarEnCatalogo(servicio.isActivo(), servicio.getNombre(), cantidad, previas.get(entrada.getKey()));
 					if (cantidad > 150)
 					{
 						throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Cantidad no válida", "Un servicio no puede pasar de 150 unidades por venta.");
@@ -300,6 +313,37 @@ public class VentaService
 		}
 
 		return new Armado(lineas, total);
+	}
+
+	/** Lo retirado del catálogo ya no se vende, salvo lo que esta venta ya tenía. */
+	private static void revisarEnCatalogo(boolean activo, String nombre, int cantidad, Integer previa)
+	{
+		if (!activo && (previa == null || cantidad > previa))
+		{
+			throw new OperacionRechazadaException(HttpStatus.CONFLICT, "Artículo retirado", "«" + nombre + "» ya no está en el catálogo.");
+		}
+	}
+
+	/** Cuántas unidades de cada artículo tenía la venta, con la misma llave que usa una venta nueva. */
+	private static Map<String, Integer> cantidadesDe(List<Detalle_de_factura> lineas)
+	{
+		Map<String, Integer> cantidades = new HashMap<>();
+		for (Detalle_de_factura linea : lineas)
+		{
+			if (linea.getProductoPapeleriaId() > 0)
+			{
+				cantidades.merge("producto:" + linea.getProductoPapeleriaId(), linea.getCantidadProducto(), Integer::sum);
+			}
+			else if (linea.getRopaId() > 0)
+			{
+				cantidades.merge("ropa:" + linea.getRopaId(), linea.getCantidadRopa(), Integer::sum);
+			}
+			else if (linea.getServicioId() > 0)
+			{
+				cantidades.merge("servicio:" + linea.getServicioId(), linea.getCantidadServicio(), Integer::sum);
+			}
+		}
+		return cantidades;
 	}
 
 	private static void revisarTotal(double total, Double totalEsperado)
@@ -333,10 +377,13 @@ public class VentaService
 			throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Falta el operador",
 				"Las ventas quedan a nombre de un operador de cibercafé. Indica el operador en operadorId.");
 		}
-		if (!operadores.existsById(peticion.operadorId()))
+		Operador_de_cibercafe operador = operadores.findById(peticion.operadorId())
+			.orElseThrow(() -> new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Operador no válido",
+				"No existe un operador de cibercafé con el id " + peticion.operadorId() + "."));
+		if (!operador.isActivo())
 		{
 			throw new OperacionRechazadaException(HttpStatus.BAD_REQUEST, "Operador no válido",
-				"No existe un operador de cibercafé con el id " + peticion.operadorId() + ".");
+				operador.getPrimerNombre() + " no está activo. Elige otro operador.");
 		}
 		return peticion.operadorId();
 	}
@@ -397,7 +444,7 @@ public class VentaService
 			Usuario vendedor = vendedores.get(factura.getUsuarioId());
 			String nombre = vendedor != null ? (vendedor.getPrimerNombre() + " " + vendedor.getPrimerApellido()).trim() : "Operador " + factura.getUsuarioId();
 			return new VentaResponse(factura.getIdFactura(), factura.getCodigoFactura(), factura.getTipoFactura(), factura.getFechaGeneracion(),
-				factura.getMonto(), factura.getUsuarioId(), nombre, lineas);
+				factura.getMonto(), factura.getUsuarioId(), nombre, lineas, factura.isAnulada());
 		}).toList();
 	}
 

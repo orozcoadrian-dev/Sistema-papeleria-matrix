@@ -418,13 +418,14 @@ h2 {
 
 .tarjeta__acciones {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: auto;
     padding-top: 0.4rem;
 }
 
 .tarjeta__acciones .boton {
-    flex: 1;
+    flex: 1 1 auto;
 }
 
 /* Tarjeta de carga */
@@ -780,4 +781,52 @@ textarea.campo__entrada {
     .tarjeta--cargando {
         animation: none;
     }
+}
+
+/* ---------- Filtros y destacados ---------- */
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filtro {
+    min-height: 2.5rem;
+    padding: 0.4rem 1rem;
+    border: 2px solid var(--p-borde);
+    border-radius: 999px;
+    background: var(--p-tarjeta);
+    color: var(--p-texto);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.filtro:hover {
+    border-color: var(--p-morado);
+}
+
+.filtro[aria-pressed="true"] {
+    border-color: var(--p-morado);
+    background: var(--p-morado);
+    color: #FFFFFF;
+}
+
+.filtros--seccion {
+    margin-bottom: 0.8rem;
+}
+
+.filtros[hidden] {
+    display: none;
+}
+
+.etiqueta--destacada {
+    background: #FFF2C2;
+    color: #6B4E00;
+}
+
+#quitar-motivo-caja {
+    margin-bottom: 1rem;
+    text-align: left;
 }

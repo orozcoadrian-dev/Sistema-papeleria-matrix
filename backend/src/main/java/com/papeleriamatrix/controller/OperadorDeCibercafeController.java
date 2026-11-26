@@ -61,4 +61,21 @@ public class OperadorDeCibercafeController
 	{
 		return OperadorResponse.desde(operadorDeCibercafeService.actualizar(id, peticion));
 	}
+
+	@PutMapping("/{id}/estado")
+	@Operation(summary = "Cambiar el estado de un operador", description = "Activo, Suspendido o Despedido. Quien no está activo no puede entrar.",
+		security = @SecurityRequirement(name = "claveApi"))
+	public OperadorResponse cambiarEstado(@PathVariable Integer id, @Valid @RequestBody com.papeleriamatrix.dto.EstadoOperadorRequest peticion)
+	{
+		return OperadorResponse.desde(operadorDeCibercafeService.cambiarEstado(id, com.papeleriamatrix.model.EstadoUsuario.desde(peticion.estado())));
+	}
+
+	@org.springframework.web.bind.annotation.DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "Retirar un operador", description = "Queda como Despedido. Sus datos y sus ventas se conservan.",
+		security = @SecurityRequirement(name = "claveApi"))
+	public void eliminar(@PathVariable Integer id)
+	{
+		operadorDeCibercafeService.eliminar(id);
+	}
 }

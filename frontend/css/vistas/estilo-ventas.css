@@ -13,8 +13,9 @@
 }
 
 .pestana {
+    flex: 1 1 auto;
     min-height: 2.9rem;
-    padding: 0.55rem 1.2rem;
+    padding: 0.55rem clamp(0.5rem, 2.5vw, 1.2rem);
     border: 0;
     border-radius: var(--radius-sm);
     background: transparent;
@@ -53,35 +54,6 @@
 }
 
 /* ---------- Filtros ---------- */
-.filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.filtro {
-    min-height: 2.5rem;
-    padding: 0.4rem 1rem;
-    border: 2px solid var(--p-borde);
-    border-radius: 999px;
-    background: var(--p-tarjeta);
-    color: var(--p-texto);
-    font: inherit;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-}
-
-.filtro:hover {
-    border-color: var(--p-morado);
-}
-
-.filtro[aria-pressed="true"] {
-    border-color: var(--p-morado);
-    background: var(--p-morado);
-    color: #FFFFFF;
-}
-
 /* ---------- Artículos del catálogo ---------- */
 .articulos {
     display: grid;
@@ -522,4 +494,41 @@
     background: #fff4cf;
     color: var(--color-negro);
     font-weight: 700;
+}
+
+/* ---------- Búsqueda, anuladas y datos del cliente ---------- */
+#vista-vendido .filtros,
+#vista-vendido .buscador {
+    margin-bottom: 0.8rem;
+}
+
+.venta--anulada {
+    opacity: 0.65;
+}
+
+.venta--anulada .tarjeta__precio {
+    text-decoration: line-through;
+}
+
+#caja-cliente {
+    margin-top: 0.8rem;
+    text-align: left;
+}
+
+#caja-cliente .campo__etiqueta {
+    display: block;
+    margin-top: 0.6rem;
+}
+
+#recibo + .ventana__botones {
+    flex-wrap: wrap;
+}
+
+#correo-propio {
+    text-decoration: none;
+}
+
+#correo-propio[hidden],
+#boton-enviar-correo[hidden] {
+    display: none;
 }

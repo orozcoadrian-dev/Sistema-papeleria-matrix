@@ -139,7 +139,7 @@ onMounted(cargar);
   </template>
 
   <BottomSheet v-if="porAnular" :titulo="`¿Anular la venta de ${pesos(porAnular.total)}?`" @cerrar="porAnular = undefined">
-    <p>La venta se borra y la papelería vuelve a las existencias. No se puede deshacer.</p>
+    <p>La venta queda anulada y la papelería vuelve a las existencias. No se puede deshacer.</p>
     <form class="formulario" @submit.prevent="anular">
       <template v-if="!esAdministrador">
         <label for="permiso-anular">Tu clave de permiso</label>

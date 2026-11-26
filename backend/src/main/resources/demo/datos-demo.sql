@@ -47,3 +47,8 @@ INSERT INTO detalle_de_factura (Factura_del_negocio_id, Descripcion, Servicio_id
 (1, 'Venta de Impresión a color', 2, 2, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP),
 (1, 'Venta de Carpeta blanca', NULL, NULL, 2, 1, NULL, NULL, CURRENT_TIMESTAMP),
 (2, 'Venta de Blusa rosada sencilla', NULL, NULL, NULL, NULL, 2, 1, CURRENT_TIMESTAMP);
+
+-- Lo que sale entre los destacados de la página.
+UPDATE servicio SET Destacado = TRUE WHERE Nombre = 'Impresión a color';
+UPDATE producto_de_papeleria SET Destacado = TRUE WHERE Codigo_producto = 'PAP-001';
+UPDATE ropa SET Destacado = TRUE WHERE Codigo_ropa = 'ROP-001';

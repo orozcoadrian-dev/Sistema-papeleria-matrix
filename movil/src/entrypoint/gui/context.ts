@@ -47,8 +47,8 @@ export function avisar(texto: string, esError = false): void {
 }
 
 export function mensajeDe(error: unknown): string {
-  // Un 403 por la clave de permiso dice qué pasó; los demás se explican en general.
-  if (error instanceof ErrorDeApi && error.estado === 403 && !/clave/i.test(error.titulo)) return 'Tu usuario no tiene permiso para hacer esto.';
+  // Un 403 por la clave de permiso o por un usuario suspendido dice qué pasó; los demás se explican en general.
+  if (error instanceof ErrorDeApi && error.estado === 403 && !/clave|usuario no disponible/i.test(error.titulo)) return 'Tu usuario no tiene permiso para hacer esto.';
   if (error instanceof ErrorDeApi && error.estado >= 500) return 'Algo salió mal en el sistema. Intenta otra vez en un momento.';
   if (error instanceof ErrorDeApi || error instanceof ErrorDeDominio) return error.message;
   return 'Algo salió mal. Intenta otra vez en un momento.';

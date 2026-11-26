@@ -9,5 +9,8 @@ CREATE TABLE producto_de_papeleria
     Descripcion VARCHAR(150) NULL,
     Lugar_compra VARCHAR(40) NULL,
     Fecha_publicacion DATE NOT NULL,
-    Fecha_actualizacion DATE NULL
+    Fecha_actualizacion DATE NULL,
+    Activo BOOLEAN NOT NULL DEFAULT TRUE,
+    Motivo_retiro VARCHAR(150) NULL,
+    Destacado BOOLEAN NOT NULL DEFAULT FALSE
 );

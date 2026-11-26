@@ -16,9 +16,10 @@ El modo se elige con la variable `SPRING_PROFILES_ACTIVE`.
 **Modo local, con XAMPP**
 
 1. Encender MySQL en XAMPP y ejecutar los scripts de `database/scripts` en orden: carpetas 01, 02 y 03.
-2. Dentro de `backend`, ejecutar `mvn spring-boot:run`.
+2. Si la base ya existía de antes, ejecutar una sola vez `database/scripts/04-actualizaciones/01-casos-de-uso.sql`. Agrega las columnas nuevas sin borrar datos. En una base recién creada no hace falta.
+3. Dentro de `backend`, ejecutar `mvn spring-boot:run`.
 
-Si la base no usa el usuario `root` sin contraseña en el puerto 3306, se cambian las variables de entorno `DB_URL`, `DB_USER` y `DB_PASSWORD`.
+Si la base no usa el usuario `root` sin contraseña en el puerto 3306, se cambian las variables de entorno `DB_URL`, `DB_USER` y `DB_PASSWORD`. El modo local está preparado para MariaDB, que es la base de XAMPP; con MySQL se define `DB_DIALECTO=org.hibernate.dialect.MySQLDialect`.
 
 **Modo demo, sin XAMPP**
 
@@ -45,9 +46,19 @@ docker run -p 8080:8080 papeleria-matrix
 | `GET /api/servicios` y `GET /api/servicios/{id}` | Consultan los servicios del negocio. | No |
 | `POST /api/servicios` | Crea un servicio. Responde 201 con la dirección del nuevo. | Sí |
 | `PUT /api/servicios/{id}` | Edita un servicio. | Sí |
-| `DELETE /api/servicios/{id}` | Elimina un servicio. Responde 204. | Sí |
+| `DELETE /api/servicios/{id}` | Retira un servicio: deja de mostrarse y queda en la base. Acepta `?motivo=`. Responde 204. | Sí |
 | `GET /api/productos` y `GET /api/productos/{id}` | Catálogo de papelería, sin precios de compra ni proveedor. | No |
 | `GET /api/ropa` y `GET /api/ropa/{id}` | Catálogo de ropa. | No |
+| `DELETE /api/productos/{id}`, `/api/ropa/{id}` y `/api/informacion-negocio/{id}` | Retiran igual que los servicios. | Sí |
+| `PUT /api/servicios/{id}/destacado` (y en productos y ropa) | Marca o desmarca lo que la página muestra como destacado. | Sí |
+| `PUT /api/productos/{id}/existencias` | Anota cuántas unidades hay. También la usa el operador. | Sesión |
+| `PUT /api/operadores-cibercafe/{id}/estado` | `Activo`, `Suspendido` o `Despedido`. Quien no está activo no puede entrar. | Sí |
+| `DELETE /api/operadores-cibercafe/{id}` | Retira a un operador: queda como `Despedido`, sin borrar sus datos. | Sí |
+| `GET /api/ventas` | Ventas del periodo. Con `?incluirAnuladas=true` trae también las anuladas. | Sesión |
+| `PUT /api/ventas/{id}` y `DELETE /api/ventas/{id}` | Cambian o anulan una venta. Anular la deja marcada y devuelve las existencias. | Sesión |
+| `POST /api/ventas/{id}/correo` | Envía el registro de la venta por correo. | Sesión |
+| `GET /api/contadores` | Cuántos registros hay de cada cosa, incluidos los retirados y anulados. | Sí |
+| `DELETE /api/reportes/{id}` | Elimina un reporte. | Sí |
 | `/swagger-ui.html` | Documentación de la API, que también se puede probar desde ahí. | No |
 | `/v3/api-docs` | La misma documentación en formato OpenAPI. | No |
 
@@ -61,13 +72,24 @@ Consultar es libre. Crear, editar y eliminar exigen la cabecera `X-API-Key`.
 - En Render la clave la inventa el propio servicio. Se ve en el panel del servicio, en Environment, variable `API_KEY`. No se escribe en el repositorio.
 - Para usar otra clave, se define la variable de entorno `API_KEY`.
 
+«Sesión» significa que sirve con la sesión de la administradora o del operador (cabecera `Authorization`).
+
+## Correo
+
+El registro de una venta se puede enviar desde el sistema con una cuenta gratuita de [Brevo](https://www.brevo.com). Se usa su API web porque el plan gratuito de Render no deja salir correos por SMTP.
+
+1. Crear la cuenta, verificar en ella el correo que va a enviar y generar una clave de API.
+2. En Render, en Environment del servicio `papeleria-matrix-api`, definir `CORREO_CLAVE` (la clave) y `CORREO_REMITENTE` (el correo verificado).
+
+La clave no se escribe en el repositorio. Sin estas variables el sistema no envía nada: la página abre el programa de correo de la persona con el mensaje ya escrito.
+
 ## Datos de ejemplo
 
 En modo demo la API arranca con 5 servicios, 6 productos de papelería y 4 prendas de ropa, definidos en `src/main/resources/demo/datos-demo.sql`. Se pierden al reiniciar. En modo local las tablas empiezan vacías: los datos reales se cargan en XAMPP.
 
 ## Postman
 
-En la carpeta `postman` del repositorio hay una colección con 15 peticiones y sus pruebas, y dos entornos.
+En la carpeta `postman` del repositorio hay una colección con 47 peticiones y sus pruebas, y dos entornos.
 
 1. En Postman, Import, y se eligen los tres archivos de la carpeta `postman`.
 2. Arriba a la derecha se elige el entorno: Local o Render.

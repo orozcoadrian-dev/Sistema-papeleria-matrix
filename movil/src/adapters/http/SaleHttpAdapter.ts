@@ -32,6 +32,8 @@ export class SaleHttpAdapter implements SaleGateway {
   }
 
   async operadores(): Promise<Operador[]> {
-    return (await this.http.enviar<OperadorResponse[]>('/operadores-cibercafe')).map(aOperador);
+    const operadores = await this.http.enviar<OperadorResponse[]>('/operadores-cibercafe');
+    // Solo se puede vender a nombre de quien está activo.
+    return operadores.filter((o) => !o.estado || o.estado === 'Activo').map(aOperador);
   }
 }

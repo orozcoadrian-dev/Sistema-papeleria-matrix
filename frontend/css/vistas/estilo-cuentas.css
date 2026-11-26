@@ -133,3 +133,17 @@
         break-inside: avoid;
     }
 }
+
+/* ---------- Historiales y reportes ---------- */
+.cuentas__cortes .filtros,
+.cuentas__cortes .buscador {
+    margin-bottom: 0.8rem;
+}
+
+@media print {
+    .cuentas__cortes .filtros,
+    .cuentas__cortes .buscador,
+    .cuentas__cortes .tarjeta__acciones {
+        display: none;
+    }
+}

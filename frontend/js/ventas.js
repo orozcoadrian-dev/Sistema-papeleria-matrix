@@ -3,6 +3,7 @@
 /* Pantalla de ventas. El operador del cibercafé toca lo que se lleva el cliente, revisa el total y cobra.
    La administradora también entra aquí: puede vender a nombre de un operador y ver todas las ventas.
    Una venta registrada se puede cambiar o anular; el operador necesita para eso su clave de permiso.
+   Su registro se puede descargar en PDF o enviar por correo. En «Existencias» se anota lo que hay.
    Las existencias las cuida el servidor: si no alcanzan, la venta no se hace y se dice cuántas quedan.
    Los datos se insertan con textContent, nunca con innerHTML. */
 
@@ -30,8 +31,18 @@ const CARPETA_DE_FOTOS = { servicio: 'servicios', producto: 'productos', ropa: '
 const PERIODOS = {
     hoy: { titulo: 'Hoy', dias: 0 },
     semana: { titulo: 'Últimos 7 días', dias: 6 },
-    mes: { titulo: 'Últimos 30 días', dias: 29 }
+    mes: { titulo: 'Últimos 30 días', dias: 29 },
+    todo: { titulo: 'Todo', dias: null }
 };
+const PRIMERA_FECHA = '2020-01-01';
+
+const CLASES = {
+    todas: { titulo: 'Todas', pasa: () => true },
+    servicios: { titulo: 'Con servicios', pasa: (v) => v.articulos.some((a) => a.tipo === 'servicio') },
+    anuladas: { titulo: 'Anuladas', pasa: (v) => v.anulada }
+};
+
+const PESTANAS = ['vender', 'vendido', 'existencias'];
 
 /* ---------- Estado ---------- */
 
@@ -44,6 +55,11 @@ let ventas = undefined;      // undefined = cargando, null = sin conexión
 let porAnular = null;
 let operadores = [];
 let editando = null;         // la venta registrada que se está cambiando
+let clase = 'todas';         // qué ventas se muestran en «Lo vendido»
+const clientes = new Map();  // id de la venta → datos temporales del cliente; se pierden al salir
+let ventaDelRecibo = null;
+let ventaDelCorreo = null;
+let productoContado = null;  // producto al que se le anotan las existencias
 
 /* ---------- Utilidades ---------- */
 
@@ -107,32 +123,34 @@ function mostrarEstado(prefijo, { icono, titulo, texto, boton }) {
 /* ---------- Pestañas ---------- */
 
 function elegirPestana(cual) {
-    const vender = cual === 'vender';
-    $('pestana-vender').setAttribute('aria-selected', String(vender));
-    $('pestana-vendido').setAttribute('aria-selected', String(!vender));
-    $('pestana-vender').tabIndex = vender ? 0 : -1;
-    $('pestana-vendido').tabIndex = vender ? -1 : 0;
-    $('vista-vender').hidden = !vender;
-    $('vista-vendido').hidden = vender;
-    $('saludo-sub').textContent = vender
-        ? `Toca lo que se lleva el cliente y después «${editando ? 'Guardar cambios' : 'Cobrar'}».`
-        : 'Revisa cuánto se ha vendido.';
+    for (const nombre of PESTANAS) {
+        const elegida = nombre === cual;
+        $(`pestana-${nombre}`).setAttribute('aria-selected', String(elegida));
+        $(`pestana-${nombre}`).tabIndex = elegida ? 0 : -1;
+        $(`vista-${nombre}`).hidden = !elegida;
+    }
+    $('saludo-sub').textContent = {
+        vender: `Toca lo que se lleva el cliente y después «${editando ? 'Guardar cambios' : 'Cobrar'}».`,
+        vendido: 'Revisa cuánto se ha vendido.',
+        existencias: 'Anota cuántas unidades hay en la tienda.'
+    }[cual];
     try { sessionStorage.setItem(PESTANA_ALMACEN, cual); } catch { /* solo es una comodidad */ }
-    $('barra-cobro').hidden = !vender || carrito.size === 0;
-    if (!vender && ventas === undefined) cargarVentas();
+    $('barra-cobro').hidden = cual !== 'vender' || carrito.size === 0;
+    if (cual === 'vendido' && ventas === undefined) cargarVentas();
+    if (cual === 'existencias') dibujarExistencias();
 }
 
-$('pestana-vender').addEventListener('click', () => elegirPestana('vender'));
-$('pestana-vendido').addEventListener('click', () => elegirPestana('vendido'));
-for (const pestana of [$('pestana-vender'), $('pestana-vendido')]) {
+PESTANAS.forEach((nombre, posicion) => {
+    const pestana = $(`pestana-${nombre}`);
+    pestana.addEventListener('click', () => elegirPestana(nombre));
     pestana.addEventListener('keydown', (evento) => {
-        if (evento.key === 'ArrowRight' || evento.key === 'ArrowLeft') {
-            const otra = pestana.id === 'pestana-vender' ? $('pestana-vendido') : $('pestana-vender');
-            otra.click();
-            otra.focus();
-        }
+        const paso = evento.key === 'ArrowRight' ? 1 : evento.key === 'ArrowLeft' ? -1 : 0;
+        if (!paso) return;
+        const otra = $(`pestana-${PESTANAS[(posicion + paso + PESTANAS.length) % PESTANAS.length]}`);
+        otra.click();
+        otra.focus();
     });
-}
+});
 
 /* ---------- Catálogo ---------- */
 
@@ -177,6 +195,7 @@ async function cargarCatalogo() {
     dibujarFiltros();
     dibujarCatalogo();
     dibujarCarrito();
+    dibujarExistencias();
 }
 
 function dibujarFiltros() {
@@ -460,6 +479,9 @@ function abrirCobro() {
     $('pago').value = '';
     $('cambio').textContent = '';
     $('cobrar-error').textContent = '';
+    $('caja-cliente').hidden = cambiando;
+    $('caja-cliente').open = false;
+    for (const campo of ['cliente-nombre', 'cliente-celular', 'cliente-correo']) $(campo).value = '';
     dibujarPagosRapidos(total);
     $('ventana-cobrar').showModal();
     (!cambiando ? $('pago') : ES_ADMIN ? $('boton-confirmar-cobro') : $('clave-permiso')).focus();
@@ -536,6 +558,9 @@ $('formulario-cobrar').addEventListener('submit', async (evento) => {
         return;
     }
 
+    const cliente = leerCliente();
+    if (cliente === null) return;
+
     const boton = $('boton-confirmar-cobro');
     boton.disabled = true;
     boton.textContent = 'Registrando…';
@@ -545,6 +570,7 @@ $('formulario-cobrar').addEventListener('submit', async (evento) => {
     try {
         const venta = await Sesion.llamar('/api/ventas', { metodo: 'POST', cuerpo });
         $('ventana-cobrar').close();
+        if (Object.values(cliente).some(Boolean)) clientes.set(venta.id, cliente);
         mostrarRecibo(venta, Number.isFinite(pago) ? pago : null);
         carrito.clear();
         ventas = undefined; // la lista de lo vendido se vuelve a pedir
@@ -569,6 +595,7 @@ $('formulario-cobrar').addEventListener('submit', async (evento) => {
 });
 
 function mostrarRecibo(venta, pago) {
+    ventaDelRecibo = venta;
     const recibo = $('recibo');
     recibo.replaceChildren();
     const lista = document.createElement('ul');
@@ -596,6 +623,13 @@ function mostrarRecibo(venta, pago) {
     codigo.className = 'recibo__codigo';
     codigo.textContent = `Factura n.º ${venta.codigo}`;
     recibo.append(codigo);
+    const cliente = clientes.get(venta.id);
+    if (cliente?.nombre) {
+        const paraQuien = document.createElement('p');
+        paraQuien.className = 'recibo__codigo';
+        paraQuien.textContent = `Cliente: ${cliente.nombre}`;
+        recibo.append(paraQuien);
+    }
     $('ventana-recibo').showModal();
     $('boton-nueva-venta').focus();
 }
@@ -719,7 +753,8 @@ async function cargarOperadores() {
     const selector = $('operador');
     selector.replaceChildren(new Option('Cargando…', ''));
     try {
-        operadores = await Sesion.llamar('/api/operadores-cibercafe');
+        // Solo se puede vender a nombre de quien está activo.
+        operadores = (await Sesion.llamar('/api/operadores-cibercafe')).filter((o) => !o.estado || o.estado === 'Activo');
         selector.replaceChildren();
         if (operadores.length !== 1) selector.append(new Option('Elige el operador', ''));
         for (const operador of operadores) {
@@ -756,7 +791,8 @@ async function cargarVentas() {
     dibujarVentas();
     const { dias } = PERIODOS[periodo];
     try {
-        ventas = await Sesion.llamar(`/api/ventas?desde=${hoyISO(dias)}&hasta=${hoyISO()}`);
+        const desde = dias === null ? PRIMERA_FECHA : hoyISO(dias);
+        ventas = await Sesion.llamar(`/api/ventas?desde=${desde}&hasta=${hoyISO()}&incluirAnuladas=true`);
     } catch (error) {
         ventas = error.estado === 401 ? undefined : null;
     }
@@ -768,7 +804,9 @@ function dibujarVentas() {
     const resumen = $('resumen');
     contenedor.replaceChildren();
     resumen.replaceChildren();
+    $('vendido-contador').textContent = '';
     $('vendido-estado').hidden = true;
+    dibujarClases();
     $('vendido-ayuda').textContent = ES_ADMIN ? 'Todas las ventas del negocio.'
         : 'Solo aparecen las ventas que registraste tú. Para cambiar o anular una necesitas tu clave de permiso.';
 
@@ -791,11 +829,13 @@ function dibujarVentas() {
         return;
     }
 
-    const total = ventas.reduce((suma, venta) => suma + venta.total, 0);
+    // Las anuladas se ven en la lista, pero no cuentan.
+    const vigentes = ventas.filter((venta) => !venta.anulada);
+    const total = vigentes.reduce((suma, venta) => suma + venta.total, 0);
     resumen.append(
         crearCifra('Total vendido', pesos.format(total)),
-        crearCifra('Ventas', miles.format(ventas.length)),
-        crearCifra('Promedio por venta', ventas.length ? pesos.format(Math.round(total / ventas.length)) : '—')
+        crearCifra('Ventas', miles.format(vigentes.length)),
+        crearCifra('Promedio por venta', vigentes.length ? pesos.format(Math.round(total / vigentes.length)) : '—')
     );
 
     if (ventas.length === 0) {
@@ -808,8 +848,18 @@ function dibujarVentas() {
         return;
     }
 
+    const visibles = ventasVisibles();
+    if (visibles.length === 0) {
+        mostrarEstado('vendido-', {
+            icono: '🔍', titulo: 'No encontramos ninguna factura así', texto: 'Cambia la búsqueda o elige «Todas».',
+            boton: { texto: 'Ver todas', accion: () => { $('buscar-vendido').value = ''; clase = 'todas'; dibujarVentas(); } }
+        });
+        return;
+    }
+    if (visibles.length !== ventas.length) $('vendido-contador').textContent = `Mostrando ${visibles.length} de ${ventas.length}`;
+
     let fechaAnterior = '';
-    for (const venta of ventas) {
+    for (const venta of visibles) {
         if (venta.fecha !== fechaAnterior) {
             fechaAnterior = venta.fecha;
             const dia = document.createElement('h3');
@@ -836,7 +886,7 @@ function crearCifra(titulo, valor) {
 
 function crearVenta(venta) {
     const tarjeta = document.createElement('article');
-    tarjeta.className = 'tarjeta venta';
+    tarjeta.className = venta.anulada ? 'tarjeta venta venta--anulada' : 'tarjeta venta';
 
     const cabecera = document.createElement('div');
     cabecera.className = 'venta__cabecera';
@@ -858,15 +908,20 @@ function crearVenta(venta) {
     }
     tarjeta.append(lista);
 
-    if (ES_ADMIN) {
+    if (ES_ADMIN || venta.anulada) {
         const etiquetas = document.createElement('div');
         etiquetas.className = 'etiquetas';
-        const quien = document.createElement('span');
-        quien.className = 'etiqueta';
-        quien.textContent = `Vendió: ${venta.operador}`;
-        etiquetas.append(quien);
+        const agregarEtiqueta = (texto, extra = '') => {
+            const etiqueta = document.createElement('span');
+            etiqueta.className = `etiqueta ${extra}`.trim();
+            etiqueta.textContent = texto;
+            etiquetas.append(etiqueta);
+        };
+        if (venta.anulada) agregarEtiqueta('🚫 Anulada', 'etiqueta--mal');
+        if (ES_ADMIN) agregarEtiqueta(`Vendió: ${venta.operador}`);
         tarjeta.append(etiquetas);
     }
+    if (venta.anulada) return tarjeta;
 
     const acciones = document.createElement('div');
     acciones.className = 'tarjeta__acciones';
@@ -879,6 +934,8 @@ function crearVenta(venta) {
         boton.addEventListener('click', () => accion(venta));
         acciones.append(boton);
     };
+    crearAccion('📄 PDF', 'boton--suave', 'Descargar en PDF la venta', descargarPdf);
+    crearAccion('✉️ Correo', 'boton--suave', 'Enviar por correo la venta', abrirCorreo);
     if (venta.tipo === 'Venta en tienda') crearAccion('✏️ Cambiar venta', 'boton--suave', 'Cambiar la venta', empezarCambio);
     crearAccion('↩️ Anular venta', 'boton--peligro-suave', 'Anular la venta', pedirAnular);
     tarjeta.append(acciones);
@@ -920,7 +977,7 @@ $('boton-confirmar-anular').addEventListener('click', async () => {
             return;
         }
         $('ventana-anular').close();
-        if (error.estado === 404) {
+        if (error.estado === 404 || (error.estado === 409 && error.titulo === 'Venta anulada')) {
             avisar('Esa venta ya estaba anulada.');
             cargarVentas();
         } else if (error.estado !== 401) {
@@ -930,6 +987,245 @@ $('boton-confirmar-anular').addEventListener('click', async () => {
         boton.disabled = false;
     }
 });
+
+function dibujarClases() {
+    const contenedor = $('clases');
+    contenedor.replaceChildren();
+    for (const [valor, info] of Object.entries(CLASES)) {
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.className = 'filtro';
+        boton.setAttribute('aria-pressed', String(valor === clase));
+        boton.textContent = info.titulo;
+        boton.addEventListener('click', () => {
+            clase = valor;
+            dibujarVentas();
+        });
+        contenedor.append(boton);
+    }
+}
+
+/* Cada palabra buscada debe aparecer en el número, el vendedor, la fecha o lo que se llevó. */
+function ventasVisibles() {
+    const palabras = normalizar($('buscar-vendido').value).split(/\s+/).filter(Boolean);
+    return ventas.filter((venta) => {
+        if (!CLASES[clase].pasa(venta)) return false;
+        const texto = normalizar([venta.codigo, venta.operador, venta.fecha, fechaLegible(venta.fecha),
+            ...venta.articulos.map((a) => a.nombre)].join(' '));
+        return palabras.every((palabra) => texto.includes(palabra));
+    });
+}
+
+$('buscar-vendido').addEventListener('input', () => { if (ventas) dibujarVentas(); });
+
+/* ---------- Datos del cliente, PDF y correo ---------- */
+
+/* Devuelve los datos escritos (todos opcionales), o null si alguno está mal. */
+function leerCliente() {
+    const nombre = $('cliente-nombre').value.replace(/\s+/g, ' ').trim();
+    const celular = $('cliente-celular').value.replace(/[\s.-]/g, '');
+    const correo = $('cliente-correo').value.trim();
+    const fallo = (campo, mensaje) => {
+        $('caja-cliente').open = true;
+        $('cobrar-error').textContent = mensaje;
+        $(campo).focus();
+        return null;
+    };
+    if (nombre && !/^[\p{L} .'-]{3,60}$/u.test(nombre)) return fallo('cliente-nombre', 'El nombre del cliente solo lleva letras (mínimo 3).');
+    if (celular && !/^\d{7,15}$/.test(celular)) return fallo('cliente-celular', 'El celular del cliente lleva entre 7 y 15 números.');
+    if (correo && !correoValido(correo)) return fallo('cliente-correo', 'Revisa el correo del cliente.');
+    return { nombre, celular, correo };
+}
+
+function correoValido(correo) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo);
+}
+
+function fechaCorta(iso) {
+    const [anio, mes, dia] = iso.split('-');
+    return `${Number(dia)}/${mes}/${anio}`;
+}
+
+/* Los valores por artículo solo se muestran si suman lo cobrado: los precios pueden haber cambiado después. */
+function lineasDelRecibo(venta) {
+    const cliente = clientes.get(venta.id) || {};
+    const suma = venta.articulos.reduce((total, a) => total + (a.precioUnitario ?? NaN) * a.cantidad, 0);
+    const conValores = Math.abs(suma - venta.total) < 0.5;
+    return [
+        { texto: 'Papelería Matrix', tipo: 'titulo' },
+        { texto: `Registro de venta n.º ${venta.codigo}`, tipo: 'subtitulo' },
+        { texto: `Fecha: ${fechaCorta(venta.fecha)}` },
+        { texto: `Atendió: ${venta.operador}` },
+        ...[cliente.nombre && `Cliente: ${cliente.nombre}`, cliente.celular && `Celular: ${cliente.celular}`,
+            cliente.correo && `Correo: ${cliente.correo}`].filter(Boolean).map((texto) => ({ texto })),
+        { linea: true },
+        ...venta.articulos.map((a) => ({
+            texto: `${a.cantidad} × ${a.nombre}`,
+            derecha: conValores ? pesos.format(a.precioUnitario * a.cantidad) : ''
+        })),
+        { linea: true },
+        { texto: 'Total pagado', derecha: pesos.format(venta.total), tipo: 'total' },
+        { espacio: true },
+        { texto: '¡Gracias por tu compra!' }
+    ];
+}
+
+function descargarPdf(venta) {
+    Pdf.descargar(`venta-${venta.codigo}.pdf`, lineasDelRecibo(venta));
+    avisar('✓ Se descargó el PDF. Búscalo en tus descargas.');
+}
+
+function textoDelCorreo(venta, nombre) {
+    return [
+        nombre ? `Hola, ${nombre}:` : 'Hola:', '',
+        'Este es el registro de tu compra en Papelería Matrix.', '',
+        `Registro n.º ${venta.codigo}`, `Fecha: ${fechaCorta(venta.fecha)}`, `Te atendió: ${venta.operador}`, '',
+        ...venta.articulos.map((a) => `- ${a.cantidad} x ${a.nombre}`), '',
+        `Total pagado: ${pesos.format(venta.total)}`, '', '¡Gracias por tu compra!'
+    ].join('\n');
+}
+
+function abrirCorreo(venta) {
+    ventaDelCorreo = venta;
+    $('correo-detalle').textContent = `Factura n.º ${venta.codigo}, de ${pesos.format(venta.total)}.`;
+    $('correo-para').value = clientes.get(venta.id)?.correo || '';
+    $('correo-error').textContent = '';
+    $('correo-propio').hidden = true;
+    $('boton-enviar-correo').hidden = false;
+    $('ventana-correo').showModal();
+    $('correo-para').focus();
+}
+
+/* Si el sistema no puede enviar, se abre el correo de la persona con el mensaje ya escrito. */
+function ofrecerCorreoPropio(para) {
+    const nombre = clientes.get(ventaDelCorreo.id)?.nombre;
+    const asunto = encodeURIComponent('Tu compra en Papelería Matrix');
+    const cuerpo = encodeURIComponent(textoDelCorreo(ventaDelCorreo, nombre));
+    $('correo-propio').href = `mailto:${encodeURIComponent(para).replace('%40', '@')}?subject=${asunto}&body=${cuerpo}`;
+    $('correo-propio').hidden = false;
+    $('boton-enviar-correo').hidden = true;
+    $('correo-error').textContent = 'El envío desde el sistema todavía no está activado. Toca «Abrir mi correo»: el mensaje ya va escrito.';
+}
+
+$('formulario-correo').addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    const para = $('correo-para').value.trim();
+    if (!correoValido(para)) {
+        $('correo-error').textContent = 'Escribe un correo completo, por ejemplo cliente@correo.com';
+        $('correo-para').focus();
+        return;
+    }
+    const venta = ventaDelCorreo;
+    const boton = $('boton-enviar-correo');
+    boton.disabled = true;
+    boton.textContent = 'Enviando…';
+    $('correo-error').textContent = '';
+    try {
+        const nombre = clientes.get(venta.id)?.nombre || null;
+        await Sesion.llamar(`/api/ventas/${venta.id}/correo`, { metodo: 'POST', cuerpo: { correo: para, nombre } });
+        $('ventana-correo').close();
+        avisar(`✓ Se envió el registro a ${para}.`);
+    } catch (error) {
+        if (error.estado === 503) ofrecerCorreoPropio(para);
+        else if (error.estado !== 401) $('correo-error').textContent = error.message || mensajeGeneral(error);
+    } finally {
+        boton.disabled = false;
+        boton.textContent = 'Enviar';
+    }
+});
+
+$('correo-para').addEventListener('input', () => {
+    $('correo-propio').hidden = true;
+    $('boton-enviar-correo').hidden = false;
+});
+$('correo-propio').addEventListener('click', () => setTimeout(() => $('ventana-correo').close(), 300));
+$('boton-recibo-pdf').addEventListener('click', () => descargarPdf(ventaDelRecibo));
+$('boton-recibo-correo').addEventListener('click', () => abrirCorreo(ventaDelRecibo));
+
+/* ---------- Existencias ---------- */
+
+function dibujarExistencias() {
+    const contenedor = $('existencias-lista');
+    const contador = $('existencias-contador');
+    contenedor.replaceChildren();
+    if (!catalogoCargado) {
+        contador.textContent = 'Cargando…';
+        return;
+    }
+    if (!catalogo) {
+        contador.textContent = 'No pudimos conectar con el sistema. Revisa el internet e intenta otra vez.';
+        return;
+    }
+    const palabras = normalizar($('buscar-existencias').value).split(/\s+/).filter(Boolean);
+    const productos = catalogo.filter((a) => a.tipo === 'producto' && (!palabras.length || coincide(a, palabras)));
+    contador.textContent = productos.length === 1 ? '1 producto' : `${productos.length} productos`;
+    for (const producto of productos) {
+        const tarjeta = document.createElement('article');
+        tarjeta.className = 'tarjeta venta';
+        const nombre = document.createElement('h3');
+        nombre.className = 'tarjeta__nombre';
+        nombre.textContent = producto.nombre;
+        const cuantas = document.createElement('div');
+        cuantas.className = 'etiquetas';
+        const etiqueta = document.createElement('span');
+        const hay = producto.enTienda;
+        etiqueta.className = `etiqueta ${hay < POCAS_UNIDADES ? 'etiqueta--mal' : 'etiqueta--bien'}`;
+        etiqueta.textContent = hay === 0 ? 'Agotado' : hay === 1 ? 'Queda 1' : `Quedan ${miles.format(hay)}`;
+        cuantas.append(etiqueta);
+        const acciones = document.createElement('div');
+        acciones.className = 'tarjeta__acciones';
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.className = 'boton boton--suave';
+        boton.textContent = '✏️ Cambiar cantidad';
+        boton.setAttribute('aria-label', `Cambiar la cantidad de ${producto.nombre}`);
+        boton.addEventListener('click', () => abrirExistencias(producto));
+        acciones.append(boton);
+        tarjeta.append(nombre, cuantas, acciones);
+        contenedor.append(tarjeta);
+    }
+}
+
+function abrirExistencias(producto) {
+    productoContado = producto;
+    $('existencias-titulo').textContent = producto.nombre;
+    $('existencias-detalle').textContent = `El sistema dice que hay ${miles.format(producto.enTienda)}.`;
+    $('existencias-cantidad').value = '';
+    $('existencias-error').textContent = '';
+    $('ventana-existencias').showModal();
+    $('existencias-cantidad').focus();
+}
+
+$('formulario-existencias').addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    const cantidad = leerEntero($('existencias-cantidad').value.trim());
+    if (!Number.isFinite(cantidad) || cantidad > 100000) {
+        $('existencias-error').textContent = 'Escribe un número entre 0 y 100.000.';
+        $('existencias-cantidad').focus();
+        return;
+    }
+    const producto = productoContado;
+    const boton = $('boton-guardar-existencias');
+    boton.disabled = true;
+    try {
+        await Sesion.llamar(`/api/productos/${producto.id}/existencias`, { metodo: 'PUT', cuerpo: { cantidad, cantidadAnterior: producto.enTienda } });
+        $('ventana-existencias').close();
+        avisar(`✓ ${producto.nombre}: quedan ${miles.format(cantidad)}.`);
+        await cargarCatalogo();
+    } catch (error) {
+        if (error.estado === 409 || error.estado === 404) {
+            $('ventana-existencias').close();
+            avisar(error.estado === 404 ? 'Ese producto ya no está en el catálogo.' : 'Las unidades cambiaron mientras contabas. Revisa el número nuevo.', 'error');
+            await cargarCatalogo();
+        } else if (error.estado !== 401) {
+            $('existencias-error').textContent = mensajeGeneral(error);
+        }
+    } finally {
+        boton.disabled = false;
+    }
+});
+
+$('buscar-existencias').addEventListener('input', dibujarExistencias);
 
 /* ---------- Eventos generales ---------- */
 
@@ -966,5 +1262,5 @@ if (SESION) {
     cargarCatalogo();
     let pestana = 'vender';
     try { pestana = sessionStorage.getItem(PESTANA_ALMACEN) || 'vender'; } catch { /* empieza en vender */ }
-    elegirPestana(pestana === 'vendido' ? 'vendido' : 'vender');
+    elegirPestana(PESTANAS.includes(pestana) ? pestana : 'vender');
 }

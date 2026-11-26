@@ -10,5 +10,8 @@ CREATE TABLE ropa
     Precio DOUBLE NOT NULL,
     Color VARCHAR(40) NULL,
     Fecha_registro DATE NOT NULL,
-    Fecha_actualizacion DATE NULL
+    Fecha_actualizacion DATE NULL,
+    Activo BOOLEAN NOT NULL DEFAULT TRUE,
+    Motivo_retiro VARCHAR(150) NULL,
+    Destacado BOOLEAN NOT NULL DEFAULT FALSE
 );

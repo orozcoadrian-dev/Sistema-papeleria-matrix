@@ -22,14 +22,13 @@ public class InformacionDelNegocioService
 	@Transactional(readOnly = true)
 	public List<Informacion_del_negocio> listar()
 	{
-		return repositorio.findAll();
+		return repositorio.findByActivoTrue();
 	}
 
 	@Transactional(readOnly = true)
 	public Informacion_del_negocio obtener(Integer id)
 	{
-		return repositorio.findById(id)
-			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una información del negocio con el id " + id + "."));
+		return buscar(id);
 	}
 
 	@Transactional
@@ -42,7 +41,7 @@ public class InformacionDelNegocioService
 	@Transactional
 	public Informacion_del_negocio actualizar(Integer id, InformacionDelNegocioRequest peticion)
 	{
-		Informacion_del_negocio entidad = repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe una información del negocio con el id " + id + "."));
+		Informacion_del_negocio entidad = buscar(id);
 		entidad.setUsuarioId(peticion.usuarioId());
 		entidad.setValorInformacion(peticion.valorInformacion());
 		entidad.setTipoInformacion(peticion.tipoInformacion());
@@ -51,9 +50,17 @@ public class InformacionDelNegocioService
 		return repositorio.save(entidad);
 	}
 
+	/** Deja de mostrarse en la página y en el panel, pero queda guardada en la base. */
 	@Transactional
-	public void eliminar(Integer id)
+	public void eliminar(Integer id, String motivo)
 	{
-		repositorio.delete(repositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No existe una información del negocio con el id " + id + ".")));
+		buscar(id).retirar(motivo);
+	}
+
+	private Informacion_del_negocio buscar(Integer id)
+	{
+		return repositorio.findById(id)
+			.filter(Informacion_del_negocio::isActivo)
+			.orElseThrow(() -> new RecursoNoEncontradoException("No existe una información del negocio con el id " + id + "."));
 	}
 }

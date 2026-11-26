@@ -64,8 +64,8 @@ public class InformacionDelNegocioController
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Eliminar la información del negocio", security = @SecurityRequirement(name = "claveApi"))
-	public void eliminar(@PathVariable Integer id)
+	public void eliminar(@PathVariable Integer id, @org.springframework.web.bind.annotation.RequestParam(required = false) String motivo)
 	{
-		informacionDelNegocioService.eliminar(id);
+		informacionDelNegocioService.eliminar(id, motivo);
 	}
 }
