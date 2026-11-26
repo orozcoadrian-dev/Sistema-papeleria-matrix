@@ -47,7 +47,7 @@ async function guardar() {
   guardando.value = true;
   try {
     await catalogo.guardar({ tipo, id, formulario: { ...formulario }, cantidadAnterior });
-    avisar(`✓ Se guardó «${formulario.nombre || formulario.tipoRopa}».`);
+    avisar(`Se guardó «${formulario.nombre || formulario.tipoRopa}».`);
     await router.push({ name: 'catalogo' });
   } catch (fallo) {
     if (fallo instanceof ErrorDeDominio || fallo instanceof ErrorDeApi) {

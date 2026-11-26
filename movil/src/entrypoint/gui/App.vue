@@ -53,12 +53,12 @@ onBeforeUnmount(() => {
 
 <template>
   <header v-if="privada" class="barra">
-    <img src="/logo.ico" alt="" width="32" height="32" />
+    <img src="/logo.png" alt="" width="40" height="40" />
     <div class="barra__nombre">
       <strong>{{ usuario?.nombre }}</strong>
       <span>{{ usuario?.rolNombre }}</span>
     </div>
-    <button type="button" class="barra__salir" @click="salir"><LogOut :size="20" aria-hidden="true" /> Salir</button>
+    <button type="button" class="barra__salir" @click="salir"><LogOut :size="18" aria-hidden="true" /> Salir</button>
   </header>
 
   <main :class="privada ? 'contenido' : 'contenido contenido--publico'">

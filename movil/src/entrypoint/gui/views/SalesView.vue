@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ReceiptText, Undo2, WifiOff } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import type { Periodo, ResumenDeVentas } from '../../../application/dto/responses/responses';
@@ -53,7 +54,7 @@ async function anular() {
   anulando.value = true;
   try {
     await ventas.anular(venta.id);
-    avisar(`✓ Se anuló la venta de ${pesos(venta.total)}.`);
+    avisar(`Se anuló la venta de ${pesos(venta.total)}.`);
   } catch (fallo) {
     if (fallo instanceof ErrorDeApi && fallo.estado === 404) avisar('Esa venta ya estaba anulada.');
     else avisar(mensajeDe(fallo), true);
@@ -76,10 +77,13 @@ onMounted(cargar);
   </div>
 
   <div v-if="error" class="tarjeta estado">
-    <p>📡 {{ error }}</p>
+    <WifiOff :size="32" aria-hidden="true" />
+    <p>{{ error }}</p>
     <button type="button" class="boton boton--suave" @click="cargar">Intentar de nuevo</button>
   </div>
-  <p v-else-if="!resumen" class="estado" role="status">Cargando…</p>
+  <div v-else-if="!resumen" class="lista" role="status" aria-label="Cargando ventas">
+    <div v-for="n in 3" :key="n" class="esqueleto" />
+  </div>
   <template v-else>
     <div class="cifras">
       <div class="cifra cifra--grande"><span>Total vendido</span><strong>{{ pesos(resumen.total) }}</strong></div>
@@ -88,7 +92,8 @@ onMounted(cargar);
     </div>
 
     <div v-if="!resumen.cantidad" class="tarjeta estado">
-      <p>🧾 No hay ventas en estos días.</p>
+      <ReceiptText :size="32" aria-hidden="true" />
+      <p>No hay ventas en estos días.</p>
       <RouterLink :to="{ name: 'vender' }" class="boton boton--principal">Hacer una venta</RouterLink>
     </div>
 
@@ -98,7 +103,7 @@ onMounted(cargar);
         <li v-for="(linea, indice) in venta.articulos" :key="indice">{{ linea.cantidad }} × {{ linea.nombre }}</li>
       </ul>
       <small>Factura n.º {{ venta.codigo }}<template v-if="esAdministrador"> · Vendió: {{ venta.operador }}</template></small>
-      <button v-if="esAdministrador" type="button" class="boton boton--peligro" :aria-label="`Anular la venta ${venta.codigo}`" @click="porAnular = venta">↩️ Anular venta</button>
+      <button v-if="esAdministrador" type="button" class="boton boton--peligro" :aria-label="`Anular la venta ${venta.codigo}`" @click="porAnular = venta"><Undo2 :size="18" aria-hidden="true" /> Anular venta</button>
     </article>
   </template>
 
